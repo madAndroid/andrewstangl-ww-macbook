@@ -38,6 +38,10 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
+bootstrap.sh 
+
+kubectl wait 
+
 kubectl create secret generic -n vault vault-token --from-literal=vault-token=$(cat resources/.vault-init.json | jq -r '.root_token')
 
 secrets.sh --wge-entitlement ~/resources/entitlement.yaml --secrets ~/resources/secrets.yaml 
