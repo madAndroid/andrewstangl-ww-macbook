@@ -74,8 +74,8 @@ spec:
   path: ./cluster/addons/vault
   prune: true
   wait: true
-  dependsOn:
-    - name: cert-config
+  # dependsOn:
+  #   - name: cert-config
   sourceRef:
     kind: GitRepository
     name: flux-system
