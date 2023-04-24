@@ -79,5 +79,3 @@ accessor_id=$(vault auth list --format=json | jq -r '.["oidc/"].accessor')
 
 vault write identity/group-alias name=$GITHUB_AUTH_ORG canonical_id=$github_admin_id mount_accessor=$accessor_id
 
-vault secrets enable -path=secrets kv-v2
-vault secrets enable -path=leaf-cluster-secrets kv-v2

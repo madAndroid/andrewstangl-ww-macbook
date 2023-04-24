@@ -40,9 +40,9 @@ pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
 export VAULT_ADDR="https://vault.kubernetes.docker.internal"
-key1=$(jq -r '.recovery_keys_b64[0]' resources/.vault-init.json)
-key2=$(jq -r '.recovery_keys_b64[1]' resources/.vault-init.json)
-key3=$(jq -r '.recovery_keys_b64[2]' resources/.vault-init.json)
+key1=$(jq -r '.unseal_keys_b64[0]' resources/.vault-init.json)
+key2=$(jq -r '.unseal_keys_b64[1]' resources/.vault-init.json)
+key3=$(jq -r '.unseal_keys_b64[2]' resources/.vault-init.json)
 
 kubectl -n vault exec --stdin=true --tty=true vault-0 -- vault operator unseal $key1
 kubectl -n vault exec --stdin=true --tty=true vault-0 -- vault operator unseal $key2

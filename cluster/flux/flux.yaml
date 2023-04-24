@@ -57,6 +57,7 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: nginx
+    - name: secrets
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -74,8 +75,6 @@ spec:
   path: ./cluster/addons/vault
   prune: true
   wait: true
-  # dependsOn:
-  #   - name: cert-config
   sourceRef:
     kind: GitRepository
     name: flux-system
