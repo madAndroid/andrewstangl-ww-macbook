@@ -56,5 +56,5 @@ EOF
 
 kubectl create secret generic -n external-secrets vault-token --from-literal=vault-token=$(cat resources/.vault-init.json | jq -r '.root_token')
 
-secrets.sh --wge-entitlement ~/resources/entitlement.yaml --secrets ~/resources/secrets.yaml 
+secrets.sh --tls-skip --wge-entitlement ~/resources/wge-entitlement.yaml --secrets ~/resources/secrets.yaml 
 
