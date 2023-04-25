@@ -51,7 +51,7 @@ spec:
         type: github
         hostname: github.com
       capi:
-        repositoryURL: https://github.com/paulcarlton-ww/macbook
+        repositoryURL: https://github.com/${github_mgmt_org}/${github_mgmt_repo}
       oidc:
         enabled: true
         issuerURL: https://dex.${hostName}

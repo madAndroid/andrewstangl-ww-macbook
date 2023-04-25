@@ -47,12 +47,6 @@ export VAULT_TOKEN="$(jq -r '.root_token' resources/.vault-init.json)"
 export DEX_URL="https://dex.kubernetes.docker.internal"
 export GITHUB_AUTH_ORG=ww-gitops
 
-vault policy write -tls-skip-verify admin - << EOF
-path "*" {
-  capabilities = ["create", "read", "update", "patch", "delete", "list", "sudo"]
-}
-EOF
-
 set +e
 
 vault secrets enable -tls-skip-verify -path=secrets kv-v2

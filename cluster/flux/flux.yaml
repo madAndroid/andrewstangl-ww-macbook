@@ -145,8 +145,6 @@ spec:
   path: ./cluster/config
   prune: true
   wait: true
-  dependsOn:
-    - name: secrets
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -159,7 +157,7 @@ metadata:
 spec:
   interval: 1m0s
   dependsOn:
-    - name: vault
+    - name: secrets
   path: ./cluster/addons/tf-controller
   prune: true
   wait: true
@@ -194,7 +192,7 @@ metadata:
 spec:
   interval: 1m0s
   dependsOn:
-    - name: nginx
+    - name: secrets
   path: ./cluster/addons/prom-graf
   prune: true
   wait: true

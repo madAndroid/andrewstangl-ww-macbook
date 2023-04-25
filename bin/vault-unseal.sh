@@ -8,7 +8,7 @@ set -euo pipefail
 
 function usage()
 {
-    echo "usage ${0} [--debug] " >&2
+    echo "usage ${0} [--debug]" >&2
     echo "This script will initialize vault" >&2
 }
 
