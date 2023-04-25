@@ -42,6 +42,11 @@ git config pull.rebase true
 
 bootstrap.sh 
 
+if [ -f resources/CA.cer ]; then
+  echo "Certificate Authority already exists"
+else
+  ca-cert.sh
+fi
 
 kubectl apply -f - <<EOF
 apiVersion: v1
@@ -54,6 +59,14 @@ data:
   tls.key: $(base64 -i resources/CA.key)
 EOF
 
+# Wait for vault to start
+echo "Waiting for vault to start"
+kubectl wait --for=condition=Ready pod/vault-0 -n vault
+
+# Initialize vault
+vault-init.sh
+vault-unseal.sh
+
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Secret
@@ -64,5 +77,11 @@ data:
   vault-token: $(jq -r '.root_token' resources/.vault-init.json | base64)
 EOF
 
-secrets.sh --tls-skip --wge-entitlement ~/resources/wge-entitlement.yaml --secrets ~/resources/secrets.yaml 
+secrets.sh --tls-skip --wge-entitlement ~/resources/wge-entitlement.yaml --secrets ~/resources/secrets.yaml
+
+# Wait for dex to start
+kubectl wait --for=condition=Ready kustomization/dex -n flux-system
+
+vault-oidc-config.sh
+
 
