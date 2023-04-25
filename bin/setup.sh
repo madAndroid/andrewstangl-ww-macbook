@@ -54,7 +54,17 @@ data:
   tls.key: $(base64 -i resources/CA.key)
 EOF
 
-kubectl create secret generic -n vault vault-token --from-literal=vault-token="$(cat resources/.vault-init.json | jq -r '.root_token')"
+# kubectl create secret generic -n vault vault-token --from-literal=vault-token="$(cat resources/.vault-init.json | jq -r '.root_token')"
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-token
+  namespace: vault
+data:
+  vault-token: $(jq -r '.root_token' resources/.vault-init.json | base64)
+EOF
 
 secrets.sh --tls-skip --wge-entitlement ~/resources/wge-entitlement.yaml --secrets ~/resources/secrets.yaml 
 
