@@ -45,15 +45,4 @@ pushd ${top_level}/resources >/dev/null
 openssl genrsa -out CA.key 4096
 openssl req -x509 -new -nodes -key CA.key -subj "/CN=paulc" -days 3650 -reqexts v3_req -extensions v3_ca -out CA.cer
 
-# kubectl apply -f - <<EOF
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   name: ca-key-pair
-#   namespace: cert-manager
-# data:
-#   tls.crt: $(base64 -i CA.cer)
-#   tls.key: $(base64 -i CA.key)
-# EOF
-
 popd >/dev/null

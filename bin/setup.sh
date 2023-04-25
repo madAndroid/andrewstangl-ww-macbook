@@ -42,7 +42,17 @@ git config pull.rebase true
 
 bootstrap.sh 
 
-kubectl wait 
+
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ca-key-pair
+  namespace: cert-manager
+data:
+  tls.crt: $(base64 -i resources/CA.cer)
+  tls.key: $(base64 -i resources/CA.key)
+EOF
 
 kubectl create secret generic -n external-secrets vault-token --from-literal=vault-token=$(cat resources/.vault-init.json | jq -r '.root_token')
 

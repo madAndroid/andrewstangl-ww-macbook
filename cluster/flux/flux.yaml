@@ -57,7 +57,6 @@ spec:
   dependsOn:
     - name: cert-manager
     - name: nginx
-    - name: secrets
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -108,6 +107,7 @@ spec:
   wait: true
   dependsOn:
     - name: external-secrets
+    - name: cert-config
   sourceRef:
     kind: GitRepository
     name: flux-system
