@@ -70,7 +70,6 @@ source ${secrets_file}
 source resources/github-config.sh
 
 
-vault kv put ${tls_skip} -mount=secrets ca-key-pair  tls.crt=$(base64 -i resources/CA.cer) tls.key=$(base64 -i resources/CA.key)
 vault kv put ${tls_skip} -mount=secrets dex-config config.yaml="$(cat resources/github-dex-config.yaml |envsubst)"
 # vault kv put ${tls_skip} -mount=secrets git-provider-credentials GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} GITLAB_CLIENT_SECRET=${GITLAB_CLIENT_SECRET} \
 #       GITLAB_HOSTNAME=${GITLAB_HOSTNAME} GIT_HOST_TYPE=${GIT_HOST_TYPE}
