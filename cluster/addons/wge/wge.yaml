@@ -70,5 +70,17 @@ spec:
     enableTerraformUI: true
     global:
       capiEnabled: false
-
-  
+  postRenderers:
+    - kustomize:
+        patchesJson6902:
+          - target:
+              version: v1
+              kind: Deployment
+              name: weave-gitops-enterprise-mccp-cluster-service
+            patch:
+              - op: add
+                path: /spec/template/spec/hostAliases/ip
+                value: 10.110.112.126
+              - op: add
+                path: /spec/template/spec/hostAliases/hostnames
+                value: ${hostName}
