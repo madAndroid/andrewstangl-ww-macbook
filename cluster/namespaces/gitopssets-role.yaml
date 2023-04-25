@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: gitopssets-role
-  namespace: default
+  namespace: ${nameSpace}
 rules:
 - apiGroups:
   - kustomize.toolkit.fluxcd.io
@@ -22,7 +22,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: gitopssets-role-binding
-  namespace: default
+  namespace: ${nameSpace}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -30,4 +30,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: gitopssets-kustomization
-  namespace: default
+  namespace: ${nameSpace}
