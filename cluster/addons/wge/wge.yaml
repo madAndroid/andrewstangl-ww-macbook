@@ -73,17 +73,6 @@ spec:
   postRenderers:
     - kustomize:
         # patchesJson6902:
-        #   - target:
-        #       version: v1
-        #       kind: Deployment
-        #       name: weave-gitops-enterprise-mccp-cluster-service
-        #     patch:
-        #       - op: add
-        #         path: /spec/template/spec/hostAliases/hostnames
-        #         value: "${hostName}"
-        #       - op: add
-        #         path: /spec/template/spec/hostAliases/ip
-        #         value: "10.110.112.126"
         patches:
         - target:
             kind: Deployment
@@ -91,5 +80,21 @@ spec:
             - op: add
               path: /spec/template/spec/hostAliases
               value:
-                ip: ${clusterIP}
-                hostnames: ${hostName}
+                - ip: ${clusterIP}
+                  hostnames:
+                  - "${hostName}"
+
+            - op: add
+              path: /spec/template/spec/volumes/-
+              value:
+                name: local-ca
+                configMap:
+                  name: local-ca
+
+            - op: add
+              path: /spec/template/spec/containers/0/volumeMounts/-
+              value:
+                name: local-ca
+                mountPath: /etc/ssl/certs/local-ca.pem
+                subPath: local-ca.pem
+                readOnly: false

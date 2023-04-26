@@ -1,0 +1,22 @@
+
+- op: add
+  path: /spec/template/spec/hostAliases
+  value:
+    - ip: ${clusterIP}
+      hostnames:
+      - "${hostName}"
+
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: local-ca
+    configMap:
+      name: local-ca
+
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: local-ca
+    mountPath: /etc/ssl/certs/local-ca.pem
+    subPath: local-ca.pem
+    readOnly: false
