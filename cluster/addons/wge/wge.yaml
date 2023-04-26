@@ -83,7 +83,7 @@ spec:
               value:
                 - ip: ${clusterIP}
                   hostnames:
-                  - "${hostName}"
+                  - "dex.${hostName}"
 
             - op: add
               path: /spec/template/spec/volumes/-
