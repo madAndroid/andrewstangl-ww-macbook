@@ -7,5 +7,6 @@ resources:
 - wge.yaml
 configMapGenerator:
 - name: local-ca
+  namespace: flux-system
   files:
   - ../../../resources/CA.cer
