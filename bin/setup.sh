@@ -40,7 +40,9 @@ source .envrc
 
 git config pull.rebase true  
 
-bootstrap.sh 
+bootstrap.sh
+
+cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 
 if [ -f resources/CA.cer ]; then
   echo "Certificate Authority already exists"
@@ -84,4 +86,12 @@ kubectl wait --for=condition=Ready kustomization/dex -n flux-system
 
 vault-oidc-config.sh
 
+export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
 
+cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
+
+if [[ `git status --porcelain` ]]; then
+  git commit -m "update cluster config"
+  git pull
+  git push
+fi

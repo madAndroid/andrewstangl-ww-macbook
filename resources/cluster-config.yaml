@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-info
+  namespace: flux-system
+data:
+  clusterType: "macbook"
+  clusterName: ${CLUSTER_NAME}
+  clusterIP: ${CLUSTER_IP}
+  GitHubOrg: ${GITHUB_MGMT_ORG}
+  GitHubRepo: ${GITHUB_MGMT_REPO}
