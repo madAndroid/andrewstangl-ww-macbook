@@ -84,6 +84,7 @@ spec:
                 - ip: ${clusterIP}
                   hostnames:
                   - "dex.${hostName}"
+                  - "wge.${hostName}"
 
             - op: add
               path: /spec/template/spec/volumes/-
