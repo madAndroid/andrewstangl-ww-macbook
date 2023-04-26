@@ -8,4 +8,4 @@ resources:
 configMapGenerator:
 - name: local-ca
   files:
-  - ../../resources/CA.cer
+  - ../../../resources/CA.cer
