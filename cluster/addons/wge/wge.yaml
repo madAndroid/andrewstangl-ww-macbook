@@ -76,7 +76,8 @@ spec:
         patches:
         - target:
             kind: Deployment
-          patch: |-
+            name: weave-gitops-enterprise-mccp-cluster-service
+          patch: |
             - op: add
               path: /spec/template/spec/hostAliases
               value:
