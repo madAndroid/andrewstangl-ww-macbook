@@ -51,7 +51,7 @@ spec:
         type: github
         hostname: github.com
       capi:
-        repositoryURL: https://github.com/${githubOrg}/${githubRepo}
+        repositoryURL: https://github.com/${GitHubOrg}/${GitHubRepo}
       oidc:
         enabled: true
         issuerURL: https://dex.${hostName}
