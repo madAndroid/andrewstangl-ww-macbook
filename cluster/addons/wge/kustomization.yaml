@@ -10,3 +10,5 @@ configMapGenerator:
   namespace: flux-system
   files:
   - ../../../resources/CA.cer
+  options:
+    disableNameSuffixHash: true
