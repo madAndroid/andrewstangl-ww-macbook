@@ -32,6 +32,7 @@ spec:
   interval: 1m0s
   timeout: 5m
   values:
+    enableExplorer: true
     ingress:
       enabled: true
       annotations:

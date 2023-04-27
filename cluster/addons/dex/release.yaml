@@ -50,11 +50,10 @@ spec:
       hosts:
         - host: dex.${hostName}
           paths:
-          - path: /
+          - path: /?(.*)
             pathType: ImplementationSpecific
   postRenderers:
     - kustomize:
-        # patchesJson6902:
         patches:
         - target:
             kind: Deployment
@@ -67,6 +66,7 @@ spec:
                   hostnames:
                   - "dex.${hostName}"
                   - "wge.${hostName}"
+                  - "vault.${hostName}"
 
             - op: add
               path: /spec/template/spec/volumes/-
