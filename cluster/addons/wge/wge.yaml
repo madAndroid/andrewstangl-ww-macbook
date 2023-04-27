@@ -53,7 +53,7 @@ spec:
       capi:
         repositoryURL: https://github.com/${GitHubOrg}/${GitHubRepo}
       oidc:
-        enabled: false
+        enabled: true
         issuerURL: https://dex.${hostName}
         redirectURL: https://wge.${hostName}/oauth2/callback
         clientCredentialsSecret: wge-oidc-auth
