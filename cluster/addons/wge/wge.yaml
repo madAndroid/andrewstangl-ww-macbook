@@ -72,7 +72,6 @@ spec:
       capiEnabled: false
   postRenderers:
     - kustomize:
-        # patchesJson6902:
         patches:
         - target:
             kind: Deployment
