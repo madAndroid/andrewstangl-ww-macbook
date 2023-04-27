@@ -39,13 +39,13 @@ spec:
             kind: Deployment
             name: ingress-nginx-controller
           patch: |-
-            # - op: add
-            #   path: /spec/template/spec/hostAliases
-            #   value:
-            #     - ip: ${clusterIP}
-            #       hostnames:
-            #       - "dex.${hostName}"
-            #       - "wge.${hostName}"
+            - op: add
+              path: /spec/template/spec/hostAliases
+              value:
+                - ip: 10.110.112.126
+                  hostnames:
+                  - "dex.${hostName}"
+                  - "wge.${hostName}"
 
             - op: add
               path: /spec/template/spec/volumes/-
