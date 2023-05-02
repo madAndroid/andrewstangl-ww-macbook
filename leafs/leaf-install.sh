@@ -38,65 +38,66 @@ export PATH=$PATH:/usr/local/bin
 export HOME=/root
 
 echo "Updating system packages & installing required utilities"
-apt-get update
-apt-get install -y ca-certificates curl jq iproute2 git unzip apt-transport-https gnupg2 vim
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl jq iproute2 git unzip apt-transport-https gnupg2 vim
 
 curl -s https://fluxcd.io/install.sh | bash
 
-echo "$(hostname -I | awk '{print $2}') $(hostname)" >> /etc/hosts
+cp /etc/hosts /tmp/hosts-plus
+echo "$(hostname -I | awk '{print $2}') $(hostname)" >> /tmp/hosts-plus
+sudo cp /tmp/hosts-plus /etc/hosts
 
-swapoff -a
-sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo swapoff -a
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 
 
-cat <<EOF | tee /etc/modules-load.d/k8s.conf
+sudo cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
 # only needed to set up multicast on Equinix
-cat <<EOF | tee /etc/modules-load.d/gre.conf
+sudo cat <<EOF | sudo tee /etc/modules-load.d/gre.conf
 ip_gre
 EOF
 
-modprobe overlay
-modprobe br_netfilter
-modprobe ip_gre
+sudo modprobe overlay
+sudo modprobe br_netfilter
+sudo modprobe ip_gre
 
 # sysctl params required by setup, params persist across reboots
-cat <<EOF | tee /etc/sysctl.d/k8s.conf
+sudo cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
 # Apply sysctl params without reboot
-sysctl --system
+sudo sysctl --system
 
-systemctl stop apparmor
-systemctl disable apparmor 
+sudo systemctl stop apparmor
+sudo systemctl disable apparmor 
 
 # Install containerd
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-apt update
-apt install -y containerd.io 
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update
+sudo apt install -y containerd.io 
 
 # Generate and save containerd configuration file to its standard location
-mkdir -p /etc/containerd
-containerd config default | tee /etc/containerd/config.toml
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 # Restart containerd to ensure new configuration file usage:
-systemctl restart containerd
+sudo systemctl restart containerd
 
 # Verify containerd is running.
-systemctl status containerd | head -5
+sudo systemctl --no-pager status containerd -l
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list 
 
-apt update
-apt -y install kubelet kubeadm kubectl
-apt-mark hold kubelet kubeadm kubectl
+sudo apt update
+sudo apt install --allow-change-held-packages -y kubelet kubeadm kubectl
 
-systemctl enable --now kubelet
+sudo systemctl enable --now kubelet

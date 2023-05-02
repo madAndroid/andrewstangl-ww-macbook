@@ -34,24 +34,66 @@ function args() {
 
 args "$@"
 
+source /tmp/env.sh
+
 hostname=$(hostname)
-sudo kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr 192.168.0.0/16 --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
+sudo kubeadm reset -f
+sudo rm -rf /etc/cni/net.d/*
+sudo ipvsadm --clear
+
+sudo -E kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr 192.168.0.0/16 --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
 
 mkdir -p $HOME/.kube
 sudo cp -rf /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+export KUBECONFIG=$HOME/.kube/config
+while [ 1 -eq 1 ]
+do
+  set +e
+  echo "Waiting for kube-apiserver-$hostname to be ready"
+  kubectl wait --for=condition=Ready -n kube-system pod/kube-apiserver-$hostname
+  ret=$?
+  set -e
+  if [ $ret -eq 0 ]; then
+    break
+  fi
+  sleep 1
+done
 
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+sleep 5
+
+while [ 1 -eq 1 ]
+do
+  set +e
+  kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+  ret=$?
+  set -e
+  if [ $ret -eq 0 ]; then
+    break
+  fi
+  sleep 1
+done
+
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get nodes
 
 kubectl get pods -A
 sudo systemctl --no-pager status kubelet -l
 
-
 cat $KUBECONFIG | sed s%https://.*:6443%https://$hostname:6443%g > /tmp/kubeconfig
 
-flux bootstrap gitlab --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --token-auth \
-  --path=${target_path}/flux
+while [ 1 -eq 1 ]
+do
+  set +e
+  echo "Waiting for coredns to be available"
+  kubectl wait --for=condition=Available --timeout=120s -n kube-system deployment.apps/coredns
+  ret=$?
+  set -e
+  if [ $ret -eq 0 ]; then
+    break
+  fi
+  sleep 1
+done
+
 flux --version
 flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path cluster/clusters/leafs/$hostname/flux
