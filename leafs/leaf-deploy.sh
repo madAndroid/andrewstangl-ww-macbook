@@ -41,7 +41,7 @@ sudo kubeadm reset -f
 sudo rm -rf /etc/cni/net.d/*
 sudo ipvsadm --clear
 
-sudo -E kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr 192.168.0.0/16 --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
+sudo -E kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr 10.10.0.0/16 --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
 
 mkdir -p $HOME/.kube
 sudo cp -rf /etc/kubernetes/admin.conf $HOME/.kube/config
