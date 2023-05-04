@@ -6,9 +6,10 @@ subjects:
   - kind: User
     name: wego-admin
     apiGroup: rbac.authorization.k8s.io
+  - kind: User
+    name: paul.carlton@weave.works
+    apiGroup: rbac.authorization.k8s.io
   - kind: Group
     name: ww-gitops:admin # Github group
     apiGroup: rbac.authorization.k8s.io
-  - kind: Group
-    name: weaveworks-cx # GitLab group
-    apiGroup: rbac.authorization.k8s.io
+

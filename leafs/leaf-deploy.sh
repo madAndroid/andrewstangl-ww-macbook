@@ -38,10 +38,10 @@ source /tmp/env.sh
 
 hostname=$(hostname)
 sudo kubeadm reset -f
-sudo rm -rf /etc/cni/net.d/*
+sudo rm -rf /etc/cni/net.d
 sudo ipvsadm --clear
 
-sudo -E kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr 10.10.0.0/16 --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
+sudo -E kubeadm init --ignore-preflight-errors=NumCPU --pod-network-cidr "10.0.0.0/8" --kubernetes-version v1.27.0 --apiserver-cert-extra-sans $hostname
 
 mkdir -p $HOME/.kube
 sudo cp -rf /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -65,7 +65,9 @@ sleep 5
 while [ 1 -eq 1 ]
 do
   set +e
-  kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+  # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+  # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+  kubectl apply -f /tmp/leafs/weave-daemonset-k8s.yaml
   ret=$?
   set -e
   if [ $ret -eq 0 ]; then
