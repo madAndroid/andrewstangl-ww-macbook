@@ -100,3 +100,7 @@ spec:
                 mountPath: /etc/ssl/certs/local-ca.pem
                 subPath: CA.cer
                 readOnly: false
+        images:
+          - name: ghcr.io/weaveworks/gitopssets-controller
+            newName: pcarlton/gitopssets-controller
+            newTag: 1.0.0
