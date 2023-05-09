@@ -249,7 +249,7 @@ metadata:
 spec:
   interval: 1m0s
   dependsOn:
-    - name: wge
+    - name: wge-templates
   path: ./cluster/apps/dynamic-templates/k8s
   prune: true
   wait: true

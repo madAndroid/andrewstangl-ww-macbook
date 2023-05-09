@@ -4,8 +4,8 @@ kind: ConfigMap
 metadata:
   name: env-config
   namespace: default
-data:
-  wge:
+data: |
+  wge: 
     mgmt-repo: dish-wge-mgmt
     gui: false
 
