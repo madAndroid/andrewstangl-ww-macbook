@@ -1,0 +1,27 @@
+wge:
+  mgmt-repo: dish-wge-mgmt
+  gui: false
+
+template: 
+  name: dynamic-v1
+  namespace: default
+aws:
+  region: us-west-2
+vpcs:
+  - name: v1
+    mode: create # set to use to use existing vpc
+    cidr: 10.0.0.0/16
+    publicsubnets: 3
+    privatesubnets: 3
+
+clusters:
+  - name: c1
+    mode: create # set to use to use existing cluster
+    gui: false # set to false to skip adding it to the GUI
+    vpc_name: v1
+    version: 1.23
+
+    apps: 
+      - name: coralogix
+        version: 0.0.4
+      - name: swim

@@ -1,0 +1,309 @@
+apiVersion: templates.weave.works/v1alpha2
+kind: GitOpsTemplate
+metadata:
+  name: dynamic-v1
+  namespace: default
+  labels:
+    weave.works/template-type: terraform
+  annotations:
+    templates.weave.works/profiles-enabled: "true"
+    templates.weave.works/kustomizations-enabled: "false"
+    templates.weave.works/credentials-enabled: "false"
+    templates.weave.works/delimiters: "((,))"
+spec:
+  description: Template for creating Beta environment.
+  renderType: templating
+  params:
+    - name: RESOURCE_NAME
+      description: Name of the beta environment.
+    - name: AWS_REGION
+      description: AWS region to deploy cluster.
+      default: us-east-1
+    - name: DESIRED_SIZE
+      description: Desired number of nodes in cluster.
+      default: "2"
+    - name: MIN_SIZE
+      description: Min number of nodes in cluster.
+      default: "1"
+    - name: MAX_SIZE
+      description: Max number of nodes in cluster.
+      default: "3"
+    - name: CAPACITY_TYPE
+      description: Capacity type of nodes in cluster.
+      options: ["ON_DEMAND", "SPOT"]
+      default: "ON_DEMAND"
+    - name: INSTANCE_TYPE
+      description: Instance type of nodes in cluster.
+      default: "t3.medium"
+    - name: SHRINK
+      description: Shrink application node groups to zero.
+      default: "false"
+
+  resourcetemplates:
+    - path: clusters/management/clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+      content:
+
+        # vpc
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-vpcs
+          spec:
+            generators:
+              - gitRepository:
+                  repositoryRef: beta
+                  files:
+                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: "{ .vpcs }"
+                content:
+                  kind: Kustomization
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  metadata:
+                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
+                    annotations:
+                      templates.weave.works/create-request: ''
+                  spec:
+                    interval: 1m0s
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    path: ./infra/dynamic/vpc
+                    prune: true
+                    wait: true
+                    timeout: 10m
+                    
+                    postBuild:
+                      substitute:
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                        vpcName: '{{ .Repeat.name }}'
+                        publicSubnetCount: '{{ .Repeat.publicsubnets }}'
+                        privateSubnetCount: '{{ .Repeat.privatesubnets }}'
+                        vpcCIDR: '{{ .Repeat.cidr }}'
+                        mode: '{{ .Repeat.mode }}'
+                      substituteFrom:
+                        - kind: ConfigMap
+                          name: tf-output-values
+
+        # Register cluster with WGE if desired/needed
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-gitops-clusters
+          spec:
+            generators:
+              - gitRepository:
+                  repositoryRef: beta
+                  files:
+                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: '{ .clusters[?(@.gui)] }'
+                content:
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  kind: Kustomization
+                  metadata:
+                    annotations:
+                      templates.weave.works/create-request: ""
+                    name: (( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-gitops-cluster
+                  spec:
+                    interval: 1m0s
+                    path: ./wge
+                    postBuild:
+                      substitute:
+                        clusterName: '{{ .Repeat.name }}'
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                    prune: true
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    timeout: 1m
+                    
+        # eks cluster
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-clusters
+          spec:
+            generators:
+              - gitRepository:
+                  repositoryRef: beta
+                  files:
+                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: "{ .clusters }"
+                content:
+                  kind: Kustomization
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  metadata:
+                    name: "(( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}"
+                    annotations:
+                      templates.weave.works/create-request: ''
+                  spec:
+                    interval: 1m0s
+                    dependsOn:
+                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.vpc_name }}'
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    path: ./infra/dynamic/eks
+                    prune: true
+                    wait: true
+                    timeout: 15m
+                    
+                    postBuild:
+                      substitute:
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                        clusterName: '{{ .Repeat.name }}'
+                        vpcName: '{{ .Repeat.vpc_name }}'
+                        clusterVersion: '{{ .Repeat.version }}'
+                        mode: '{{ .Repeat.mode }}'
+                      substituteFrom:
+                        - kind: ConfigMap
+                          name: tf-output-values
+
+        # Configure eks cluster if create is true
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-clusters-config
+          spec:
+            generators:
+              - gitRepository:
+                  repositoryRef: beta
+                  files:
+                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: '{ .clusters[?(@.mode=="create")] }'
+                content:
+                  kind: Kustomization
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  metadata:
+                    name: "(( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-config"
+                    annotations:
+                      templates.weave.works/create-request: ''
+                  spec:
+                    interval: 1m0s
+                    dependsOn:
+                      - name: "(( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}"
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    path: ./infra/dynamic/eks-config
+                    prune: true
+                    wait: true
+                    timeout: 5m
+                    
+                    postBuild:
+                      substitute:
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                        clusterName: '{{ .Repeat.name }}'
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        target_path: 'clusters/(( .template.meta.namespace ))/${clusterName}'
+                        desired_size: "\"(( .params.DESIRED_SIZE ))\""
+                        # min_size: '(( .params.MIN_SIZE ))'
+                        # max_size: '(( .params.MAX_SIZE ))'
+                        # capacity_type: '(( .params.CAPACITY_TYPE ))'
+                        # instance_type: '(( .params.INSTANCE_TYPE ))'
+                        # shrink: "(( .params.SHRINK ))"
+                        eks_core_state_bucket: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
+                      substituteFrom:
+                        - kind: ConfigMap
+                          name: tf-output-values
+
+        # Deploy apps to cluster
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-apps
+          spec:
+            generators:
+              - gitRepository:
+                  repositoryRef: beta
+                  files:
+                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: "{ .clusters }"
+                content:
+                  apiVersion: templates.weave.works/v1alpha1
+                  kind: GitOpsSet
+                  metadata:
+                    labels:
+                      app.kubernetes.io/name: gitopsset
+                      app.kubernetes.io/instance: gitopsset-sample
+                      app.kubernetes.io/part-of: gitopssets-controller
+                      app.kubernetes.io/managed-by: kustomize
+                      app.kubernetes.io/created-by: gitopssets-controller
+                    name: (( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-apps
+                  spec:
+                    generators:
+                      - gitRepository:
+                          repositoryRef: beta
+                          files:
+                            - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    templates:
+                      - repeat: '{ .clusters[?(@.name=="{{ .Repeat.name }}")].apps }'
+                        content:
+                          kind: Kustomization
+                          apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                          metadata:
+                            name: "(( .params.RESOURCE_NAME ))-cluster-{{ .Element.name }}-app-{{ .Repeat.name }}"
+                            annotations:
+                              templates.weave.works/create-request: ''
+                          spec:
+                            interval: 1m0s
+                            sourceRef:
+                              kind: GitRepository
+                              name: flux-system
+                              namespace: flux-system
+                            path: ./apps/{{ .Repeat.name }}
+                            prune: true
+                            wait: true
+                            timeout: 5m
+                            
+                            postBuild:
+                              substitute:
+                                templateNamespace: '(( .template.meta.namespace ))'
+                                resourceName: '(( .params.RESOURCE_NAME ))'
+                                cnfVersion: '{{ .Repeat.version }}'
+                                clusterName: '{{ .Element.name }}'
+                                appName: '{{ .Repeat.name }}'
+                              substituteFrom:
+                                - kind: ConfigMap
+                                  name: tf-output-values
