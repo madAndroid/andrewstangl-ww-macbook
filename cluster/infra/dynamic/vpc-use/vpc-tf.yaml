@@ -6,36 +6,23 @@ metadata:
 spec:
   interval: 10m
   retryInterval: 20s
-  path: ./terraform/cluster-templates/vpc-${mode}
+  path: ./terraform/cluster-templates/vpc-use
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-vpc-${vpcName}-outputs'
+    name: '${vpcName}-vpc-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc/${vpcName}/terraform.tfstate"
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc-use/${vpcName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
         dynamodb_table = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
       }
-  varsFrom:
-    - kind: ConfigMap
-      name: vpc-config
-      varsKeys:
-        - vpc_name
-        - region
-
   vars:
     - name: vpc_name
-      value: ${resourceName}-${vpcName}
-    - name: vpc_cidr
-      value: ${vpcCIDR}
-    - name: public_subnet_count
-      value: ${publicSubnetCount}
-    - name: private_subnet_count
-      value: ${privateSubnetCount}
+      value: ${vpcName}
     - name: region
       value: ${awsRegion}
   sourceRef:

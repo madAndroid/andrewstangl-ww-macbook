@@ -240,19 +240,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: dynamic-templates
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  dependsOn:
-    - name: wge-templates
-  path: ./cluster/apps/dynamic-templates/k8s
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
+

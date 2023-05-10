@@ -1,27 +1,26 @@
 wge:
-  mgmt-repo: dish-wge-mgmt
   gui: false
 
 template: 
   name: dynamic-v1
   namespace: default
 aws:
-  region: us-west-2
+  region: eu-west-1
 vpcs:
-  - name: v1
+  - name: v1 # if mode is 'use' include resource name in vpc name, i.e. <resource name>-<vpc name>
     mode: create # set to use to use existing vpc
     cidr: 10.0.0.0/16
     publicsubnets: 3
     privatesubnets: 3
 
 clusters:
-  - name: c1
+  - name: c1 # if mode is 'use' include resource name in cluster name, i.e. <resource name>-<cluster name>
     mode: create # set to use to use existing cluster
     gui: false # set to false to skip adding it to the GUI
-    vpc_name: v1
+    vpc_name: v1 # if using an existing vpc, provide full name, i.e. <resource name>-<vpc name>
     version: 1.23
 
     apps: 
-      - name: coralogix
-        version: 0.0.4
-      - name: swim
+      - name: podinfo-ms1
+      - name: podinfo-ms2
+        version: v6.3.5
