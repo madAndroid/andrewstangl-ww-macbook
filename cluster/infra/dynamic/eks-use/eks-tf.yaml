@@ -6,11 +6,11 @@ metadata:
 spec:
   interval: 1h
   retryInterval: 20s
-  path: ./cluster-templates/eks-${mode}
+  path: ./cluster-templates/eks-use
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-cluster-${clusterName}-core-outputs'
+    name: '${resourceName}-${clusterName}-eks-config'
   dependsOn:
     - name: '${resourceName}-vpc-${vpcName}'
   backendConfig:
