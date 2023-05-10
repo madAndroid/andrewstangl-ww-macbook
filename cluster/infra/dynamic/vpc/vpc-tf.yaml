@@ -1,0 +1,44 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha1
+kind: Terraform
+metadata:
+  name: '${resourceName}-vpc-${vpcName}'
+  namespace: ${templateNamespace}
+spec:
+  interval: 10m
+  retryInterval: 20s
+  path: ./terraform/cluster-templates/vpc-${mode}
+  approvePlan: auto
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: '${resourceName}-vpc-${vpcName}-outputs'
+  backendConfig:
+    customConfiguration: |
+      backend "s3" {
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc/${vpcName}/terraform.tfstate"
+        bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+        region         = "${awsRegion}"
+        encrypt        = true
+        dynamodb_table = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+      }
+  varsFrom:
+    - kind: ConfigMap
+      name: vpc-config
+      varsKeys:
+        - vpc_name
+        - region
+
+  vars:
+    - name: vpc_name
+      value: ${resourceName}-${vpcName}
+    - name: vpc_cidr
+      value: ${vpcCIDR}
+    - name: public_subnet_count
+      value: ${publicSubnetCount}
+    - name: private_subnet_count
+      value: ${privateSubnetCount}
+    - name: region
+      value: ${awsRegion}
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system

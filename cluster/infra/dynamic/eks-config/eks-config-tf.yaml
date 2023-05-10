@@ -1,0 +1,76 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha1
+kind: Terraform
+metadata:
+  name: '${resourceName}-cluster-${clusterName}-config'
+  namespace: ${templateNamespace}
+spec:
+  interval: 10m
+  dependsOn:
+    - name: '${resourceName}-cluster-${clusterName}-eks'
+  retryInterval: 20s
+  path: ./cluster-templates/eks-config
+  approvePlan: auto
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: '${resourceName}-cluster-${clusterName}-config'
+  backendConfig:
+    customConfiguration: |
+      backend "s3" {
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/config/${clusterName}/terraform.tfstate"
+        bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+        region         = "${awsRegion}"
+        encrypt        = true
+        dynamodb_table = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+      }
+  vars:
+    - name: cluster_name
+      value: ${resourceName}-${clusterName}
+    - name: region
+      value: ${awsRegion}
+    - name: target_path
+      value: 'clusters/${templateNamespace}/${resourceName}-${clusterName}'
+    - name: desired_size
+      value: ${desired_size}
+    # - name: min_size
+    #   value: '${minSize}'
+    # - name: max_size
+    #   value: '${maxSize}'
+    # - name: capacity_type
+    #   value: '${capacityType}'
+    # - name: instance_type
+    #   value: '${instanceType}'
+    # - name: shrink
+    #   value: '{{ .params.SHRINK }}'
+    - name: eks_core_state_bucket
+      value: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
+    - name: eks_core_state_key
+      value: '${wge_cluster_name}/${templateNamespace}/${resourceName}/eks/${clusterName}/terraform.tfstate'
+    - name: route53_main_domain
+      value: ${leafZone}
+  varsFrom:
+    - kind: ConfigMap
+      name: leaf-cluster-config
+      varsKeys:
+        - bases_path
+        - git_commit_author
+        - git_commit_email
+        - gitlab_owner
+        - gitlab_url
+        - repository_name
+        - vault_auth_mount
+        - wge_profiles_auth
+    - kind: Secret
+      name: leaf-cluster-auth
+    - kind: ConfigMap
+      name: tf-output-values
+      varsKeys:
+        - gitlab_known_hosts
+        - harbor_registry
+        - vault_url
+        - wge_profiles_url
+        - cluster_admin_roles_string
+        - cluster_admin_users_string
+  sourceRef:
+    kind: GitRepository
+    name: terraform
+    namespace: flux-system

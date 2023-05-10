@@ -57,9 +57,9 @@ spec:
           spec:
             generators:
               - gitRepository:
-                  repositoryRef: beta
+                  repositoryRef: flux-system
                   files:
-                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: "{ .vpcs }"
                 content:
@@ -107,9 +107,9 @@ spec:
           spec:
             generators:
               - gitRepository:
-                  repositoryRef: beta
+                  repositoryRef: flux-system
                   files:
-                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: '{ .clusters[?(@.gui)] }'
                 content:
@@ -121,7 +121,7 @@ spec:
                     name: (( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-gitops-cluster
                   spec:
                     interval: 1m0s
-                    path: ./wge
+                    path: ./clusters/wge
                     postBuild:
                       substitute:
                         clusterName: '{{ .Repeat.name }}'
@@ -148,9 +148,9 @@ spec:
           spec:
             generators:
               - gitRepository:
-                  repositoryRef: beta
+                  repositoryRef: flux-system
                   files:
-                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: "{ .clusters }"
                 content:
@@ -199,9 +199,9 @@ spec:
           spec:
             generators:
               - gitRepository:
-                  repositoryRef: beta
+                  repositoryRef: flux-system
                   files:
-                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: '{ .clusters[?(@.mode=="create")] }'
                 content:
@@ -255,9 +255,9 @@ spec:
           spec:
             generators:
               - gitRepository:
-                  repositoryRef: beta
+                  repositoryRef: flux-system
                   files:
-                    - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: "{ .clusters }"
                 content:
@@ -274,9 +274,9 @@ spec:
                   spec:
                     generators:
                       - gitRepository:
-                          repositoryRef: beta
+                          repositoryRef: flux-system
                           files:
-                            - path: environments/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                            - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
                     templates:
                       - repeat: '{ .clusters[?(@.name=="{{ .Repeat.name }}")].apps }'
                         content:

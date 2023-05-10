@@ -1,0 +1,44 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha1
+kind: Terraform
+metadata:
+  name: '${resourceName}-cluster-${clusterName}-eks'
+  namespace: ${templateNamespace}
+spec:
+  interval: 1h
+  retryInterval: 20s
+  path: ./cluster-templates/eks-${mode}
+  approvePlan: auto
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: '${resourceName}-cluster-${clusterName}-core-outputs'
+  dependsOn:
+    - name: '${resourceName}-vpc-${vpcName}'
+  backendConfig:
+    customConfiguration: |
+      backend "s3" {
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/eks/${clusterName}/terraform.tfstate"
+        bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+        region         = "${awsRegion}"
+        encrypt        = true
+        dynamodb_table = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
+      }
+  vars:
+    - name: cluster_name
+      value: ${resourceName}-${clusterName}
+    - name: eks_version
+      value: ${clusterVersion}
+    - name: region
+      value: ${awsRegion}
+  varsFrom:
+    - kind: Secret
+      name: ${resourceName}-vpc-${vpcName}-outputs
+      varsKeys:
+        - vpc_id
+        - private_subnets_string
+        - public_subnets_string
+        - vpc_cidr
+        
+  sourceRef:
+    kind: GitRepository
+    name: terraform
+    namespace: flux-system
