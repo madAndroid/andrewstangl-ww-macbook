@@ -59,7 +59,7 @@ spec:
                   files:
                     - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
-              - repeat: '{ .vpcs[?(@.mode=="create")] }'
+              - repeat: '{ .vpcs }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -83,33 +83,33 @@ spec:
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         vpcName: '{{ .Repeat.name }}'
                         region: '{{ .Element.aws.region }}'
-                        publicSubnetCount: '{{ .Repeat.publicsubnets }}'
-                        privateSubnetCount: '{{ .Repeat.privatesubnets }}'
-                        vpcCIDR: '{{ .Repeat.cidr }}'
+                        publicSubnetCount: '{{ or .Repeat.publicsubnets "3" }}'
+                        privateSubnetCount: '{{ or .Repeat.privatesubnets "3" }}'
+                        vpcCIDR: '{{ or .Repeat.cidr  "10.0.0.0/16"}}'
 
-              - repeat: '{ .vpcs[?(@.mode=="use")] }'
-                content:
-                  kind: Kustomization
-                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-                  metadata:
-                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
-                    annotations:
-                      templates.weave.works/create-request: ''
-                  spec:
-                    interval: 1m0s
-                    sourceRef:
-                      kind: GitRepository
-                      name: flux-system
-                      namespace: flux-system
-                    path: ./infra/dynamic/vpc-use
-                    prune: true
-                    wait: true
-                    timeout: 10m                    
-                    postBuild:
-                      substitute:
-                        templateNamespace: '(( .template.meta.namespace ))'
-                        resourceName: '(( .params.RESOURCE_NAME ))'
-                        vpcName: '{{ .Repeat.name }}'
+              # - repeat: '{ .vpcs[?(@.mode=="use")] }'
+              #   content:
+              #     kind: Kustomization
+              #     apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+              #     metadata:
+              #       name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
+              #       annotations:
+              #         templates.weave.works/create-request: ''
+              #     spec:
+              #       interval: 1m0s
+              #       sourceRef:
+              #         kind: GitRepository
+              #         name: flux-system
+              #         namespace: flux-system
+              #       path: ./infra/dynamic/vpc-use
+              #       prune: true
+              #       wait: true
+              #       timeout: 10m                    
+              #       postBuild:
+              #         substitute:
+              #           templateNamespace: '(( .template.meta.namespace ))'
+              #           resourceName: '(( .params.RESOURCE_NAME ))'
+              #           vpcName: '{{ .Repeat.name }}'
 
         # Register cluster with WGE if desired/needed
         - apiVersion: templates.weave.works/v1alpha1
