@@ -4,3 +4,6 @@ resources/.vault-init.json
 resources/wge-entitlement.yaml
 resources/github-secrets.sh
 
+.terraform
+*.tfstate*
+.terraform.lock.hcl
