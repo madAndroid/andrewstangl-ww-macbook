@@ -10,7 +10,7 @@ spec:
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-${clusterName}-eks-config'
+    name: '${resourceName}-eks-${clusterName}-config'
   dependsOn:
     - name: '${resourceName}-vpc-${vpcName}'
   backendConfig:
@@ -24,20 +24,9 @@ spec:
       }
   vars:
     - name: cluster_name
-      value: ${resourceName}-${clusterName}
-    - name: eks_version
-      value: ${clusterVersion}
+      value: ${clusterName}
     - name: region
-      value: ${awsRegion}
-  varsFrom:
-    - kind: Secret
-      name: ${resourceName}-vpc-${vpcName}-outputs
-      varsKeys:
-        - vpc_id
-        - private_subnets_string
-        - public_subnets_string
-        - vpc_cidr
-        
+      value: ${awsRegion}    
   sourceRef:
     kind: GitRepository
     name: terraform

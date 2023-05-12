@@ -10,11 +10,11 @@ spec:
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${vpcName}-vpc-config'
+    name: '${resourceName}-vpc-${vpcName}-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc-use/${vpcName}/terraform.tfstate"
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc/${vpcName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true

@@ -1,16 +1,16 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
-  name: '${resourceName}-cluster-${clusterName}-eks'
+  name: '${resourceName}-eks-${clusterName}'
   namespace: ${templateNamespace}
 spec:
   interval: 1h
   retryInterval: 20s
-  path: ./cluster-templates/eks-${mode}
+  path: ./cluster-templates/eks-create
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-cluster-${clusterName}-core-outputs'
+    name: '${resourceName}-eks-${resourceName}-${clusterName}-config'
   dependsOn:
     - name: '${resourceName}-vpc-${vpcName}'
   backendConfig:
@@ -31,13 +31,12 @@ spec:
       value: ${awsRegion}
   varsFrom:
     - kind: Secret
-      name: ${resourceName}-vpc-${vpcName}-outputs
+      name: ${resourceName}-vpc-${vpcName}-config
       varsKeys:
         - vpc_id
         - private_subnets_string
         - public_subnets_string
         - vpc_cidr
-        
   sourceRef:
     kind: GitRepository
     name: terraform

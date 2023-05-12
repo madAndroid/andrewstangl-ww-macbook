@@ -22,5 +22,10 @@ clusters:
 
     apps: 
       - name: podinfo-ms1
+        path: ./kustomize
       - name: podinfo-ms2
         version: v6.3.5
+      - name: podinfo-ms3
+        ref:
+          type: tag
+          value: v6.3.6

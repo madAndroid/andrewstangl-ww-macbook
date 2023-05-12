@@ -1,22 +1,22 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
-  name: '${resourceName}-cluster-config-${resourceName}-${clusterName}'
+  name: '${resourceName}-eks-config-${resourceName}-${clusterName}'
   namespace: ${templateNamespace}
 spec:
   interval: 10m
   dependsOn:
-    - name: '${resourceName}-eks-cluster-${clusterName}'
+    - name: '${resourceName}-eks-${clusterName}'
   retryInterval: 20s
   path: ./cluster-templates/eks-config
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-${clusterName}-cluster-config'
+    name: '${resourceName}-eks-config-${clusterName}-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/config/${clusterName}/terraform.tfstate"
+        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/eks-config/${clusterName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true

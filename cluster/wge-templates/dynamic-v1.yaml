@@ -38,11 +38,9 @@ spec:
     - name: SHRINK
       description: Shrink application node groups to zero.
       default: "false"
-
   resourcetemplates:
     - path: clusters/management/clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
       content:
-
         # vpc
         - apiVersion: templates.weave.works/v1alpha1
           kind: GitOpsSet
@@ -59,7 +57,7 @@ spec:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
-                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: '{ .vpcs[?(@.mode=="create")] }'
                 content:
@@ -79,7 +77,6 @@ spec:
                     prune: true
                     wait: true
                     timeout: 10m
-                    
                     postBuild:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
@@ -130,7 +127,7 @@ spec:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
-                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: '{ .clusters[?(@.gui)] }'
                 content:
@@ -171,9 +168,9 @@ spec:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
-                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
-              - repeat: "{ .clusters }"
+              - repeat: '{ .clusters }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -189,11 +186,10 @@ spec:
                       kind: GitRepository
                       name: flux-system
                       namespace: flux-system
-                    path: ./infra/dynamic/eks-create
+                    path: ./infra/dynamic/eks-{{ .Repeat.mode }}
                     prune: true
                     wait: true
                     timeout: 15m
-                    
                     postBuild:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
@@ -201,7 +197,6 @@ spec:
                         clusterName: '{{ .Repeat.name }}'
                         vpcName: '{{ .Repeat.vpc_name }}'
                         clusterVersion: '{{ .Repeat.version }}'
-                        mode: '{{ .Repeat.mode }}'
 
         # Configure eks cluster if create is true
         - apiVersion: templates.weave.works/v1alpha1
@@ -213,20 +208,20 @@ spec:
               app.kubernetes.io/part-of: gitopssets-controller
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
-            name: (( .params.RESOURCE_NAME ))-clusters-config
+            name: (( .params.RESOURCE_NAME ))-eks-config
           spec:
             generators:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
-                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: '{ .clusters[?(@.mode=="create")] }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-cluster-config-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-config-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -247,7 +242,7 @@ spec:
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         clusterName: '{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
-                        target_path: 'clusters/(( .template.meta.namespace ))/${clusterName}'
+                        target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
                         desired_size: "\"(( .params.DESIRED_SIZE ))\""
                         # min_size: '(( .params.MIN_SIZE ))'
                         # max_size: '(( .params.MAX_SIZE ))'
@@ -272,7 +267,7 @@ spec:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
-                    - path: clusters/apps/dynamic-templates/yamls(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
               - repeat: "{ .clusters.apps }"
                 content:
@@ -288,7 +283,7 @@ spec:
                       kind: GitRepository
                       name: flux-system
                       namespace: flux-system
-                    path: ./infra/dynamic/deploy-app
+                    path: ./cluster/apps/template
                     prune: true
                     wait: true
                     timeout: 5m
@@ -297,7 +292,9 @@ spec:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        cnfVersion: '{{ .Repeat.version }}'
                         clusterName: '{{ .Element.name }}'
                         appName: '{{ .Repeat.name }}'
-                        appVersion: '{{ .Repeat.version }}'
+                        appVersion: '{{or .Repeat.version "" }}'
+                        appPath: '{{or .Repeat.path "./kustomize" }}'
+                        appRefType: '{{or .Repeat.ref.type "branch" }}'
+                        appRefValue: '{{or .Repeat.ref.value "main" }}'
