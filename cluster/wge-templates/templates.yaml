@@ -64,4 +64,4 @@ spec:
                         appName: '{{ .Repeat.name }}'
                       substituteFrom:
                         - kind: ConfigMap
-                          name: cluster-info
+                          name: cluster-config
