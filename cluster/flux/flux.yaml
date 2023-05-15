@@ -266,7 +266,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: wge-rbac
-  path: ./clusters/namespaces
+  path: ./cluster/namespaces
   prune: true
   wait: true
   sourceRef:
