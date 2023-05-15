@@ -15,7 +15,7 @@ spec:
     - gitRepository:
         repositoryRef: flux-system
         files:
-          - path: resource-descriptions/namespaces/gitopssets.yaml
+          - path: resource-descriptions/namespaces.yaml
   templates:
     - repeat: '{ .namespaces }'
       content:
