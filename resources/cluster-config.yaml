@@ -10,3 +10,9 @@ data:
   clusterIP: ${CLUSTER_IP}
   GitHubOrg: ${GITHUB_MGMT_ORG}
   GitHubRepo: ${GITHUB_MGMT_REPO}
+  awsAccountId: "\"${AWS_ACCOUNT_ID}\""
+  prefixName: ${PREFIX_NAME}
+  awsRegion: ${AWS_REGION}
+  awsTagCreator: ${AWS_TAG_creator}
+  awsTagCustomer: ${AWS_TAG_customer}
+  awsTagProjectGid: "\"${AWS_TAG_projectGid}\""

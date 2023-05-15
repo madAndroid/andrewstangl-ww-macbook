@@ -46,6 +46,11 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
+aws-secret.sh
+
+# this is the token for the vault admin user, create a more restricted token for use in default namespace
+vault kv put ${tls_skip} -mount=secrets default-vault-token vault-token=${VAULT_TOKEN}
+
 entitlement=$(yq -r '.data.entitlement'  ${entitlement_file})
 if [ "$entitlement" == "null" ]; then
   echo "missing entitlement field, file: ${entitlement_file}"
@@ -68,7 +73,6 @@ vault kv put ${tls_skip} -mount=secrets wge-entitlement entitlement=${entitlemen
 
 source ${secrets_file}
 source resources/github-config.sh
-
 
 vault kv put ${tls_skip} -mount=secrets dex-config config.yaml="$(cat resources/github-dex-config.yaml |envsubst)"
 # vault kv put ${tls_skip} -mount=secrets git-provider-credentials GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} GITLAB_CLIENT_SECRET=${GITLAB_CLIENT_SECRET} \

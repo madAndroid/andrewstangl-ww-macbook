@@ -14,7 +14,7 @@ spec:
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/vpc/${resourceName}-${vpcName}/terraform.tfstate"
+        key            = "${clusterName}/${templateNamespace}/${resourceName}/vpc/${resourceName}-${vpcName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
@@ -35,3 +35,8 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  runnerPodTemplate:
+    spec:
+      envFrom:
+      - secretRef:
+          name: aws-creds

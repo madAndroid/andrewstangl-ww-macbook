@@ -16,7 +16,7 @@ spec:
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${wge_cluster_name}/${templateNamespace}/${resourceName}/eks-config/${clusterName}/terraform.tfstate"
+        key            = "${clusterName}/${templateNamespace}/${resourceName}/eks-config/${clusterName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
@@ -44,7 +44,7 @@ spec:
     - name: eks_core_state_bucket
       value: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
     - name: eks_core_state_key
-      value: '${wge_cluster_name}/${templateNamespace}/${resourceName}/eks/${clusterName}/terraform.tfstate'
+      value: '${clusterName}/${templateNamespace}/${resourceName}/eks/${clusterName}/terraform.tfstate'
     - name: route53_main_domain
       value: ${leafZone}
   varsFrom:

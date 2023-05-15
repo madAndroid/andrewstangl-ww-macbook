@@ -29,6 +29,9 @@ spec:
         interval: 1m0s
         path: ./infra/dynamic/vpc-create
         postBuild:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-config
           substitute:
             privateSubnetCount: '{{ or .Repeat.privatesubnets "3" }}'
             publicSubnetCount: '{{ or .Repeat.publicsubnets "3" }}'
@@ -78,6 +81,9 @@ spec:
         interval: 1m0s
         path: ./clusters/wge
         postBuild:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-config
           substitute:
             clusterName: '{{ .Repeat.name }}'
             resourceName: dynamic-test
@@ -124,6 +130,9 @@ spec:
         interval: 1m0s
         path: ./infra/dynamic/eks-{{ .Repeat.mode }}
         postBuild:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-config
           substitute:
             clusterName: '{{ .Repeat.name }}'
             clusterVersion: '{{ .Repeat.version }}'
@@ -173,6 +182,9 @@ spec:
         interval: 1m0s
         path: ./infra/dynamic/eks-config
         postBuild:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-config
           substitute:
             clusterName: '{{ .Repeat.name }}'
             desired_size: '"2"'
@@ -221,6 +233,9 @@ spec:
         interval: 1m0s
         path: ./cluster/apps/template
         postBuild:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-config
           substitute:
             appName: '{{ .Repeat.name }}'
             appPath: '{{or .Repeat.path "./kustomize" }}'

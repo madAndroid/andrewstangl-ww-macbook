@@ -87,7 +87,8 @@ kubectl wait --for=condition=Ready kustomization/dex -n flux-system
 vault-oidc-config.sh
 
 export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
-
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+export AWS_REGION=$(vault kv get -format=json  secrets/aws-creds | jq -r '.data.data."AWS_REGION"')
 cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 
 if [[ `git status --porcelain` ]]; then

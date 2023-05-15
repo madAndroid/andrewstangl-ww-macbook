@@ -1,0 +1,34 @@
+---
+apiVersion: infra.contrib.fluxcd.io/v1alpha1
+kind: Terraform
+metadata:
+  name: aws-s3-bucket
+  namespace: ${nameSpace}
+  labels:
+    tf.weave.works/composite: s3-bucket
+spec:
+  path: aws_s3_bucket
+  values:
+    bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
+    tags:
+      creator: ${awsTagCreator}
+      customer: ${awsTagCustomer}
+      projectGid: ${awsTagProjectGid}
+      Name: state-bucket
+  sourceRef:
+    kind: OCIRepository
+    name: aws-package
+  approvePlan: auto
+  retryInterval: 10s
+  interval: 2m
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: aws-s3-bucket-outputs
+    outputs:
+    - arn
+    - bucket
+  runnerPodTemplate:
+    spec:
+      envFrom:
+      - secretRef:
+          name: aws-creds

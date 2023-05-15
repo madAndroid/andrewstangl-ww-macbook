@@ -1,9 +1,13 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitopssets
+  namespace: flux-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: gitopssets-role
-  namespace: ${nameSpace}
 rules:
 - apiGroups:
   - kustomize.toolkit.fluxcd.io
@@ -22,12 +26,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: gitopssets-role-binding
-  namespace: ${nameSpace}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: gitopssets-role
 subjects:
 - kind: ServiceAccount
-  name: gitopssets-kustomization
-  namespace: ${nameSpace}
+  name: gitopssets
+  namespace: flux-system
