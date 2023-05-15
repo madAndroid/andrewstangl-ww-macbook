@@ -27,5 +27,5 @@ roleRef:
   name: gitopssets-role
 subjects:
 - kind: ServiceAccount
-  name: gitopssets-kustomization
+  name: gitopssets
   namespace: flux-system
