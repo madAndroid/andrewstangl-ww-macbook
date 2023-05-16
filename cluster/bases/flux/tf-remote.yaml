@@ -3,7 +3,7 @@ apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
   name: aws-s3-bucket
-  namespace: ${nameSpace}
+  namespace: flux-system
   labels:
     tf.weave.works/composite: s3-bucket
 spec:
