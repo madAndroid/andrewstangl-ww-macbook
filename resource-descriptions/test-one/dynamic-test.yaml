@@ -3,7 +3,7 @@ wge:
 
 template: 
   name: dynamic-v1
-  namespace: default
+  namespace: test-one
 aws:
   region: eu-west-1
 vpcs:

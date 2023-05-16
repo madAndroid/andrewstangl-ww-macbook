@@ -10,12 +10,12 @@ metadata:
     templates.weave.works/template-name: dynamic-v1
     templates.weave.works/template-namespace: ""
   name: dynamic-test-vpcs
-  namespace: default
+  namespace: test-one
 spec:
   generators:
   - gitRepository:
       files:
-      - path: resource-descriptions/default/dynamic-test.yaml
+      - path: resource-descriptions/test-one/dynamic-test.yaml
       repositoryRef: flux-system
   templates:
   - content:
@@ -37,7 +37,7 @@ spec:
             publicSubnetCount: '{{ or .Repeat.publicsubnets "3" }}'
             region: '{{ .Element.aws.region }}'
             resourceName: dynamic-test
-            templateNamespace: default
+            templateNamespace: test-one
             vpcCIDR: '{{ or .Repeat.cidr  "10.0.0.0/16"}}'
             vpcName: '{{ .Repeat.name }}'
         prune: true
@@ -62,12 +62,12 @@ metadata:
     templates.weave.works/template-name: dynamic-v1
     templates.weave.works/template-namespace: ""
   name: dynamic-test-gitops-clusters
-  namespace: default
+  namespace: test-one
 spec:
   generators:
   - gitRepository:
       files:
-      - path: resource-descriptions/default/dynamic-test.yaml
+      - path: resource-descriptions/test-one/dynamic-test.yaml
       repositoryRef: flux-system
   templates:
   - content:
@@ -87,7 +87,7 @@ spec:
           substitute:
             clusterName: '{{ .Repeat.name }}'
             resourceName: dynamic-test
-            templateNamespace: default
+            templateNamespace: test-one
         prune: true
         sourceRef:
           kind: GitRepository
@@ -109,12 +109,12 @@ metadata:
     templates.weave.works/template-name: dynamic-v1
     templates.weave.works/template-namespace: ""
   name: dynamic-test-eks-clusters
-  namespace: default
+  namespace: test-one
 spec:
   generators:
   - gitRepository:
       files:
-      - path: resource-descriptions/default/dynamic-test.yaml
+      - path: resource-descriptions/test-one/dynamic-test.yaml
       repositoryRef: flux-system
   templates:
   - content:
@@ -137,7 +137,7 @@ spec:
             clusterName: '{{ .Repeat.name }}'
             clusterVersion: '{{ .Repeat.version }}'
             resourceName: dynamic-test
-            templateNamespace: default
+            templateNamespace: test-one
             vpcName: '{{ .Repeat.vpc_name }}'
         prune: true
         sourceRef:
@@ -161,12 +161,12 @@ metadata:
     templates.weave.works/template-name: dynamic-v1
     templates.weave.works/template-namespace: ""
   name: dynamic-test-eks-config
-  namespace: default
+  namespace: test-one
 spec:
   generators:
   - gitRepository:
       files:
-      - path: resource-descriptions/default/dynamic-test.yaml
+      - path: resource-descriptions/test-one/dynamic-test.yaml
       repositoryRef: flux-system
   templates:
   - content:
@@ -190,8 +190,8 @@ spec:
             desired_size: '"2"'
             eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
             resourceName: dynamic-test
-            target_path: clusters/default/dynamic-test/${clusterName}
-            templateNamespace: default
+            target_path: clusters/test-one/dynamic-test/${clusterName}
+            templateNamespace: test-one
         prune: true
         sourceRef:
           kind: GitRepository
@@ -214,12 +214,12 @@ metadata:
     templates.weave.works/template-name: dynamic-v1
     templates.weave.works/template-namespace: ""
   name: dynamic-test-apps
-  namespace: default
+  namespace: test-one
 spec:
   generators:
   - gitRepository:
       files:
-      - path: resource-descriptions/default/dynamic-test.yaml
+      - path: resource-descriptions/test-one/dynamic-test.yaml
       repositoryRef: flux-system
   templates:
   - content:
@@ -244,7 +244,7 @@ spec:
             appVersion: '{{or .Repeat.version "" }}'
             clusterName: '{{ .Element.name }}'
             resourceName: dynamic-test
-            templateNamespace: default
+            templateNamespace: test-one
         prune: true
         sourceRef:
           kind: GitRepository
