@@ -49,7 +49,8 @@ source .envrc
 aws-secret.sh
 
 # this is the token for the vault admin user, create a more restricted token for use in default namespace
-vault kv put ${tls_skip} -mount=secrets default-vault-token vault-token=${VAULT_TOKEN}
+vault kv put ${tls_skip} -mount=secrets test-one-vault-token vault-token=${VAULT_TOKEN}
+vault kv put ${tls_skip} -mount=secrets test-two-vault-token vault-token=${VAULT_TOKEN}
 
 entitlement=$(yq -r '.data.entitlement'  ${entitlement_file})
 if [ "$entitlement" == "null" ]; then
@@ -81,9 +82,9 @@ vault kv put ${tls_skip} -mount=secrets dex-config config.yaml="$(cat resources/
 vault kv put ${tls_skip} -mount=secrets wge-oidc-auth clientID=wge clientSecret=${WGE_DEX_CLIENT_SECRET}
 vault kv put ${tls_skip} -mount=secrets vault-oidc-auth clientID=vault clientSecret=${VAULT_DEX_CLIENT_SECRET}
 
-vault kv put ${tls_skip} -mount=secrets gitlab-repo-read-credentials username=token password=${GITHUB_TOKEN_READ}
+vault kv put ${tls_skip} -mount=secrets github-repo-read-credentials username=token password=${GITHUB_TOKEN_READ}
 
-vault kv put ${tls_skip} -mount=secrets gitlab-repo-write-credentials username=token password=${GITHUB_TOKEN_WRITE}
+vault kv put ${tls_skip} -mount=secrets github-repo-write-credentials username=token password=${GITHUB_TOKEN_WRITE}
 
 ADMIN_PASSWORD="$(date +%s | sha256sum | base64 | head -c 10)"
 BCRYPT_PASSWD=$(echo -n $ADMIN_PASSWORD | gitops get bcrypt-hash)

@@ -48,3 +48,20 @@ spec:
   dataFrom:
     - extract:
         key: aws-creds
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: git-read-token
+  namespace: ${nameSpace}
+spec:
+  refreshInterval: 5m
+  secretStoreRef:
+    kind: SecretStore
+    name: vault
+  target:
+    name: git-read-token
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: git-read-token
