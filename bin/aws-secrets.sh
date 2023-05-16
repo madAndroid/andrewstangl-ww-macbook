@@ -47,8 +47,9 @@ pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
 
-AWS_ACCESS_KEY_ID=$(cat ${aws_dir}/credentials | grep aws_access_key_id | awk  -F "=" '{print $2}'  | xargs)
-AWS_SECRET_ACCESS_KEY=$(cat ${aws_dir}/credentials | grep aws_secret_access_key | awk  -F "=" '{print $2}' | xargs)
-AWS_REGION=$(cat ${aws_dir}/config | grep region | awk  -F "=" '{print $2}' | xargs)
-vault kv put ${tls_skip} -mount=secrets aws-creds  AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY AWS_REGION=$AWS_REGION
-
+AWS_ACCESS_KEY_ID=$(cat ${aws_dir}/credentials | grep aws_access_key_id | cut -f2- -d=)
+AWS_SECRET_ACCESS_KEY=$(cat ${aws_dir}/credentials | grep aws_secret_access_key | cut -f2- -d=)
+AWS_REGION=$(cat ${aws_dir}/config | grep region | cut -f2- -d= | xargs)
+AWS_SESSION_TOKEN=$(cat ${aws_dir}/credentials | grep aws_session_token | cut -f2- -d= | cut -f2 -d\")
+vault kv put ${tls_skip} -mount=secrets aws-creds  AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+         AWS_REGION=$AWS_REGION AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
