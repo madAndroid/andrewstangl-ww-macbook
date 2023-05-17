@@ -12,6 +12,7 @@ metadata:
   name: dynamic-test-vpcs
   namespace: test-one
 spec:
+  serviceAccountName: gitopssets
   generators:
   - gitRepository:
       files:
@@ -64,6 +65,7 @@ metadata:
   name: dynamic-test-gitops-clusters
   namespace: test-one
 spec:
+  serviceAccountName: gitopssets
   generators:
   - gitRepository:
       files:
@@ -111,6 +113,7 @@ metadata:
   name: dynamic-test-eks-clusters
   namespace: test-one
 spec:
+  serviceAccountName: gitopssets
   generators:
   - gitRepository:
       files:
@@ -216,6 +219,7 @@ metadata:
   name: dynamic-test-apps
   namespace: test-one
 spec:
+  serviceAccountName: gitopssets
   generators:
   - gitRepository:
       files:
