@@ -34,7 +34,7 @@ spec:
           path: ./cluster/namespace
           prune: true
           wait: true
-          timeout: 10m
+          timeout: 2m
           postBuild:
             substituteFrom:
               - kind: ConfigMap
