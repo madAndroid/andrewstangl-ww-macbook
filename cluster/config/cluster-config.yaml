@@ -15,4 +15,4 @@ data:
   awsRegion: eu-west-1
   awsTagCreator: paul.carlton@weave.works
   awsTagCustomer: weaveworks-cx
-  awsTagProjectGid: \"20276\"
+  awsTagProjectGid: "20276"
