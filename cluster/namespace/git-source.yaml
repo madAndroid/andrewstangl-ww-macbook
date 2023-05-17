@@ -9,4 +9,4 @@ spec:
     branch: main
   secretRef:
     name: github-repo-read-credentials
-  url: https://github.com/{GitHubOrg}/${GitHubRepo}.git
+  url: https://github.com/${GitHubOrg}/${GitHubRepo}.git
