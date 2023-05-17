@@ -166,6 +166,7 @@ metadata:
   name: dynamic-test-eks-config
   namespace: test-one
 spec:
+  serviceAccountName: gitopssets
   generators:
   - gitRepository:
       files:
