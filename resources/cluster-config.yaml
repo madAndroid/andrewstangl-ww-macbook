@@ -15,4 +15,4 @@ data:
   awsRegion: ${AWS_REGION}
   awsTagCreator: ${AWS_TAG_creator}
   awsTagCustomer: ${AWS_TAG_customer}
-  awsTagProjectGid: \""${AWS_TAG_projectGid}"\"
+  awsTagProjectGid: \"${AWS_TAG_projectGid}\"
