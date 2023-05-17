@@ -60,8 +60,8 @@ spec:
     kind: SecretStore
     name: vault
   target:
-    name: git-read-token
+    name: github-repo-read-credentials
     creationPolicy: Owner
   dataFrom:
     - extract:
-        key: git-read-token
+        key: github-repo-read-credentials
