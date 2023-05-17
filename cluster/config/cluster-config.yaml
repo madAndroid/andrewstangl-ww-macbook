@@ -13,6 +13,6 @@ data:
   awsAccountId: ac-
   prefixName: ww-paulc
   awsRegion: eu-west-1
-  awsTagCreator: 
-  awsTagCustomer: 
-  awsTagProjectGid: \"\"
+  awsTagCreator: paul.carlton@weave.works
+  awsTagCustomer: weaveworks-cx
+  awsTagProjectGid: \"20276\"
