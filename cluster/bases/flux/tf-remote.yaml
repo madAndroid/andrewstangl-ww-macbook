@@ -43,6 +43,7 @@ metadata:
 spec:
   path: aws_dynamodb_table
   values:
+    name: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
     attribute:
     - name: LockId
       type: S
