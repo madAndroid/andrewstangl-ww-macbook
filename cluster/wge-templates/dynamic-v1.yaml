@@ -2,7 +2,7 @@ apiVersion: templates.weave.works/v1alpha2
 kind: GitOpsTemplate
 metadata:
   name: dynamic-v1
-  namespace: default
+  namespace: test-one
   labels:
     weave.works/template-type: terraform
   annotations:
