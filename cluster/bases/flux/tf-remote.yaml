@@ -45,7 +45,7 @@ spec:
   values:
     name: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
     attribute:
-    - name: LockId
+    - name: LockID
       type: S
     hash_key: LockID
     read_capacity: 5
