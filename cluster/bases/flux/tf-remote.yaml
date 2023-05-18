@@ -32,3 +32,42 @@ spec:
       envFrom:
       - secretRef:
           name: aws-creds
+---
+apiVersion: infra.contrib.fluxcd.io/v1alpha1
+kind: Terraform
+metadata:
+  name: aws-dynamo-table
+  namespace: flux-system
+  labels:
+    tf.weave.works/composite: dynamodb-table
+spec:
+  path: aws_dynamodb_table
+  values:
+    attribute:
+    - name: LockId
+      type: S
+    hash_key: LockID
+    read_capacity: 5
+    write_capacity: 5
+    tags:
+      creator: ${awsTagCreator}
+      customer: ${awsTagCustomer}
+      projectGid: ${awsTagProjectGid}
+      Name: state-bucket
+  sourceRef:
+    kind: OCIRepository
+    name: aws-package
+  approvePlan: auto
+  retryInterval: 10s
+  interval: 2m
+  destroyResourcesOnDeletion: true
+  writeOutputsToSecret:
+    name: aws-dymamo-table-outputs
+    outputs:
+    - arn
+    - bucket
+  runnerPodTemplate:
+    spec:
+      envFrom:
+      - secretRef:
+          name: aws-creds

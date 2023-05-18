@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/bases
+  path: ./cluster/bases/rbac
   prune: true
   wait: true
   sourceRef:
