@@ -26,7 +26,7 @@ spec:
     - name: region
       value: ${awsRegion}
     - name: vpc_cidr
-      value: ${vpc_cidr}
+      value: ${vpcCIDR}
     - name: private_subnet_count
       value: ${privateSubnetCount}
     - name: public_subnet_count
