@@ -60,12 +60,12 @@ spec:
                   files:
                     - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
-              - repeat: '{ .vpcs }'
+              - repeat: '{ .vpcs[?(@.mode=="create")] }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: '(( .params.RESOURCE_NAME ))-vpc-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}'
+                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -91,29 +91,29 @@ spec:
                         privateSubnetCount: '{{ or .Repeat.privatesubnets "3" }}'
                         vpcCIDR: '{{ or .Repeat.cidr  "10.0.0.0/16"}}'
 
-              # - repeat: '{ .vpcs[?(@.mode=="use")] }'
-              #   content:
-              #     kind: Kustomization
-              #     apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-              #     metadata:
-              #       name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
-              #       annotations:
-              #         templates.weave.works/create-request: ''
-              #     spec:
-              #       interval: 1m0s
-              #       sourceRef:
-              #         kind: GitRepository
-              #         name: flux-system
-              #         namespace: flux-system
-              #       path: ./infra/dynamic/vpc-use
-              #       prune: true
-              #       wait: true
-              #       timeout: 10m                    
-              #       postBuild:
-              #         substitute:
-              #           templateNamespace: '(( .template.meta.namespace ))'
-              #           resourceName: '(( .params.RESOURCE_NAME ))'
-              #           vpcName: '{{ .Repeat.name }}'
+              - repeat: '{ .vpcs[?((@.mode=="use") && (@.resource!=""))] }'
+                content:
+                  kind: Kustomization
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  metadata:
+                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.resource }}-{{ .Repeat.name }}'
+                    annotations:
+                      templates.weave.works/create-request: ''
+                  spec:
+                    interval: 1m0s
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    path: ./infra/dynamic/vpc-use
+                    prune: true
+                    wait: true
+                    timeout: 10m                    
+                    postBuild:
+                      substitute:
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                        vpcName: '{{ .Repeat.name }}'
 
         # Register cluster with WGE if desired/needed
         - apiVersion: templates.weave.works/v1alpha1
@@ -127,6 +127,7 @@ spec:
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-gitops-clusters
           spec:
+            serviceAccountName: gitopssets
             generators:
               - gitRepository:
                   repositoryRef: flux-system
@@ -143,7 +144,7 @@ spec:
                     name: (( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-gitops-cluster
                   spec:
                     interval: 1m0s
-                    path: ./clusters/wge
+                    path: ./wge-resources/wge
                     postBuild:
                       substituteFrom:
                         - kind: ConfigMap
@@ -171,18 +172,19 @@ spec:
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-eks-clusters
           spec:
+            serviceAccountName: gitopssets
             generators:
               - gitRepository:
                   repositoryRef: flux-system
                   files:
                     - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
-              - repeat: '{ .clusters }'
+              - repeat: '{ .clusters[?(@.mode=="create")] }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -193,7 +195,7 @@ spec:
                       kind: GitRepository
                       name: flux-system
                       namespace: flux-system
-                    path: ./infra/dynamic/eks-{{ .Repeat.mode }}
+                    path: ./infra/dynamic/eks-create
                     prune: true
                     wait: true
                     timeout: 15m
@@ -220,6 +222,7 @@ spec:
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-eks-config
           spec:
+            serviceAccountName: gitopssets
             generators:
               - gitRepository:
                   repositoryRef: flux-system
@@ -231,13 +234,13 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-config-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-config-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
+                      - name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -276,6 +279,7 @@ spec:
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-apps
           spec:
+            serviceAccountName: gitopssets
             generators:
               - gitRepository:
                   repositoryRef: flux-system

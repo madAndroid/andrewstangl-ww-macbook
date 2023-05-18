@@ -8,7 +8,9 @@ aws:
   region: eu-west-1
 vpcs:
   - name: v1 # if mode is 'use' include resource name in vpc name, i.e. <resource name>-<vpc name>
-    mode: create # set to use to use existing vpc
+    mode: create # set to 'use' to use existing vpc
+    # resource: if mode is 'use' and using specify vpc name in form <resource name>-<vpc name>
+    # id: if mode is 'use' specify the vpc id of the vpc to use when using a vpc not created by6
     cidr: 10.0.0.0/16
     publicsubnets: 3
     privatesubnets: 3
@@ -16,9 +18,9 @@ vpcs:
 clusters:
   - name: c1 # if mode is 'use' include resource name in cluster name, i.e. <resource name>-<cluster name>
     mode: create # set to use to use existing cluster
-    gui: false # set to false to skip adding it to the GUI
+    gui: true # set to false to skip adding it to the GUI
     vpc_name: v1 # if using an existing vpc, provide full name, i.e. <resource name>-<vpc name>
-    version: 1.23
+    version: 1.26
 
     apps: 
       - name: podinfo-ms1

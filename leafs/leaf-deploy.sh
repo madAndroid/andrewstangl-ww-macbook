@@ -115,4 +115,4 @@ do
 done
 
 flux --version
-flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path cluster/clusters/leafs/$hostname/flux
+flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path leafs/$hostname/flux
