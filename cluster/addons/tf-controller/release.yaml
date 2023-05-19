@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: tf-controller
-      version: 0.12.1
+      version: 0.12.0
       sourceRef:
         kind: HelmRepository
         name: tf-controller
@@ -25,7 +25,7 @@ spec:
   values:
     runner:
       image:
-        tag: "v0.14.1"
+        tag: "v0.15.0-rc.1"
       serviceAccount:
         annotations:
           eks.amazonaws.com/role-arn: ${tfRunnerRoleArn}
