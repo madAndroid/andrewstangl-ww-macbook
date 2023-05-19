@@ -28,4 +28,4 @@ spec:
       resourceName: ${resourceName}
       clusterName: ${clusterName}
       appName: ${appName}
-      appVersion: ${appVersion:}
+      appVersion: ${appVersion}
