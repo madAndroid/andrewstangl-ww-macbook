@@ -86,6 +86,8 @@ vault kv put ${tls_skip} -mount=secrets github-repo-read-credentials username=to
 
 vault kv put ${tls_skip} -mount=secrets github-repo-write-credentials username=token password=${GITHUB_TOKEN_WRITE}
 
+vault kv put ${tls_skip} -mount=secrets github-repo-write-token token=${GITHUB_TOKEN_WRITE}
+
 ADMIN_PASSWORD="$(date +%s | sha256sum | base64 | head -c 10)"
 BCRYPT_PASSWD=$(echo -n $ADMIN_PASSWORD | gitops get bcrypt-hash)
 vault kv put ${tls_skip} -mount=secrets wge-admin-auth username=wge-admin password=${BCRYPT_PASSWD}

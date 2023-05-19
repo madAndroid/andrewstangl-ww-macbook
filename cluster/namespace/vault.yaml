@@ -77,9 +77,9 @@ spec:
     kind: SecretStore
     name: vault
   target:
-    name: github-repo-write-credentials
+    name: github-repo-write-token
     creationPolicy: Owner
   dataFrom:
     - extract:
-        key: github-repo-write-credentials
+        key: github-repo-write-token
   

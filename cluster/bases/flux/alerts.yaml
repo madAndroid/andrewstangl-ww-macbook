@@ -7,7 +7,7 @@ spec:
   type: github
   address: https://github.com/${GitHubOrg}/${GitHubRepo}
   secretRef:
-    name: github-repo-write-credentials
+    name: github-repo-write-token
 ---
 apiVersion: notification.toolkit.fluxcd.io/v1beta2
 kind: Alert
