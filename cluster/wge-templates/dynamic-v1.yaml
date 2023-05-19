@@ -52,6 +52,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-vpc-creation
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -102,6 +103,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-vpc-discovery
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -145,6 +147,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-gitops-clusters
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -190,6 +193,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-eks-cluster-creation
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -240,6 +244,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-eks-cluster-discovery
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -288,6 +293,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-eks-config
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
@@ -345,6 +351,7 @@ spec:
               app.kubernetes.io/managed-by: kustomize
               app.kubernetes.io/created-by: gitopssets-controller
             name: (( .params.RESOURCE_NAME ))-apps
+            namespace: (( .template.meta.namespace ))
           spec:
             serviceAccountName: gitopssets
             generators:
