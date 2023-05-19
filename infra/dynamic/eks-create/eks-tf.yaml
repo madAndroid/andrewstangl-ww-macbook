@@ -12,7 +12,7 @@ spec:
   writeOutputsToSecret:
     name: '${resourceName}-eks-${resourceName}-${clusterName}-config'
   dependsOn:
-    - name: '${resourceName}-vpc-${vpcName}'
+    - name: '${resourceName}-vpc-${vpcResource}-${vpcName}'
   backendConfig:
     customConfiguration: |
       backend "s3" {
@@ -31,7 +31,7 @@ spec:
       value: ${awsRegion}
   varsFrom:
     - kind: Secret
-      name: ${resourceName}-vpc-${vpcName}-config
+      name: ${resourceName}-vpc-${vpcResource}-${vpcName}-config
       varsKeys:
         - vpc_id
         - private_subnets_string
@@ -39,5 +39,5 @@ spec:
         - vpc_cidr
   sourceRef:
     kind: GitRepository
-    name: terraform
+    name: flux-system
     namespace: flux-system

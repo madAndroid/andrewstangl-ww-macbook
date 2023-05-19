@@ -1,7 +1,7 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
-  name: '${resourceName}-vpc-${vpcName}'
+  name: '${resourceName}-vpc-${resourceName}-${vpcName}'
   namespace: ${templateNamespace}
 spec:
   interval: 10m

@@ -228,6 +228,7 @@ spec:
                           name: cluster-config
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
+                        vpcResource: '{{ or .Repeat.vpc_resource (( .params.RESOURCE_NAME )) }}'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         clusterName: '{{ .Repeat.name }}'
                         vpcName: '{{ .Repeat.vpc_name }}'

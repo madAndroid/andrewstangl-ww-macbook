@@ -7,12 +7,13 @@ template:
 aws:
   region: eu-west-1
 vpcs:
-    # if mode is 'use' include resource name in vpc name, i.e. <resource name>-<vpc name>
-    # if mode is 'discover' name should be the vpc id or vpc name if it has one
+    # if mode is 'discover' name can be the vpc id or vpc name if it has one
   - name: v1
+    # If mode is 'use' provide the resource name of the existing vpc as well as name
+    # resource: 
     # set to 'use' to use existing vpc previously created by this template or 'discover' for using existing vpc
     mode: create
-    # id: if mode is 'discover' specify the vpc id of the vpc 
+    # Following field only required if mode is create 
     cidr: 10.0.0.0/16
     publicsubnets: 3
     privatesubnets: 3
@@ -21,10 +22,15 @@ clusters:
     # if mode is 'use' include resource name in cluster name, i.e. <resource name>-<cluster name>
     # if mode is 'discover' name should be the EKS cluster name
   - name: c1
+    # If mode is 'use' provide the resource name of the existing cluster as well as name
+    # resource: 
     # set to 'use' to use existing cluster previously created by this template or 'discover' for using existing cluster
     mode: create
     gui: true # set to false to skip adding it to the GUI
-    vpc_name: v1 # if using an existing vpc, provide full name, i.e. <resource name>-<vpc name>
+    vpc_name: v1
+    # if using an existing vpc created by a previous template, provide resource name of vpc as well as name
+    # vpc_resource: 
+    # Following field only required if mode is create 
     version: 1.26
 
     apps: 

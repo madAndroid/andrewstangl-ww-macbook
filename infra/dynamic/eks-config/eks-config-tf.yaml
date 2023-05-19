@@ -72,5 +72,5 @@ spec:
         - cluster_admin_users_string
   sourceRef:
     kind: GitRepository
-    name: terraform
+    name: flux-system
     namespace: flux-system

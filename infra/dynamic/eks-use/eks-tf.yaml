@@ -29,5 +29,5 @@ spec:
       value: ${awsRegion}    
   sourceRef:
     kind: GitRepository
-    name: terraform
+    name: flux-system
     namespace: flux-system
