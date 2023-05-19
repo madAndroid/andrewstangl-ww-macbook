@@ -60,8 +60,26 @@ spec:
     kind: SecretStore
     name: vault
   target:
-    name: github-repo-read-credentials
+    name: github-repo-write-credentials
     creationPolicy: Owner
   dataFrom:
     - extract:
         key: github-repo-read-credentials
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: git-write-token
+  namespace: ${nameSpace}
+spec:
+  refreshInterval: 5m
+  secretStoreRef:
+    kind: SecretStore
+    name: vault
+  target:
+    name: github-repo-write-credentials
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: github-repo-write-credentials
+  
