@@ -30,7 +30,8 @@ spec:
           service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
           external-dns.alpha.kubernetes.io/hostname: ${hostName}
       ingressClassResource:
-        default: true
+        default: "true"
+      watchIngressWithoutClass: "true"
   postRenderers:
     - kustomize:
         # patchesJson6902:
