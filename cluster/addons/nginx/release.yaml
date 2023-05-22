@@ -11,6 +11,8 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: ingress-nginx
+  rollback:
+    cleanupOnFail: false
   install:
     crds: CreateReplace
     remediation:
@@ -32,33 +34,3 @@ spec:
       ingressClassResource:
         default: "true"
       watchIngressWithoutClass: "true"
-  postRenderers:
-    - kustomize:
-        # patchesJson6902:
-        patches:
-        - target:
-            kind: Deployment
-            name: ingress-nginx-controller
-          patch: |-
-            # - op: add
-            #   path: /spec/template/spec/hostAliases
-            #   value:
-            #     - ip: 10.110.112.126
-            #       hostnames:
-            #       - "dex.${hostName}"
-            #       - "wge.${hostName}"
-
-            # - op: add
-            #   path: /spec/template/spec/volumes/-
-            #   value:
-            #     name: local-ca
-            #     configMap:
-            #       name: local-ca
-
-            # - op: add
-            #   path: /spec/template/spec/containers/0/volumeMounts/-
-            #   value:
-            #     name: local-ca
-            #     mountPath: /etc/ssl/certs/local-ca.pem
-            #     subPath: CA.cer
-            #     readOnly: false
