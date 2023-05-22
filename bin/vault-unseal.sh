@@ -40,6 +40,12 @@ pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
 export VAULT_ADDR="https://vault.kubernetes.docker.internal"
+
+if [ "$(vault status --format=json | jq -r '.sealed')" == "false" ]; then
+  echo "Vault already unsealed"
+  exit 0
+fi
+
 key1=$(jq -r '.unseal_keys_b64[0]' resources/.vault-init.json)
 key2=$(jq -r '.unseal_keys_b64[1]' resources/.vault-init.json)
 key3=$(jq -r '.unseal_keys_b64[2]' resources/.vault-init.json)

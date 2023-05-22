@@ -46,7 +46,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-aws-secret.sh
+aws-secrets.sh
 
 # this is the token for the vault admin user, create a more restricted token for use in default namespace
 vault kv put ${tls_skip} -mount=secrets test-one-vault-token vault-token=${VAULT_TOKEN}

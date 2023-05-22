@@ -49,5 +49,11 @@ export GITHUB_AUTH_ORG=ww-gitops
 
 set +e
 
+vault policy write admin - << EOF
+path "*" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list", "sudo"]
+}
+EOF
+
 vault secrets enable -tls-skip-verify -path=secrets kv-v2
 vault secrets enable -tls-skip-verify -path=leaf-cluster-secrets kv-v2
