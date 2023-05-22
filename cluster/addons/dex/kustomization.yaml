@@ -4,7 +4,6 @@ kind: Kustomization
 metadata:
   name: arbitrary
 resources:
-- namespace.yaml
 - ghcr.yaml
 - repository.yaml
 - release.yaml
