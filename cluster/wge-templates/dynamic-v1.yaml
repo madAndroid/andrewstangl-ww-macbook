@@ -66,7 +66,7 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
+                    name: '(( .params.RESOURCE_NAME ))-vpc-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}'
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -117,7 +117,7 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.name }}'
+                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}{{ .Repeat.name }}'
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -135,6 +135,7 @@ spec:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         vpcName: '{{ .Repeat.name }}'
+                        vpcResource: '{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}'
 
         # Register cluster with WGE if desired/needed
         - apiVersion: templates.weave.works/v1alpha1
@@ -163,7 +164,7 @@ spec:
                   metadata:
                     annotations:
                       templates.weave.works/create-request: ""
-                    name: (( .params.RESOURCE_NAME ))-cluster-{{ .Repeat.name }}-gitops-cluster
+                    name: (( .params.RESOURCE_NAME ))-cluster-{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}-gitops-cluster
                   spec:
                     interval: 1m0s
                     path: ./wge-resources/wge
@@ -207,13 +208,13 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.vpc_name }}'
+                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.vpc_name }}'
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -234,7 +235,7 @@ spec:
                         vpcName: '{{ .Repeat.vpc_name }}'
                         clusterVersion: '{{ .Repeat.version }}'
 
-        # eks cluster discovery
+        # eks cluster discovery or use
         - apiVersion: templates.weave.works/v1alpha1
           kind: GitOpsSet
           metadata:
@@ -259,13 +260,13 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ .Repeat.vpc_name }}'
+                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.vpc_name }}'
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -281,7 +282,7 @@ spec:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ .Repeat.name }}'
+                        clusterName: '{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}'
 
         # Configure eks cluster if create is true
         - apiVersion: templates.weave.works/v1alpha1
@@ -308,13 +309,13 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-config-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-config-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
+                      - name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -330,7 +331,7 @@ spec:
                           name: cluster-config
                       substitute:
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ .Repeat.name }}'
+                        clusterName: '{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
                         target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
                         desired_size: "\"(( .params.DESIRED_SIZE ))\""
@@ -341,6 +342,8 @@ spec:
                         # shrink: "(( .params.SHRINK ))"
                         eks_core_state_bucket: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
 
+    - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps.yaml
+      content:
         # Deploy apps to cluster
         - apiVersion: templates.weave.works/v1alpha1
           kind: GitOpsSet
@@ -361,7 +364,7 @@ spec:
                   files:
                     - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
             templates:
-              - repeat: "{ .clusters.apps }"
+              - repeat: '{ .clusters.apps }'
                 content:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -387,7 +390,7 @@ spec:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ .Element.name }}'
+                        clusterName: '{{ or .Element.resource (( .params.RESOURCE_NAME )) }}-{{ .Element.name }}'
                         appName: '{{ .Repeat.name }}'
                         appVersion: '{{or .Repeat.version "" }}'
                         appPath: '{{or .Repeat.path "./kustomize" }}'

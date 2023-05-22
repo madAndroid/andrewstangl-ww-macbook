@@ -1,7 +1,7 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
-  name: '${resourceName}-vpc-${vpcName}'
+  name: '${resourceName}-vpc-${vpcResource}-${vpcName}'
   namespace: ${templateNamespace}
 spec:
   interval: 10m
@@ -10,11 +10,11 @@ spec:
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-vpc-${vpcName}-config'
+    name: '${resourceName}-vpc-${vpcResource}-${vpcName}-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${clusterName}/${templateNamespace}/${resourceName}/vpc/${vpcName}/terraform.tfstate"
+        key            = "${clusterName}/${templateNamespace}/${resourceName}/vpc/${vpcResource}-${vpcName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
@@ -22,7 +22,7 @@ spec:
       }
   vars:
     - name: vpc_name
-      value: ${vpcName}
+      value: ${vpcResource}-${vpcName}
     - name: region
       value: ${awsRegion}
   sourceRef:

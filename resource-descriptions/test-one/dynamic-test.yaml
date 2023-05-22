@@ -6,6 +6,7 @@ template:
   namespace: test-one
 aws:
   region: eu-west-1
+
 vpcs:
     # if mode is 'discover' name can be the vpc id or vpc name if it has one
   - name: v1
@@ -19,7 +20,6 @@ vpcs:
     privatesubnets: 3
 
 clusters:
-    # if mode is 'use' include resource name in cluster name, i.e. <resource name>-<cluster name>
     # if mode is 'discover' name should be the EKS cluster name
   - name: c1
     # If mode is 'use' provide the resource name of the existing cluster as well as name
