@@ -7,7 +7,7 @@ metadata:
 data:
   clusterType: "macbook"
   clusterName: ww-paulc-macbook
-  clusterIP: 10.110.112.126
+  clusterIP: 10.107.53.118
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
   awsAccountId: ac-749339757188
