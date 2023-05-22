@@ -3,6 +3,7 @@
 resources/.vault-init.json
 resources/wge-entitlement.yaml
 resources/github-secrets.sh
+resources/*-password.txt
 
 .terraform
 *.tfstate*

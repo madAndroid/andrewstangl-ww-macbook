@@ -88,6 +88,9 @@ vault kv put ${tls_skip} -mount=secrets github-repo-write-credentials username=t
 
 vault kv put ${tls_skip} -mount=secrets github-repo-write-token token=${GITHUB_TOKEN_WRITE}
 
+RECEIVER_TOKEN=$(head -c 12 /dev/urandom | shasum | cut -d ' ' -f1)
+vault kv put ${tls_skip} -mount=secrets receiver-token token=${RECEIVER_TOKEN}
+
 ADMIN_PASSWORD="$(date +%s | sha256sum | base64 | head -c 10)"
 BCRYPT_PASSWD=$(echo -n $ADMIN_PASSWORD | gitops get bcrypt-hash)
 vault kv put ${tls_skip} -mount=secrets wge-admin-auth username=wge-admin password=${BCRYPT_PASSWD}
@@ -96,5 +99,5 @@ MONITORING_PASSWORD="$(date +%s | sha256sum | base64 | head -c 10)"
 vault kv put ${tls_skip} -mount=secrets monitoring-auth auth=$(htpasswd -nb prometheus-user ${MONITORING_PASSWORD})
 vault kv put ${tls_skip} -mount=secrets monitoring-basic-auth-password password=${MONITORING_PASSWORD}
 
-echo "Admin password is: ${ADMIN_PASSWORD}"
-echo "Monitoring password is: ${MONITORING_PASSWORD}"
+echo "Admin password is: ${ADMIN_PASSWORD}" | tee $PWD/resources/wge-admin-password.txt
+echo "Monitoring password is: ${MONITORING_PASSWORD}" | tee $PWD/resources/prometheus-password.txt
