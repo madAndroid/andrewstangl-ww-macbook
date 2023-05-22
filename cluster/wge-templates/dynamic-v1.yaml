@@ -164,7 +164,7 @@ spec:
                   metadata:
                     annotations:
                       templates.weave.works/create-request: ""
-                    name: (( .params.RESOURCE_NAME ))-cluster-{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}-gitops-cluster
+                    name: '(( .params.RESOURCE_NAME ))-cluster-{{ or .Repeat.resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.name }}-gitops-cluster'
                   spec:
                     interval: 1m0s
                     path: ./wge-resources/wge
@@ -214,7 +214,7 @@ spec:
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.vpc_name }}'
+                      - name: "(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource (( .params.RESOURCE_NAME )) }}-{{ .Repeat.vpc_name }}"
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
