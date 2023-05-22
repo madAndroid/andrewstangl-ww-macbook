@@ -60,7 +60,7 @@ spec:
     kind: SecretStore
     name: vault
   target:
-    name: github-repo-write-credentials
+    name: github-repo-read-credentials
     creationPolicy: Owner
   dataFrom:
     - extract:
