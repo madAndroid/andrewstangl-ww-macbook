@@ -1,7 +1,7 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha1
 kind: Terraform
 metadata:
-  name: '${resourceName}-eks-${clusterName}'
+  name: '${resourceName}-eks-${resourceName}-${clusterName}'
   namespace: ${templateNamespace}
 spec:
   interval: 1h
@@ -16,7 +16,7 @@ spec:
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${clusterName}/${templateNamespace}/${resourceName}/eks/${clusterName}/terraform.tfstate"
+        key            = "${clusterName}/${templateNamespace}/${resourceName}/eks/${resourceName}-${clusterName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
@@ -41,3 +41,8 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  runnerPodTemplate:
+    spec:
+      envFrom:
+      - secretRef:
+          name: aws-creds
