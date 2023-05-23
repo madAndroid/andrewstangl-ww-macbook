@@ -98,26 +98,13 @@ resource "vault_kv_secret_v2" "kubeconfig" {
   data_json           = jsonencode({ "value.yaml" = local.kubeconfig })
 }
 
-resource "gitlab_repository_file" "kubeconfig" {
-  project        = var.repository_id
-  branch         = var.branch
-  file_path      = "clusters/management/secrets/leaf-clusters/${local.config_name}.yaml"
-  content        = base64encode(local.kubeconfig_secret)
-  author_email   = var.commit_email
-  author_name    = var.commit_author
-  commit_message = "Add clusters/management/secrets/leaf-clusters/${local.config_name}.yaml"
-}
-
-resource "github_repository_file" "bases" {
-  repository     = var.repository_name
-  branch         = var.branch
-  file           = "${var.target_path}/wge/bases.yaml"
-  commit_author  = var.git_commit_author
-  commit_email   = var.git_commit_email
-  commit_message = var.git_commit_message
-  content        = templatefile("${path.module}/templates/bases.tftpl", {})
-
+resource "github_repository_file" "kubeconfig_secret" {
+  repository          = var.repository_name
+  branch              = var.branch
+  file                = "clusters/management/secrets/${local.config_name}.yaml"
+  content             = local.kubeconfig_secret
+  commit_author       = var.commit_author
+  commit_email        = var.commit_email
+  commit_message      = var.commit_message
   overwrite_on_create = true
-
-  depends_on = [module.flux_bootstrap]
 }
