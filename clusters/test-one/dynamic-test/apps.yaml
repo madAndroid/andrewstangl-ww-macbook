@@ -1,0 +1,53 @@
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: dynamic-test-apps
+  namespace: test-one
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-one/dynamic-test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: dynamic-test-cluster-'{{ .Element.name }}'-app-'{{ .Repeat.name }}'
+      spec:
+        interval: 1m0s
+        path: ./cluster/apps/template
+        postBuild:
+          substitute:
+            appName: '{{ .Repeat.name }}'
+            appPath: '{{or .Repeat.path "./kustomize" }}'
+            appRefType: '{{or .Repeat.ref.type "branch" }}'
+            appRefValue: '{{or .Repeat.ref.value "main" }}'
+            appVersion: '{{or .Repeat.version "" }}'
+            clusterName: '{{ or .Element.resource "dynamic-test" }}-{{ .Element.name
+              }}'
+            resourceName: dynamic-test
+            templateNamespace: test-one
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 5m
+        wait: true
+    repeat: '{ .clusters.apps }'
