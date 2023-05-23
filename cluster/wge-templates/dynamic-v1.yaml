@@ -88,9 +88,9 @@ spec:
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         vpcName: '{{ .Repeat.name }}'
                         region: '{{ .Element.aws.region }}'
-                        publicSubnetCount: '{{ or .Repeat.publicsubnets "3" }}'
-                        privateSubnetCount: '{{ or .Repeat.privatesubnets "3" }}'
-                        vpcCIDR: '{{ or .Repeat.cidr  "10.0.0.0/16"}}'
+                        publicSubnetCount: '{{ getordefault .Repeat "publicsubnets" "3" }}'
+                        privateSubnetCount: '{{ getordefault .Repeat "privatesubnets" "3" }}'
+                        vpcCIDR: '{{ getordefault .Repeat "cidr"  "10.0.0.0/16"}}'
 
         # vpc - use vpc previously created by template
         - apiVersion: templates.weave.works/v1alpha1
@@ -117,7 +117,7 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}{{ .Repeat.name }}'
+                    name: '(( .params.RESOURCE_NAME ))-vpc-{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))"}}-{{ .Repeat.name }}'
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -135,7 +135,7 @@ spec:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         vpcName: '{{ .Repeat.name }}'
-                        vpcResource: '{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}'
+                        vpcResource: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))"}}'
 
         # Register cluster with WGE if desired/needed
         - apiVersion: templates.weave.works/v1alpha1
@@ -164,7 +164,7 @@ spec:
                   metadata:
                     annotations:
                       templates.weave.works/create-request: ""
-                    name: '(( .params.RESOURCE_NAME ))-cluster-{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}-gitops-cluster'
+                    name: '(( .params.RESOURCE_NAME ))-cluster-{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))"}}-{{ .Repeat.name }}-gitops-cluster'
                   spec:
                     interval: 1m0s
                     path: ./wge-resources/wge
@@ -214,7 +214,7 @@ spec:
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.vpc_name }}'
+                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ getordefault .Repeat "vpc_resource" "(( .params.RESOURCE_NAME ))"}}-{{ .Repeat.vpc_name }}'
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -229,7 +229,7 @@ spec:
                           name: cluster-config
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
-                        vpcResource: '{{ or .Repeat.vpc_resource "(( .params.RESOURCE_NAME ))" }}'
+                        vpcResource: '{{ getordefault .Repeat "vpc_resource" "(( .params.RESOURCE_NAME ))"}}'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         clusterName: '{{ .Repeat.name }}'
                         vpcName: '{{ .Repeat.vpc_name }}'
@@ -331,7 +331,7 @@ spec:
                           name: cluster-config
                       substitute:
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
+                        clusterName: '{{ .Repeat.resource | default "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
                         target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
                         desired_size: "\"(( .params.DESIRED_SIZE ))\""
