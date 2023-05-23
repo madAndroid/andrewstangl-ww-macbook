@@ -8,7 +8,7 @@ spec:
   dependsOn:
     - name: '${resourceName}-eks-${clusterName}'
   retryInterval: 20s
-  path: ./cluster-templates/eks-config
+  path: ./terraform/cluster-templates/eks-config
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:

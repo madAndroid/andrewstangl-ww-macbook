@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1h
   retryInterval: 20s
-  path: ./cluster-templates/eks-use
+  path: ./terraform/cluster-templates/eks-use
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
