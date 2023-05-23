@@ -11,7 +11,7 @@ vpcs:
     # if mode is 'discover' name can be the vpc id or vpc name if it has one
   - name: v1
     # If mode is 'use' provide the resource name of the existing vpc as well as name
-    # resource: 
+    resource: ""
     # set to 'use' to use existing vpc previously created by this template or 'discover' for using existing vpc
     mode: create
     # Following field only required if mode is create 
@@ -23,13 +23,13 @@ clusters:
     # if mode is 'discover' name should be the EKS cluster name
   - name: c1
     # If mode is 'use' provide the resource name of the existing cluster as well as name
-    # resource: 
+    resource: ""
     # set to 'use' to use existing cluster previously created by this template or 'discover' for using existing cluster
     mode: create
     gui: true # set to false to skip adding it to the GUI
     vpc_name: v1
     # if using an existing vpc created by a previous template, provide resource name of vpc as well as name
-    # vpc_resource: 
+    vpc_resource: ""
     # Following field only required if mode is create 
     version: 1.26
 
