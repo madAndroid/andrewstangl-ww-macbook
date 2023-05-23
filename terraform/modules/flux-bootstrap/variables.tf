@@ -1,22 +1,22 @@
 variable "aws_region" {
   type        = string
   description = "aws region"
-  default     = "us-east-1"
+  default     = "eu-west-1"
 }
 
 variable "cluster_name" {
   type        = string
-  description = "kubernetes cluster name"
+  description = "eks cluster name"
 }
 
-variable "gitlab_owner" {
+variable "github_owner" {
   type        = string
-  description = "gitlab group name"
+  description = "github owner"
 }
 
 variable "repository_name" {
   type        = string
-  description = "gitlab repository name"
+  description = "github repository name"
 }
 
 variable "branch" {
@@ -31,22 +31,16 @@ variable "target_path" {
   default     = ""
 }
 
-variable "allow_push_access" {
+variable "read_only_key" {
   type        = bool
   description = "configure the deploy key with read/write permissions"
-  default     = false
+  default     = true
 }
 
 variable "flux_version" {
   type        = string
   description = "version of flux to bootstrap"
   default     = null
-}
-
-variable "flux_namespace" {
-  type        = string
-  description = "namespace to bootstrap flux"
-  default     = "flux-system"
 }
 
 variable "use_existing_repository" {
@@ -76,22 +70,4 @@ variable "commit_email" {
   type        = string
   description = "git commit email"
   default     = null
-}
-
-variable "archive_on_destroy" {
-  type        = bool
-  description = "archive the repository instead of deleting it on destroy"
-  default     = false
-}
-
-variable "gitlab_hostname" {
-  type        = string
-  description = "hostname for gitlab instance (do not include http(s)://)"
-  default     = "gitlab.com"
-}
-
-variable "gitlab_known_hosts" {
-  type        = string
-  description = "known host key for gitlab host. run `ssh-keyscan <gitlab_hostname>` to find keys. use the 'ecdsa-sha2-nistp256' key"
-  default     = "gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY="
 }

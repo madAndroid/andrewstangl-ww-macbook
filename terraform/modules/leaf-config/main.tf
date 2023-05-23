@@ -107,3 +107,17 @@ resource "gitlab_repository_file" "kubeconfig" {
   author_name    = var.commit_author
   commit_message = "Add clusters/management/secrets/leaf-clusters/${local.config_name}.yaml"
 }
+
+resource "github_repository_file" "bases" {
+  repository     = var.repository_name
+  branch         = var.branch
+  file           = "${var.target_path}/wge/bases.yaml"
+  commit_author  = var.git_commit_author
+  commit_email   = var.git_commit_email
+  commit_message = var.git_commit_message
+  content        = templatefile("${path.module}/templates/bases.tftpl", {})
+
+  overwrite_on_create = true
+
+  depends_on = [module.flux_bootstrap]
+}

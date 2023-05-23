@@ -44,19 +44,9 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.this.token
 }
 
-provider "gitlab" {
-  base_url = "${var.gitlab_url}/api/v4"
-  token    = var.gitlab_token
-}
-
-provider "vault" {
-  address = var.vault_url
-
-  auth_login_jwt {
-    mount = var.vault_auth_mount
-    role  = var.vault_auth_role
-    jwt   = file("/var/run/secrets/kubernetes.io/serviceaccount/token")
-  }
+provider "github" {
+  owner = var.github_owner
+  token = var.github_token
 }
 
 module "system_node_group" {
@@ -98,7 +88,8 @@ module "leaf_config" {
   cluster_endpoint       = data.aws_eks_cluster.this.endpoint
   commit_author          = var.git_commit_author
   commit_email           = var.git_commit_email
-  repository_id          = module.flux_bootstrap.repository_id
+  commit_message         = var.git_commit_message
+  repository_name        = var.repository_name
   branch                 = var.branch
 }
 
@@ -106,9 +97,7 @@ module "flux_bootstrap" {
   source                  = "../../modules/flux-bootstrap"
   aws_region              = var.region
   cluster_name            = var.cluster_name
-  gitlab_owner            = var.gitlab_owner
-  gitlab_hostname         = local.gitlab_hostname
-  gitlab_known_hosts      = var.gitlab_known_hosts
+  github_owner            = var.github_owner
   repository_name         = var.repository_name
   branch                  = var.branch
   target_path             = local.flux_target_path
@@ -128,26 +117,6 @@ module "aws_auth" {
     module.system_node_group.node_group_role.arn,
     module.worker_node_group.node_group_role.arn,
   ]
-}
-
-#
-# route53 routing
-#
-data "aws_route53_zone" "main" {
-  name = var.route53_main_domain
-}
-
-resource "aws_route53_zone" "sub" {
-  name          = "${var.cluster_name}.${var.route53_main_domain}"
-  force_destroy = true
-}
-
-resource "aws_route53_record" "sub_ns" {
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = aws_route53_zone.sub.name
-  type    = "NS"
-  ttl     = "30"
-  records = aws_route53_zone.sub.name_servers
 }
 
 resource "aws_autoscaling_schedule" "set-scale-to-zero-ng-worker" {

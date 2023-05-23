@@ -16,3 +16,4 @@ data:
   awsTagCreator: ${AWS_TAG_creator}
   awsTagCustomer: ${AWS_TAG_customer}
   awsTagProjectGid: "${AWS_TAG_projectGid}"
+  userEmail: ${USER_EMAIL}

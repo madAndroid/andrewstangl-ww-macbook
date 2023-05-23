@@ -7,7 +7,7 @@ subjects:
     name: wego-admin
     apiGroup: rbac.authorization.k8s.io
   - kind: User
-    name: paul.carlton@weave.works
+    name: ${userEmail}
     apiGroup: rbac.authorization.k8s.io
   - kind: Group
     name: ww-gitops:admin # Github group

@@ -4,9 +4,9 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.33"
     }
-    gitlab = {
-      source  = "gitlabhq/gitlab"
-      version = "~> 15.7"
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.3"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
@@ -23,10 +23,6 @@ terraform {
     random = {
       source  = "hashicorp/random"
       version = ">= 3.4.3"
-    }
-    vault = {
-      source  = "hashicorp/vault"
-      version = "~> 3.11"
     }
   }
 }

@@ -82,4 +82,20 @@ spec:
   dataFrom:
     - extract:
         key: github-repo-write-token
-  
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: github-leaf-token
+  namespace: ${nameSpace}
+spec:
+  refreshInterval: 5m
+  secretStoreRef:
+    kind: SecretStore
+    name: vault
+  target:
+    name: github-leaf-token
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: github-leaf-token

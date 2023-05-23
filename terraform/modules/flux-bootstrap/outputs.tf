@@ -1,16 +1,11 @@
-output "group" {
+output "github_owner" {
   description = "owner of repository flux is bootstrapped"
-  value       = var.gitlab_owner
+  value       = var.github_owner
 }
 
 output "repository_name" {
   description = "name of repository flux is bootstrapped"
-  value       = local.gitlab_repository.name
-}
-
-output "repository_id" {
-  description = "id of repository flux is bootstrapped"
-  value       = local.gitlab_repository.id
+  value       = var.repository_name
 }
 
 output "branch" {
@@ -21,9 +16,4 @@ output "branch" {
 output "target_path" {
   description = "path within repository flux is monitoring"
   value       = var.target_path
-}
-
-output "flux_namespace" {
-  description = "k8s namespace flux is bootstapped"
-  value       = var.flux_namespace
 }

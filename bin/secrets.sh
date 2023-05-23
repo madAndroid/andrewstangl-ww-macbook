@@ -88,6 +88,8 @@ vault kv put ${tls_skip} -mount=secrets github-repo-write-credentials username=t
 
 vault kv put ${tls_skip} -mount=secrets github-repo-write-token token=${GITHUB_TOKEN_WRITE}
 
+vault kv put ${tls_skip} -mount=secrets github-leaf-token github_token=${GITHUB_TOKEN_WRITE}
+
 RECEIVER_TOKEN=$(head -c 12 /dev/urandom | shasum | cut -d ' ' -f1)
 vault kv put ${tls_skip} -mount=secrets receiver-token token=${RECEIVER_TOKEN}
 
