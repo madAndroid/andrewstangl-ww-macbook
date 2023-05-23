@@ -284,7 +284,7 @@ spec:
       metadata:
         annotations:
           templates.weave.works/create-request: ""
-        name: dynamic-test-eks-config-dynamic-test-{{ .Repeat.name }}
+        name: dynamic-test-eks-config-{{ .Repeat.name }}
       spec:
         dependsOn:
         - name: dynamic-test-eks-dynamic-test-{{ .Repeat.name }}

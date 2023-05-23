@@ -331,7 +331,7 @@ spec:
                           name: cluster-config
                       substitute:
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
+                        clusterName: '{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
                         target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
                         desired_size: "\"(( .params.DESIRED_SIZE ))\""
@@ -342,57 +342,57 @@ spec:
                         # shrink: "(( .params.SHRINK ))"
                         eks_core_state_bucket: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
 
-    - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps.yaml
-      content:
-        # Deploy apps to cluster
-        - apiVersion: templates.weave.works/v1alpha1
-          kind: GitOpsSet
-          metadata:
-            labels:
-              app.kubernetes.io/name: gitopsset
-              app.kubernetes.io/instance: gitopsset-sample
-              app.kubernetes.io/part-of: gitopssets-controller
-              app.kubernetes.io/managed-by: kustomize
-              app.kubernetes.io/created-by: gitopssets-controller
-            name: (( .params.RESOURCE_NAME ))-apps
-            namespace: (( .template.meta.namespace ))
-          spec:
-            serviceAccountName: gitopssets
-            generators:
-              - gitRepository:
-                  repositoryRef: flux-system
-                  files:
-                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
-            templates:
-              - repeat: '{ .clusters.apps }'
-                content:
-                  kind: Kustomization
-                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-                  metadata:
-                    name: "(( .params.RESOURCE_NAME ))-cluster-'{{ .Element.name }}'-app-'{{ .Repeat.name }}'"
-                    annotations:
-                      templates.weave.works/create-request: ''
-                  spec:
-                    interval: 1m0s
-                    sourceRef:
-                      kind: GitRepository
-                      name: flux-system
-                      namespace: flux-system
-                    path: ./cluster/apps/template
-                    prune: true
-                    wait: true
-                    timeout: 5m
+    # - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps.yaml
+    #   content:
+    #     # Deploy apps to cluster
+    #     - apiVersion: templates.weave.works/v1alpha1
+    #       kind: GitOpsSet
+    #       metadata:
+    #         labels:
+    #           app.kubernetes.io/name: gitopsset
+    #           app.kubernetes.io/instance: gitopsset-sample
+    #           app.kubernetes.io/part-of: gitopssets-controller
+    #           app.kubernetes.io/managed-by: kustomize
+    #           app.kubernetes.io/created-by: gitopssets-controller
+    #         name: (( .params.RESOURCE_NAME ))-apps
+    #         namespace: (( .template.meta.namespace ))
+    #       spec:
+    #         serviceAccountName: gitopssets
+    #         generators:
+    #           - gitRepository:
+    #               repositoryRef: flux-system
+    #               files:
+    #                 - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+    #         templates:
+    #           - repeat: '{ .clusters.apps }'
+    #             content:
+    #               kind: Kustomization
+    #               apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+    #               metadata:
+    #                 name: "(( .params.RESOURCE_NAME ))-cluster-'{{ .Element.name }}'-app-'{{ .Repeat.name }}'"
+    #                 annotations:
+    #                   templates.weave.works/create-request: ''
+    #               spec:
+    #                 interval: 1m0s
+    #                 sourceRef:
+    #                   kind: GitRepository
+    #                   name: flux-system
+    #                   namespace: flux-system
+    #                 path: ./cluster/apps/template
+    #                 prune: true
+    #                 wait: true
+    #                 timeout: 5m
                     
-                    postBuild:
-                      substituteFrom:
-                        - kind: ConfigMap
-                          name: cluster-config
-                      substitute:
-                        templateNamespace: '(( .template.meta.namespace ))'
-                        resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ getordefault .Element "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Element.name }}'
-                        appName: '{{ .Repeat.name }}'
-                        appVersion: '{{ getordefault .Repeat "version" "" }}'
-                        appPath: '{{ getordefault .Repeat "path" "./kustomize" }}'
-                        appRefType: '{{ dig "ref" "type" "branch" .Repeat }}'
-                        appRefValue: '{{ dig "ref" "value" "main" .Repeat }}'
+    #                 postBuild:
+    #                   substituteFrom:
+    #                     - kind: ConfigMap
+    #                       name: cluster-config
+    #                   substitute:
+    #                     templateNamespace: '(( .template.meta.namespace ))'
+    #                     resourceName: '(( .params.RESOURCE_NAME ))'
+    #                     clusterName: '{{ getordefault .Element "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Element.name }}'
+    #                     appName: '{{ .Repeat.name }}'
+    #                     appVersion: '{{ getordefault .Repeat "version" "" }}'
+    #                     appPath: '{{ getordefault .Repeat "path" "./kustomize" }}'
+    #                     appRefType: '{{ dig "ref" "type" "branch" .Repeat }}'
+    #                     appRefValue: '{{ dig "ref" "value" "main" .Repeat }}'
