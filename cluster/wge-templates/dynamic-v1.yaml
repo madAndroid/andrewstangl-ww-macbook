@@ -208,7 +208,7 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-'{{ .Repeat.name }}'"
+                    name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
@@ -260,13 +260,13 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: '(( .params.RESOURCE_NAME ))-eks-{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
+                    name: '(( .params.RESOURCE_NAME ))-eks-{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
                     interval: 1m0s
                     dependsOn:
-                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ or .Repeat.vpc_resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.vpc_name }}'
+                      - name: '(( .params.RESOURCE_NAME ))-vpc-{{ getordefault .Repeat "vpc_resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.vpc_name }}'
                     sourceRef:
                       kind: GitRepository
                       name: flux-system
@@ -282,7 +282,7 @@ spec:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ or .Repeat.resource "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
+                        clusterName: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
 
         # Configure eks cluster if create is true
         - apiVersion: templates.weave.works/v1alpha1
@@ -390,9 +390,9 @@ spec:
                       substitute:
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ or .Element.resource "(( .params.RESOURCE_NAME ))" }}-{{ .Element.name }}'
+                        clusterName: '{{ getordefault .Element "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Element.name }}'
                         appName: '{{ .Repeat.name }}'
-                        appVersion: '{{or .Repeat.version "" }}'
-                        appPath: '{{or .Repeat.path "./kustomize" }}'
-                        appRefType: '{{or .Repeat.ref.type "branch" }}'
-                        appRefValue: '{{or .Repeat.ref.value "main" }}'
+                        appVersion: '{{ getordefault .Repeat "version" "" }}'
+                        appPath: '{{ getordefault .Repeat "path" "./kustomize" }}'
+                        appRefType: '{{ dig "ref" "type" "branch" .Repeat }}'
+                        appRefValue: '{{ dig "ref" "value" "main" .Repeat }}'
