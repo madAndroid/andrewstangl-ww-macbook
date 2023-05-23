@@ -43,9 +43,9 @@ variable "chart_version" {
   default     = null
 }
 
-variable "repository_id" {
+variable "repository_name" {
   type        = string
-  description = "gitlab repository id to create file in"
+  description = "github repository name to create file in"
   default     = null
 }
 

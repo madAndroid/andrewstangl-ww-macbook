@@ -10,8 +10,10 @@ variable "cluster_endpoint" {
 
 }
 
-variable "repository_id" {
-
+variable "repository_name" {
+  type        = string
+  description = "github repository name to create file in"
+  default     = null
 }
 
 variable "branch" {
@@ -31,8 +33,14 @@ variable "commit_email" {
   default     = null
 }
 
+variable "commit_message" {
+  type        = string
+  description = "Git commit message"
+  default     = "leaf cluster kubeconfig"
+}
+
 variable "vault_secrets_path" {
   type        = string
   description = "vault path to store leaf cluster secrets"
-  default     = "leaf-cluster-secrets"
+  default     = "secrets"
 }
