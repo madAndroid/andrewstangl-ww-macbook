@@ -331,7 +331,7 @@ spec:
                           name: cluster-config
                       substitute:
                         resourceName: '(( .params.RESOURCE_NAME ))'
-                        clusterName: '{{ .Repeat.resource | default "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
+                        clusterName: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
                         target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
                         desired_size: "\"(( .params.DESIRED_SIZE ))\""
