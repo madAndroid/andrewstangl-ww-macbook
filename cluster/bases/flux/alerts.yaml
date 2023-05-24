@@ -25,3 +25,4 @@ spec:
             alert: "commit-status"
   exclusionList:
     - "^reconciliation succeeded$"
+    - "^dependency not ready$"
