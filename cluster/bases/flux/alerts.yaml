@@ -23,6 +23,5 @@ spec:
       namespace: flux-system
       matchLabels:
             alert: "commit-status"
-  exclusionList:
-    - "^reconciliation succeeded$"
-    - "^dependency not ready$"
+  # exclusionList:
+  #   - "^Dependencies do not meet ready condition, retrying in.*"
