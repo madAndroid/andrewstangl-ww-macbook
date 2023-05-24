@@ -21,3 +21,7 @@ spec:
     - kind: Kustomization
       name: "*"
       namespace: flux-system
+      matchLabels:
+            alert: "commit-status"
+  exclusionList:
+    - "^reconciliation succeeded$"

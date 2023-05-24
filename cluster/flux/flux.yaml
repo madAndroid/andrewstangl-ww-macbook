@@ -234,6 +234,8 @@ kind: Kustomization
 metadata:
   name: wge-templates
   namespace: flux-system
+  labels:
+    alert: "commit-status"
 spec:
   interval: 1m0s
   dependsOn:
@@ -250,6 +252,8 @@ kind: Kustomization
 metadata:
   name: wge-gitops
   namespace: flux-system
+  labels:
+    alert: "commit-status"
 spec:
   interval: 1m0s
   dependsOn:
