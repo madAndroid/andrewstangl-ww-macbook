@@ -70,6 +70,8 @@ metadata:
   name: vault
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: cert-config
   interval: 1m0s
   path: ./cluster/addons/vault
   prune: true
