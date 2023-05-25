@@ -93,7 +93,7 @@ metadata:
   name: vault-token
   namespace: vault
 data:
-  vault-token: $(jq -r '.root_token' resources/.vault-init.json | base64)
+  vault_token: $(jq -r '.root_token' resources/.vault-init.json | base64)
 EOF
 
 set +e

@@ -49,8 +49,8 @@ source .envrc
 aws-secrets.sh
 
 # this is the token for the vault admin user, create a more restricted token for use in default namespace
-vault kv put ${tls_skip} -mount=secrets test-one-vault-token vault-token=${VAULT_TOKEN}
-vault kv put ${tls_skip} -mount=secrets test-two-vault-token vault-token=${VAULT_TOKEN}
+vault kv put ${tls_skip} -mount=secrets test-one-vault-token vault_token=${VAULT_TOKEN}
+vault kv put ${tls_skip} -mount=secrets test-two-vault-token vault_token=${VAULT_TOKEN}
 
 entitlement=$(yq -r '.data.entitlement'  ${entitlement_file})
 if [ "$entitlement" == "null" ]; then
