@@ -31,7 +31,7 @@ spec:
             kind: GitRepository
             name: flux-system
             namespace: flux-system
-          path: ./cluster/apps/template
+          path: ./cluster/apps/template/local-folders
           prune: true
           wait: true
           timeout: 5m
@@ -45,6 +45,3 @@ spec:
               clusterName: '{{ or .Element.resource "${resourceName}" }}-{{ .Element.name }}'
               appName: '{{ .Repeat.name }}'
               appVersion: '{{or .Repeat.version "" }}'
-              appPath: '{{or .Repeat.path "./kustomize" }}'
-              appRefType: '{{or .Repeat.ref.type "branch" }}'
-              appRefValue: '{{or .Repeat.ref.value "main" }}'

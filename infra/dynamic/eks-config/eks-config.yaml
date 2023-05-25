@@ -59,10 +59,13 @@ spec:
         - github_owner
         - repository_name
         - cluster_admin_users_string
+        - vault_url
     - kind: Secret
       name: github-leaf-token
       varsKeys:
         - github_token
+    - kind: Secret
+      name: vault-token
     - kind: ConfigMap
       name: cluster-config
   sourceRef:

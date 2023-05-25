@@ -23,5 +23,5 @@ spec:
       namespace: flux-system
       matchLabels:
             alert: "commit-status"
-  # exclusionList:
-  #   - "^Dependencies do not meet ready condition, retrying in.*"
+  exclusionList:
+    - "^Dependencies do not meet ready condition, retrying in.*"

@@ -135,4 +135,14 @@ variable "cluster_admin_users_string" {
   default     = "paul.carlton@weave.works"
 }
 
+variable "vault_url" {
+  type        = string
+  description = "management cluster vault url"
+  default     = ""
+}
 
+variable "vault_token" {
+  type        = string
+  description = "management cluster vault token"
+  default     = ""
+}

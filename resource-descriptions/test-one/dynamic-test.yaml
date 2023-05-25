@@ -33,12 +33,18 @@ clusters:
     # Following field only required if mode is create 
     version: 1.26
 
-    apps: 
+    apps:
       - name: podinfo-ms1
+        mode: local-folders
         path: ./kustomize
       - name: podinfo-ms2
+        mode: apps-repos
         version: v6.3.5
       - name: podinfo-ms3
+        mode: apps-repos
         ref:
           type: tag
           value: v6.3.6
+      - name: podinfo-ms4
+        mode: app-params
+        params: ./cluster/apps/params/podinfo-ms4.yaml

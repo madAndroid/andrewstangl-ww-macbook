@@ -13,7 +13,8 @@ data:
   awsAccountId: ac-749339757188
   prefixName: ww-paulc
   awsRegion: eu-west-1
-  awsTagCreator: paul.carlton@weave.works
-  awsTagCustomer: weaveworks-cx
-  awsTagProjectGid: "20276"
+  awsTagCreator: 
+  awsTagCustomer: 
+  awsTagProjectGid: ""
   userEmail: paul.carlton@weave.works
+  vaultUrl: https://vault.kubernetes.docker.internal
