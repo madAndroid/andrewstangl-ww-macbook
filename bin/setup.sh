@@ -40,6 +40,9 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
+echo "Waiting for cluster to be ready"
+kubectl wait --for=condition=Available  -n kube-system deployment coredns
+
 git config pull.rebase true  
 
 if [ $bootstrap -eq 0 ]; then
