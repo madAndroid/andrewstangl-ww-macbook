@@ -17,4 +17,4 @@ data:
   awsTagCustomer: ${AWS_TAG_customer}
   awsTagProjectGid: "${AWS_TAG_projectGid}"
   userEmail: ${USER_EMAIL}
-  vaultUrl: ${VAULT_ADDR}
+  vault_url: ${VAULT_ADDR}

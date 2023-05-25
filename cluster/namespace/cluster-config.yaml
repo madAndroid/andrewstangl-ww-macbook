@@ -17,4 +17,4 @@ data:
   awsTagCustomer: 
   awsTagProjectGid: ""
   userEmail: paul.carlton@weave.works
-  vaultUrl: https://vault.kubernetes.docker.internal
+  vault_url: https://vault.kubernetes.docker.internal

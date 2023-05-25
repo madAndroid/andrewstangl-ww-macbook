@@ -59,7 +59,6 @@ spec:
         - github_owner
         - repository_name
         - cluster_admin_users_string
-        - vault_url
     - kind: Secret
       name: github-leaf-token
       varsKeys:
