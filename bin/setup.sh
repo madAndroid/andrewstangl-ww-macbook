@@ -78,8 +78,9 @@ data:
   tls.key: $(base64 -i resources/CA.key)
 EOF
 
-
+kubectl wait --for=condition=Ready kustomizations.kustomize.toolkit.fluxcd.io -n flux-system flux-system
 # Wait for ingress controller to start
+echo "Waiting for ingress controller to start"
 kubectl wait --for=condition=Ready kustomizations.kustomize.toolkit.fluxcd.io -n flux-system nginx
 
 export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
