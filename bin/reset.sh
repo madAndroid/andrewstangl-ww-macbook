@@ -90,8 +90,9 @@ if [ $delete_tfs -eq 1]; then
 
 else
   cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.clusterName}')
-  aws s3 rm s3://ww-paulc-ac-749339757188-eu-west-1-tf-state/$cluster_name --recursive
+  aws s3 rm s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state/$cluster_name --recursive
   aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
+
   aws dynamodb delete-table --table-name ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
 fi
 

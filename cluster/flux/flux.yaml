@@ -127,6 +127,7 @@ spec:
   dependsOn:
     - name: vault
     - name: secrets
+    - name: config
   path: ./cluster/addons/dex
   prune: true
   wait: true
@@ -147,6 +148,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
+  dependsOn:
+    - name: vault
   path: ./cluster/config
   prune: true
   wait: true
