@@ -7,14 +7,14 @@ metadata:
 data:
   clusterType: "macbook"
   clusterName: ww-paulc-macbook
-  clusterIP: 10.107.53.118
+  clusterIP: 10.97.121.205
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
-  awsAccountId: ac-749339757188
+  awsAccountId: ac-
   prefixName: ww-paulc
-  awsRegion: eu-west-1
-  awsTagCreator: 
-  awsTagCustomer: 
-  awsTagProjectGid: ""
+  awsRegion: 
+  awsTagCreator: paul.carlton@weave.works
+  awsTagCustomer: weaveworks-cx
+  awsTagProjectGid: "20276"
   userEmail: paul.carlton@weave.works
   vault_url: https://vault.kubernetes.docker.internal

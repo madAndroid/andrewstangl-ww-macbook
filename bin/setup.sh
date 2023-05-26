@@ -57,8 +57,6 @@ else
   bootstrap.sh
 fi
 
-cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
-
 if [ -f resources/CA.cer ]; then
   echo "Certificate Authority already exists"
 else
@@ -75,6 +73,25 @@ data:
   tls.crt: $(base64 -i resources/CA.cer)
   tls.key: $(base64 -i resources/CA.key)
 EOF
+
+
+# Wait for ingress controller to start
+kubectl wait --for=condition=Available  deployment ingress-nginx-controller -n ingress-nginx
+
+export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+export AWS_REGION=$(vault kv get -format=json  secrets/aws-creds | jq -r '.data.data."AWS_REGION"')
+export namespace=flux-system
+cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
+export namespace=\$\{nameSpace\}
+git add cluster/config/cluster-config.yaml
+git add cluster/namespace/cluster-config.yaml
+cat resources/cluster-config.yaml | envsubst > cluster/namespace/cluster-config.yaml
+if [[ `git status --porcelain` ]]; then
+  git commit -m "update cluster config"
+  git pull
+  git push
+fi
 
 # Wait for vault to start
 while ( true ); do
@@ -102,21 +119,6 @@ EOF
 set +e
 vault-secrets-config.sh
 set -e
-
-export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
-export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-export AWS_REGION=$(vault kv get -format=json  secrets/aws-creds | jq -r '.data.data."AWS_REGION"')
-export namespace=flux-system
-cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
-export namespace=\$\{nameSpace\}
-git add cluster/config/cluster-config.yaml
-git add cluster/namespace/cluster-config.yaml
-cat resources/cluster-config.yaml | envsubst > cluster/namespace/cluster-config.yaml
-if [[ `git status --porcelain` ]]; then
-  git commit -m "update cluster config"
-  git pull
-  git push
-fi
 
 secrets.sh --tls-skip --wge-entitlement $PWD/resources/wge-entitlement.yaml --secrets $PWD/resources/github-secrets.sh
 
