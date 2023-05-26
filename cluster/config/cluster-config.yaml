@@ -3,16 +3,16 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cluster-config
-  namespace: 
+  namespace: flux-system
 data:
   clusterType: "macbook"
   clusterName: ww-paulc-macbook
-  clusterIP: 
+  clusterIP: 10.97.121.205
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
   awsAccountId: ac-
   prefixName: ww-paulc
-  awsRegion: eu-west-1
+  awsRegion: 
   awsTagCreator: paul.carlton@weave.works
   awsTagCustomer: weaveworks-cx
   awsTagProjectGid: "20276"
