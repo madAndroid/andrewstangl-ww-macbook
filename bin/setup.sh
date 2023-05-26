@@ -80,7 +80,6 @@ kubectl wait --for=condition=Available  deployment ingress-nginx-controller -n i
 
 export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-export AWS_REGION=$(vault kv get -format=json  secrets/aws-creds | jq -r '.data.data."AWS_REGION"')
 export namespace=flux-system
 cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 export namespace=\$\{nameSpace\}
