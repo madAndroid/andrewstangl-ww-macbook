@@ -1,7 +1,7 @@
 apiVersion: templates.weave.works/v1alpha2
 kind: GitOpsTemplate
 metadata:
-  name: dynamic-v1
+  name: ${nameSpace}
   namespace: test-one
   labels:
     weave.works/template-type: terraform
