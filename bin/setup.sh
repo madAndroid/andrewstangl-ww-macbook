@@ -8,19 +8,23 @@ set -euo pipefail
 
 function usage()
 {
-    echo "usage ${0} [--debug] [--force-bootstrap] " >&2
-    echo "This script will initialize vault" >&2
+    echo "usage ${0} [--debug] [--flux-bootstrap]" >&2
+    echo "This script will initialize docker kubernetes" >&2
+    echo "  --debug: emmit debugging information" >&2
+    echo "  --flux-bootstrap: force flux bootstrap" >&2
 }
 
 function args() {
   bootstrap=0
+  reset=0
   arg_list=( "$@" )
   arg_count=${#arg_list[@]}
   arg_index=0
   while (( arg_index < arg_count )); do
     case "${arg_list[${arg_index}]}" in
           "--debug") set -x;;
-          "--force-bootstap") bootstrap=1;;
+          "--reset") reset=1;;
+          "--flux-bootstap") bootstrap=1;;
                "-h") usage; exit;;
            "--help") usage; exit;;
                "-?") usage; exit;;
@@ -76,7 +80,7 @@ EOF
 
 
 # Wait for ingress controller to start
-kubectl wait --for=condition=Available  deployment ingress-nginx-controller -n ingress-nginx
+kubectl wait --for=condition=Ready kustomizations.kustomize.toolkit.fluxcd.io -n flux-system nginx
 
 export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
@@ -99,6 +103,7 @@ while ( true ); do
   if [ "$started" == "true" ]; then
     break
   fi
+  sleep 1
 done
 
 # Initialize vault
