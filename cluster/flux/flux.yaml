@@ -22,7 +22,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: kyverno
-  path: ./cluster/addons/kyverno-policies
+  path: ./cluster/kyverno-policies
   prune: true
   wait: true
   sourceRef:
