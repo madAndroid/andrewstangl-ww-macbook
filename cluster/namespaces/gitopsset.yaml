@@ -66,7 +66,7 @@ spec:
     - gitRepository:
         repositoryRef: flux-system
         files:
-          - path: resource-descriptions/namespaces.yaml
+          - path: clusters/mamagement/clusters
   templates:
     - repeat: '{ .namespaces }'
       content:
