@@ -7,12 +7,12 @@ metadata:
 data:
   clusterType: "macbook"
   clusterName: ww-paulc-macbook
-  clusterIP: 10.102.244.213
+  clusterIP: 10.108.27.218
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
-  awsAccountId: ac-749339757188
+  awsAccountId: ac-
   prefixName: ww-paulc
-  awsRegion: eu-west-1
+  awsRegion: 
   awsTagCreator: paul.carlton@weave.works
   awsTagCustomer: weaveworks-cx
   awsTagProjectGid: "20276"
