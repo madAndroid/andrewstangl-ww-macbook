@@ -65,8 +65,8 @@ spec:
   generators:
     - gitRepository:
         repositoryRef: flux-system
-        files:
-          - path: clusters/management/clusters
+        directories:
+          - path: clusters/management/clusters/*
   templates:
     - repeat: '{ .namespaces }'
       content:

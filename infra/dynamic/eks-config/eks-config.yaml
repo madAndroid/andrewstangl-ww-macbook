@@ -5,9 +5,8 @@ metadata:
   namespace: ${templateNamespace}
 spec:
   interval: 10m
-  # Remove dependency for testing
-  # dependsOn:
-  #   - name: '${resourceName}-eks-${resourceName}-${clusterName}'
+  dependsOn:
+    - name: '${resourceName}-eks-${resourceName}-${clusterName}'
   retryInterval: 20s
   path: ./terraform/cluster-templates/eks-config
   approvePlan: auto
