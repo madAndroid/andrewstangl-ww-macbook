@@ -72,7 +72,7 @@ spec:
         kind: Kustomization
         apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
         metadata:
-          name: 'namespace-{{ .Element.Directory }}-templates'
+          name: 'namespace-{{ .Element.Base }}-templates'
           annotations:
             templates.weave.works/create-request: ''
         spec:
@@ -90,5 +90,5 @@ spec:
               - kind: ConfigMap
                 name: cluster-config
             substitute:
-              nameSpace: '{{ .Element.Directory }}'
+              nameSpace: '{{ .Element.Base }}'
               hostname: ${hostName}
