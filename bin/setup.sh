@@ -24,7 +24,7 @@ function args() {
     case "${arg_list[${arg_index}]}" in
           "--debug") set -x;;
           "--reset") reset=1;;
-          "--flux-bootstap") bootstrap=1;;
+          "--flux-bootstrap") bootstrap=1;;
                "-h") usage; exit;;
            "--help") usage; exit;;
                "-?") usage; exit;;
