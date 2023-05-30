@@ -304,7 +304,8 @@ spec:
     - name: flux-tf
   path: ./cluster/namespaces
   prune: true
-  wait: true
+  # Remove wait to overcone tf pod deletion error so I can test other stuff
+  # wait: true
   sourceRef:
     kind: GitRepository
     name: flux-system
