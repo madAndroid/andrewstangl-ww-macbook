@@ -20,6 +20,6 @@ configMapGenerator:
 - name: local-ca
   namespace: dex
   files:
-  - ../../../resources/CA.cer
+  - ../../resources/CA.cer
   options:
     disableNameSuffixHash: true
