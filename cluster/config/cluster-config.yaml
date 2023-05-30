@@ -10,9 +10,9 @@ data:
   clusterIP: 10.108.27.218
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
-  awsAccountId: ac-
+  awsAccountId: ac-749339757188
   prefixName: ww-paulc
-  awsRegion: 
+  awsRegion: eu-west-1
   awsTagCreator: paul.carlton@weave.works
   awsTagCustomer: weaveworks-cx
   awsTagProjectGid: "20276"
