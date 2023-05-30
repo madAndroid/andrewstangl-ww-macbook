@@ -12,8 +12,8 @@ resources:
 - kustomization.yaml
 - leaf-config.yaml
 - ns.yaml
-- resource-limits.yaml
-- resource-quota.yaml
+# - resource-limits.yaml
+# - resource-quota.yaml
 - tf-runner.yaml
 - vault.yaml
 configMapGenerator:
