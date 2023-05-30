@@ -68,12 +68,11 @@ spec:
         directories:
           - path: clusters/management/clusters/*
   templates:
-    - repeat: '{ .namespaces }'
-      content:
+    - content:
         kind: Kustomization
         apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
         metadata:
-          name: 'namespace-{{ .Repeat.name }}-templates'
+          name: 'namespace-{{ .Element.Directory }}-templates'
           annotations:
             templates.weave.works/create-request: ''
         spec:
@@ -91,5 +90,5 @@ spec:
               - kind: ConfigMap
                 name: cluster-config
             substitute:
-              nameSpace: '{{ .Repeat.name }}'
+              nameSpace: '{{ .Element.Directory }}'
               hostname: ${hostName}
