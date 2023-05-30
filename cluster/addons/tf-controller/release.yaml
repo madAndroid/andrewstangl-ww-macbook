@@ -25,7 +25,7 @@ spec:
   values:
     runner:
       image:
-        tag: "v0.15.0-rc.1"
+        tag: "v0.15.0-rc.3"
       serviceAccount:
         annotations:
           eks.amazonaws.com/role-arn: ${tfRunnerRoleArn}
