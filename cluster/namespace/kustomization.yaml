@@ -18,7 +18,7 @@ resources:
 - vault.yaml
 configMapGenerator:
 - name: local-ca
-  namespace: dex
+  namespace: ${nameSpace}
   files:
   - ../../resources/CA.cer
   options:
