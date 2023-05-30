@@ -123,6 +123,15 @@ else
   
 fi
 
+rm -rf cluster/flux/flux-system
+git add -A
+if [[ `git status --porcelain` ]]; then
+  git commit -m "remove flux resources"
+  git pull
+  git push
+fi
+
+
 echo "Reset Kubernetes"
 read -p "Press enter to continue" 
 
