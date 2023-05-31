@@ -12,29 +12,29 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: kyverno-policies
-  namespace: flux-system
-spec:
-  interval: 1m0s
-  dependsOn:
-    - name: kyverno
-    - name: config
-  path: ./cluster/kyverno-policies
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-config
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+# kind: Kustomization
+# metadata:
+#   name: kyverno-policies
+#   namespace: flux-system
+# spec:
+#   interval: 1m0s
+#   dependsOn:
+#     - name: kyverno
+#     - name: config
+#   path: ./cluster/kyverno-policies
+#   prune: true
+#   wait: true
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#   postBuild:
+#     substitute:
+#       hostName: kubernetes.docker.internal
+#     substituteFrom:
+#       - kind: ConfigMap
+#         name: cluster-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -209,6 +209,9 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  postBuild:
+    substitute:
+      hostName: kubernetes.docker.internal
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
