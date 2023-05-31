@@ -28,7 +28,7 @@ spec:
       tag: "v0.15.0-rc.3"
     runner:
       image:
-        repository: pcarlton/tf-runner
+        repository: pcarlton/tf-controller
         tag: "v0.15.0-rc.3"
       serviceAccount:
         annotations:
