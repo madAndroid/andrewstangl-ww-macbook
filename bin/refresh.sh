@@ -8,3 +8,4 @@
 aws-secrets.sh
 kubectl rollout restart deployment -n flux-system  source-controller 
 kubectl rollout restart deployment -n flux-system  kustomize-controller 
+kubectl rollout restart deployment -n flux-system  weave-gitops-enterprise-mccp-cluster-service
