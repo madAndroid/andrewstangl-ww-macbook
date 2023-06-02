@@ -100,7 +100,9 @@ fi
 # Wait for vault to start
 while ( true ); do
   echo "Waiting for vault to start"
+  set +e
   started="$(kubectl get pod/vault-0 -n vault -o json 2>/dev/null | jq -r '.status.containerStatuses[0].started')"
+  set -e
   if [ "$started" == "true" ]; then
     break
   fi
