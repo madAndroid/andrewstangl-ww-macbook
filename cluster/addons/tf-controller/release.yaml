@@ -24,11 +24,11 @@ spec:
   timeout: 5m
   values:
     image:
-      repository: pcarlton/tf-controller
+      # repository: pcarlton/tf-controller
       tag: "v0.15.0-rc.3"
     runner:
       image:
-        repository: pcarlton/tf-runner
+        # repository: pcarlton/tf-runner
         tag: "v0.15.0-rc.3"
       serviceAccount:
         annotations:
