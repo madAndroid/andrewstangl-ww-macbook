@@ -40,8 +40,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-
 for ns in $(kubectl get ns -o custom-columns=":metadata.name"); do
   for k in $(kubectl get kustomizations.kustomize.toolkit.fluxcd.io -n $ns -o custom-columns=":metadata.name"); do
     flux resume kustomization -n $ns $k &
