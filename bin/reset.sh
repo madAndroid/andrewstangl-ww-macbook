@@ -118,7 +118,7 @@ else
   present=$?
   set -e
   if [ $present -eq 0 ]; then
-    aaws dynamodb delete-table --table-name ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
+    aws dynamodb delete-table --table-name ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
   fi
   
 fi
