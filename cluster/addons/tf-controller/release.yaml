@@ -35,4 +35,3 @@ spec:
       #     eks.amazonaws.com/role-arn: ${tfRunnerRoleArn}
       grpc:
         maxMessageSize: 30
-

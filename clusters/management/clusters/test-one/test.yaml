@@ -294,13 +294,13 @@ spec:
           substitute:
             clusterName: '{{ .Repeat.name }}'
             desired_size: '"2"'
-            eks_core_state_bucket: '---tf-state'
             resourceName: test
             target_path: clusters/test-one/test/
             templateNamespace: test-one
+            hostName: kubernetes.docker.internal
           substituteFrom:
           - kind: ConfigMap
-            name: cluster-config
+            name: cluster-config  
         prune: true
         sourceRef:
           kind: GitRepository
