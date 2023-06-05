@@ -76,19 +76,19 @@ spec:
       envFrom:
       - secretRef:
           name: aws-creds
-  runnerPodSpec:
-    hostAliases:
-    - hostnames:
-      - dex.${hostName}
-      - wge.${hostName}
-      - vault.${hostName}
-      ip: ${clusterIP}
-    volumeMounts:
-    - mountPath: /etc/ssl/certs/local-ca.pem
-      name: local-ca
-      subPath: CA.cer
-    volumes:
-    - configMap:
-        defaultMode: 420
-        name: local-ca
-      name: local-ca
+      runnerPodSpec:
+        hostAliases:
+        - hostnames:
+          - dex.${hostName}
+          - wge.${hostName}
+          - vault.${hostName}
+          ip: ${clusterIP}
+        volumeMounts:
+        - mountPath: /etc/ssl/certs/local-ca.pem
+          name: local-ca
+          subPath: CA.cer
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: local-ca
+          name: local-ca
