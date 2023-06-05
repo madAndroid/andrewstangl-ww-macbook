@@ -76,12 +76,6 @@ spec:
       envFrom:
       - secretRef:
           name: aws-creds
-      hostAliases:
-      - ip: ${clusterIP}
-        hostnames:
-        - dex.${dnsSuffix}
-        - wge.${dnsSuffix}
-        - vault.${dnsSuffix} 
       volumeMounts:
       - mountPath: /etc/ssl/certs/local-ca.pem
         name: local-ca
@@ -91,3 +85,9 @@ spec:
           defaultMode: 420
           name: local-ca
         name: local-ca
+      hostAliases:
+      - ip: ${clusterIP}
+        hostnames:
+        - dex.${dnsSuffix}
+        - wge.${dnsSuffix}
+        - vault.${dnsSuffix} 
