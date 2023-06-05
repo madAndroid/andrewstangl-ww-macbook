@@ -8,7 +8,7 @@ data:
   clusterType: "macbook"
   mgmtClusterName: ww-paulc-macbook
   dnsSuffix: kubernetes.docker.internal
-  clusterIP: 10.109.251.242
+  clusterIP: 10.96.83.88
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
   awsAccountId: ac-749339757188
@@ -19,3 +19,4 @@ data:
   awsTagProjectGid: "20276"
   userEmail: paul.carlton@weave.works
   vault_url: https://vault.kubernetes.docker.internal
+  commitUser: paulcarlton-ww
