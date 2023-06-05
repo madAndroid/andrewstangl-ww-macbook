@@ -77,10 +77,10 @@ spec:
       - secretRef:
           name: aws-creds
       hostAliases:
-      - hostnames:
-        - dex.${hostName}
-        - wge.${hostName}
-        - vault.${hostName}
+        - hostnames:
+          - dex.${hostName}
+          - wge.${hostName}
+          - vault.${hostName}
         ip: ${clusterIP}
       volumeMounts:
       - mountPath: /etc/ssl/certs/local-ca.pem
