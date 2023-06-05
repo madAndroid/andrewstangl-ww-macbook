@@ -280,7 +280,7 @@ spec:
                         - kind: ConfigMap
                           name: cluster-config
                       substitute:
-                        hostName: ${hostName}
+                        dnsSuffix: ${dnsSuffix}
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         clusterName: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
@@ -341,7 +341,7 @@ spec:
                         # capacity_type: '(( .params.CAPACITY_TYPE ))'
                         # instance_type: '(( .params.INSTANCE_TYPE ))'
                         # shrink: "(( .params.SHRINK ))"
-                        eks_core_state_bucket: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
+                        eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
 
     # - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps.yaml
     #   content:

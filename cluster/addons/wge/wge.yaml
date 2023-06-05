@@ -41,9 +41,9 @@ spec:
       tls:
         - secretName: wge-tls
           hosts:
-            - wge.${hostName}
+            - wge.${dnsSuffix}
       hosts:
-        - host: wge.${hostName}
+        - host: wge.${dnsSuffix}
           paths:
           - path: /?(.*)
             pathType: ImplementationSpecific
@@ -55,8 +55,8 @@ spec:
         repositoryURL: https://github.com/${GitHubOrg}/${GitHubRepo}
       oidc:
         enabled: true
-        issuerURL: https://dex.${hostName}
-        redirectURL: https://wge.${hostName}/oauth2/callback
+        issuerURL: https://dex.${dnsSuffix}
+        redirectURL: https://wge.${dnsSuffix}/oauth2/callback
         clientCredentialsSecret: wge-oidc-auth
     policy-agent:
       enabled: true
@@ -83,8 +83,8 @@ spec:
               value:
                 - ip: ${clusterIP}
                   hostnames:
-                  - "dex.${hostName}"
-                  - "wge.${hostName}"
+                  - "dex.${dnsSuffix}"
+                  - "wge.${dnsSuffix}"
 
             - op: add
               path: /spec/template/spec/volumes/-

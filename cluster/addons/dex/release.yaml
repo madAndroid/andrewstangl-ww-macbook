@@ -46,9 +46,9 @@ spec:
       tls:
         - secretName: dex-tls
           hosts:
-            - dex.${hostName}
+            - dex.${dnsSuffix}
       hosts:
-        - host: dex.${hostName}
+        - host: dex.${dnsSuffix}
           paths:
           - path: /?(.*)
             pathType: ImplementationSpecific
@@ -64,9 +64,9 @@ spec:
               value:
                 - ip: ${clusterIP}
                   hostnames:
-                  - "dex.${hostName}"
-                  - "wge.${hostName}"
-                  - "vault.${hostName}"
+                  - "dex.${dnsSuffix}"
+                  - "wge.${dnsSuffix}"
+                  - "vault.${dnsSuffix}"
 
             - op: add
               path: /spec/template/spec/volumes/-

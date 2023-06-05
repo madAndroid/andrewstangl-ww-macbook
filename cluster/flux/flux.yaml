@@ -31,7 +31,7 @@ spec:
 #     name: flux-system
 #   postBuild:
 #     substitute:
-#       hostName: kubernetes.docker.internal
+#       dnsSuffix: kubernetes.docker.internal
 #     substituteFrom:
 #       - kind: ConfigMap
 #         name: cluster-config
@@ -65,7 +65,7 @@ spec:
     name: flux-system
   postBuild:
     substitute:
-      hostName: kubernetes.docker.internal
+      dnsSuffix: kubernetes.docker.internal
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -99,7 +99,7 @@ spec:
     name: flux-system
   postBuild:
     substitute:
-      hostName: kubernetes.docker.internal
+      dnsSuffix: kubernetes.docker.internal
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -118,7 +118,7 @@ spec:
     name: flux-system
   postBuild:
     substitute:
-      hostName: kubernetes.docker.internal
+      dnsSuffix: kubernetes.docker.internal
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -152,7 +152,7 @@ spec:
     name: flux-system
   postBuild:
     substitute:
-      hostName: kubernetes.docker.internal
+      dnsSuffix: kubernetes.docker.internal
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -172,8 +172,6 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
     substituteFrom:
       - kind: ConfigMap
         name: cluster-config
@@ -211,7 +209,7 @@ spec:
     name: flux-system
   postBuild:
     substitute:
-      hostName: kubernetes.docker.internal
+      dnsSuffix: kubernetes.docker.internal
     substituteFrom:
       - kind: ConfigMap
         name: cluster-config
@@ -232,8 +230,6 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
     substituteFrom:
       - kind: ConfigMap
         name: cluster-config
@@ -254,8 +250,9 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-config
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
@@ -293,8 +290,6 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
     substituteFrom:
       - kind: ConfigMap
         name: cluster-config
@@ -315,8 +310,6 @@ spec:
     kind: GitRepository
     name: flux-system
   postBuild:
-    substitute:
-      hostName: kubernetes.docker.internal
     substituteFrom:
       - kind: ConfigMap
         name: cluster-config

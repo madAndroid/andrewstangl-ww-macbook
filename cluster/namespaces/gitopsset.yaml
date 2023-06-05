@@ -41,7 +41,7 @@ spec:
                 name: cluster-config
             substitute:
               nameSpace: '{{ .Repeat.name }}'
-              hostname: ${hostName}
+              dnsSuffix: ${dnsSuffix}
               # limitsCpu: '{{ or .Repeat.quota.limits.cpu .Element.default.quota.limits.cpu }}'
               # limitsMemory: '{{ or .Repeat.quota.limits.memory .Element.default.quota.limits.memory }}'
               # requestsCpu: '{{ or .Repeat.quota.requests.cpu .Element.default.quota.requests.cpu }}'
@@ -91,4 +91,4 @@ spec:
                 name: cluster-config
             substitute:
               nameSpace: '{{ .Element.Base }}'
-              hostName: ${hostName}
+              dnsSuffix: ${dnsSuffix}

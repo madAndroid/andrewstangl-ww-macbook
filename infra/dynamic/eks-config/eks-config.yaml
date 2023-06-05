@@ -79,9 +79,9 @@ spec:
       hostAliases:
       - ip: ${clusterIP}
         hostnames:
-        - dex.${hostName}
-        - wge.${hostName}
-        - vault.${hostName} 
+        - dex.${dnsSuffix}
+        - wge.${dnsSuffix}
+        - vault.${dnsSuffix} 
       volumeMounts:
       - mountPath: /etc/ssl/certs/local-ca.pem
         name: local-ca

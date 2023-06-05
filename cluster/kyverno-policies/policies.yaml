@@ -22,9 +22,9 @@ spec:
             value:
               - ip: ${clusterIP}
                 hostnames:
-                - "dex.${hostName}"
-                - "wge.${hostName}"
-                - "vault.${hostName}"
+                - "dex.${dnsSuffix}"
+                - "wge.${dnsSuffix}"
+                - "vault.${dnsSuffix}"
 
           - op: add
             path: /spec/volumes/-

@@ -7,6 +7,7 @@ metadata:
 data:
   clusterType: "macbook"
   mgmtClusterName: ${CLUSTER_NAME}
+  dnsSuffix: kubernetes.docker.internal
   clusterIP: ${CLUSTER_IP}
   GitHubOrg: ${GITHUB_MGMT_ORG}
   GitHubRepo: ${GITHUB_MGMT_REPO}
