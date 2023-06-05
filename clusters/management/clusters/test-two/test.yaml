@@ -242,7 +242,7 @@ spec:
           substitute:
             clusterName: '{{ getordefault .Repeat "resource" "test" }}-{{ .Repeat.name
               }}'
-            hostName: null
+            hostName: kubernetes.docker.internal
             resourceName: test
             templateNamespace: test-two
           substituteFrom:
