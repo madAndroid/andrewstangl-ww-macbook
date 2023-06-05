@@ -6,7 +6,7 @@ metadata:
   namespace: ${namespace}
 data:
   clusterType: "macbook"
-  clusterName: ${CLUSTER_NAME}
+  mgmtClusterName: ${CLUSTER_NAME}
   clusterIP: ${CLUSTER_IP}
   GitHubOrg: ${GITHUB_MGMT_ORG}
   GitHubRepo: ${GITHUB_MGMT_REPO}

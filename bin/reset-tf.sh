@@ -97,7 +97,7 @@ if [ $delete_tfs -eq 1 ]; then
 
 else
 
-  cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.clusterName}')
+  cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
   set +e
   aws s3 ls | grep -E "${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
   present=$?
