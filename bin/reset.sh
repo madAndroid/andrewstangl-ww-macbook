@@ -72,6 +72,16 @@ if [ $delete_tfs -eq 1 ]; then
     sleep 5
   done
 
+  cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
+  set +e
+  aws s3 ls | grep -E "s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
+  present=$?
+  set -e
+  if [ $present -eq 0 ]; then
+    aws s3 rm s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state/$cluster_name --recursive
+    aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
+  fi
+
   set +e
   kubectl get terraforms.infra.contrib.fluxcd.io -n flux-system aws-dynamo-table > /dev/null 2>&1
   present=$?
