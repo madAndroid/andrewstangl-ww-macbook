@@ -91,4 +91,4 @@ spec:
                 name: cluster-config
             substitute:
               nameSpace: '{{ .Element.Base }}'
-              hostname: ${hostName}
+              hostName: ${hostName}
