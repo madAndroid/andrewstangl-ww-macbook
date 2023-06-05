@@ -6,7 +6,7 @@ metadata:
   namespace: ${nameSpace}
 data:
   clusterType: "macbook"
-  clusterName: ww-paulc-macbook
+  mgmtClusterName: ww-paulc-macbook
   clusterIP: 10.109.251.242
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
