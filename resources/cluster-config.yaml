@@ -19,3 +19,4 @@ data:
   awsTagProjectGid: "${AWS_TAG_projectGid}"
   userEmail: ${USER_EMAIL}
   vault_url: ${VAULT_ADDR}
+  commitUser: ${GITHUB_USER}
