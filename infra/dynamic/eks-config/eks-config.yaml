@@ -16,7 +16,7 @@ spec:
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${clusterName}/${templateNamespace}/${resourceName}/eks-config/${resourceName}/${clusterName}/terraform.tfstate"
+        key            = "${mgmtClusterName}/${templateNamespace}/${resourceName}/eks-config/${resourceName}/${clusterName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
