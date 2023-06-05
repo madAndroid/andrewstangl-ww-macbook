@@ -1,5 +1,5 @@
 ---
-apiVersion: infra.contrib.fluxcd.io/v1alpha1
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
 kind: Terraform
 metadata:
   name: aws-s3-bucket
@@ -33,7 +33,7 @@ spec:
       - secretRef:
           name: aws-creds
 ---
-apiVersion: infra.contrib.fluxcd.io/v1alpha1
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
 kind: Terraform
 metadata:
   name: aws-dynamo-table
