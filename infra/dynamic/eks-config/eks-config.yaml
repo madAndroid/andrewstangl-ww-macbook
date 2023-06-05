@@ -49,7 +49,7 @@ spec:
     - name: eks_core_state_bucket
       value: '${prefixName}-${awsAccountId}-${awsRegion}-tf-state'
     - name: eks_core_state_key
-      value: '${clusterName}/${templateNamespace}/${resourceName}/eks/${resourceName}/${clusterName}/terraform.tfstate'
+      value: '${mgmtClusterName}/${templateNamespace}/${resourceName}/eks/${resourceName}/${clusterName}/terraform.tfstate'
   varsFrom:
     - kind: ConfigMap
       name: leaf-cluster-config

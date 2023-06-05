@@ -295,7 +295,7 @@ spec:
           substitute:
             clusterName: '{{ .Repeat.name }}'
             desired_size: '"2"'
-            eks_core_state_bucket: '---tf-state'
+            eks_core_state_bucket: ww-paulc-ac-749339757188-eu-west-1-tf-state
             resourceName: test
             target_path: clusters/test-two/test/
             templateNamespace: test-two

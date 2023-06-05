@@ -280,7 +280,6 @@ spec:
                         - kind: ConfigMap
                           name: cluster-config
                       substitute:
-                        dnsSuffix: ${dnsSuffix}
                         templateNamespace: '(( .template.meta.namespace ))'
                         resourceName: '(( .params.RESOURCE_NAME ))'
                         clusterName: '{{ getordefault .Repeat "resource" "(( .params.RESOURCE_NAME ))" }}-{{ .Repeat.name }}'
