@@ -161,7 +161,7 @@ spec:
                   kind: Kustomization
                   apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
                   metadata:
-                    name: "(( .params.RESOURCE_NAME ))-eks-(( .params.RESOURCE_NAME ))-{{ .Repeat.name }}"
+                    name: "(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}"
                     annotations:
                       templates.weave.works/create-request: ''
                   spec:
