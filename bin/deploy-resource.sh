@@ -18,7 +18,7 @@ function usage()
 }
 
 function args() {
-  env_template
+  env_template=""
   template_name=""
   resource_name=""
   namespace=""
