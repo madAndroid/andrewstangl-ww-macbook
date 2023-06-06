@@ -1,7 +1,7 @@
 apiVersion: infra.contrib.fluxcd.io/v1alpha2
 kind: Terraform
 metadata:
-  name: '${resourceName}-eks-${resourceName}-${clusterName}'
+  name: eks-${resourceName}-${clusterName}
   namespace: ${templateNamespace}
 spec:
   interval: 10m
@@ -10,13 +10,13 @@ spec:
   approvePlan: auto
   destroyResourcesOnDeletion: true
   writeOutputsToSecret:
-    name: '${resourceName}-eks-${resourceName}-${clusterName}-config'
+    name: '${resourceName}-${clusterName}-eks-config'
   dependsOn:
-    - name: '${resourceName}-vpc-${vpcResource}-${vpcName}'
+    - name: 'vpc-${vpcResource}-${vpcName}'
   backendConfig:
     customConfiguration: |
       backend "s3" {
-        key            = "${mgmtClusterName}/${templateNamespace}/${resourceName}/eks/${resourceName}/${clusterName}/terraform.tfstate"
+        key            = "${mgmtClusterName}/${templateNamespace}/eks/${resourceName}-${clusterName}/terraform.tfstate"
         bucket         = "${prefixName}-${awsAccountId}-${awsRegion}-tf-state"
         region         = "${awsRegion}"
         encrypt        = true
@@ -31,7 +31,7 @@ spec:
       value: ${awsRegion}
   varsFrom:
     - kind: Secret
-      name: ${resourceName}-vpc-${vpcResource}-${vpcName}-config
+      name: ${vpcResource}-${vpcName}-vpc-config
       varsKeys:
         - vpc_id
         - private_subnets_string
