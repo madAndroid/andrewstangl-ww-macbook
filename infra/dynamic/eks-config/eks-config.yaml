@@ -57,6 +57,7 @@ spec:
         - git_commit_author
         - git_commit_email
         - github_owner
+        - github_org
         - repository_name
         - cluster_admin_users_string
     - kind: Secret
