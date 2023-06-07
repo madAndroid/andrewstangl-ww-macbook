@@ -101,6 +101,7 @@ resource "github_repository_file" "leaf_rbac" {
     name       = "leaf"
     namespace  = "flux-system"
     path       = "wge-resources/leaf-rbac"
+    depends_on = null
     wait       = true
     timeout    = "5m"
     depends_on = null
