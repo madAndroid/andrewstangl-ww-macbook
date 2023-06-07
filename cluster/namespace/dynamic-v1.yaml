@@ -429,7 +429,7 @@ spec:
     #                   kind: GitRepository
     #                   name: flux-system
     #                   namespace: flux-system
-    #                 path: ./cluster/apps/template
+    #                 path: ./cluster/apps/template/{{ .Repeat.mode }}
     #                 prune: true
     #                 wait: true
     #                 timeout: 5m
