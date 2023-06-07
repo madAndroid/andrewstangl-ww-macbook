@@ -161,25 +161,25 @@ resource "github_repository_file" "leaf_config" {
   overwrite_on_create = true
 }
 
-resource "github_repository_file" "leaf_apps" {
-  repository          = var.repository_name
-  branch              = var.branch
-  file                = format("%s/apps.yaml", var.target_path)
-  content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
-    name       = "apps"
-    namespace  = "flux-system"
-    path       = "cluster/apps"
-    wait       = true
-    timeout    = "5m"
-    depends_on = "config"
-    config    = true
-    substitute = null
-    # substitute = <<-EOF
-    #   clusterName: ${var.cluster_name}
-    # EOF
-  }))
-  commit_author       = var.commit_author
-  commit_email        = var.commit_email
-  commit_message      = var.commit_message
-  overwrite_on_create = true
-}
+# resource "github_repository_file" "leaf_apps" {
+#   repository          = var.repository_name
+#   branch              = var.branch
+#   file                = format("%s/apps.yaml", var.target_path)
+#   content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
+#     name       = "apps"
+#     namespace  = "flux-system"
+#     path       = "cluster/apps"
+#     wait       = true
+#     timeout    = "5m"
+#     depends_on = "config"
+#     config    = true
+#     substitute = null
+#     # substitute = <<-EOF
+#     #   clusterName: ${var.cluster_name}
+#     # EOF
+#   }))
+#   commit_author       = var.commit_author
+#   commit_email        = var.commit_email
+#   commit_message      = var.commit_message
+#   overwrite_on_create = true
+# }
