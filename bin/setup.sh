@@ -130,7 +130,7 @@ set -e
 secrets.sh --tls-skip --wge-entitlement $PWD/resources/wge-entitlement.yaml --secrets $PWD/resources/github-secrets.sh
 
 # Wait for dex to start
-kubectl wait --for=condition=Ready kustomization/dex -n flux-system
+kubectl wait --timeout=5m --for=condition=Ready kustomization/dex -n flux-system
 
 set +e
 vault-oidc-config.sh
