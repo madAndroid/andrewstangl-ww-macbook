@@ -101,19 +101,35 @@ if [[ `git status --porcelain` ]]; then
   git push
 fi
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
 
-echo "Reset Kubernetes"
-read -p "Press enter to continue" 
+  echo "Reset Kubernetes"
+  read -p "Press enter to continue" 
 
-# Wait for kubernetes to be ready
-while ( true ); do
-  echo "Waiting for kubernetes to start"
-  started="$(docker ps -q --filter 'name=k8s_kube-apiserver')"
-  if [ -n "$started" ]; then
-    break
-  fi
-  sleep 1
-done
+  # Wait for kubernetes to be ready
+  while ( true ); do
+    echo "Waiting for kubernetes to start"
+    started="$(docker ps -q --filter 'name=k8s_kube-apiserver')"
+    if [ -n "$started" ]; then
+      break
+    fi
+    sleep 1
+  done
+else
+  echo "Deleting Kind cluster and recreating" 
+  kind delete cluster
+  kind create cluster
+
+  # Wait for kubernetes to be ready
+  while ( true ); do
+    echo "Waiting for kubernetes to start"
+    started="$(docker ps -q --filter 'name=k8s_kube-apiserver')"
+    if [ -n "$started" ]; then
+      break
+    fi
+    sleep 1
+  done
+fi
 
 
 
