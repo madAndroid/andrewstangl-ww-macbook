@@ -89,8 +89,8 @@ export namespace=flux-system
 cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 export namespace=\$\{nameSpace\}
 git add cluster/config/cluster-config.yaml
-git add cluster/namespace/cluster-config.yaml
 cat resources/cluster-config.yaml | envsubst > cluster/namespace/cluster-config.yaml
+git add cluster/namespace/cluster-config.yaml
 if [[ `git status --porcelain` ]]; then
   git commit -m "update cluster config"
   git pull
