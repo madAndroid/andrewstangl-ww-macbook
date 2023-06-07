@@ -1,0 +1,360 @@
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-vpc-creation
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-vpc-{{ .Repeat.name }}
+      spec:
+        interval: 1m0s
+        path: ./infra/dynamic/vpc-create
+        postBuild:
+          substitute:
+            privateSubnetCount: '{{ getordefault .Repeat "privatesubnets" "3" }}'
+            publicSubnetCount: '{{ getordefault .Repeat "publicsubnets" "3" }}'
+            region: '{{ .Element.aws.region }}'
+            resourceName: test
+            templateNamespace: test-two
+            vpcCIDR: '{{ getordefault .Repeat "cidr"  "10.0.0.0/16"}}'
+            vpcName: '{{ .Repeat.name }}'
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 10m
+        wait: true
+    repeat: '{ .vpcs[?(@.mode=="create")] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-vpc-discover
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-vpc-{{ .Repeat.name }}
+      spec:
+        interval: 1m0s
+        path: ./infra/dynamic/vpc-discover
+        postBuild:
+          substitute:
+            resourceName: test
+            templateNamespace: test-two
+            vpcName: '{{ .Repeat.name }}'
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 10m
+        wait: true
+    repeat: '{ .vpcs[?(@.mode=="discover")] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-eks-creation
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-eks-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: '{{ getordefault .Repeat "vpc_resource" "test" }}-vpc-{{ .Repeat.vpc_name
+            }}'
+        interval: 1m0s
+        path: ./infra/dynamic/eks-create
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            clusterVersion: '{{ .Repeat.version }}'
+            resourceName: test
+            templateNamespace: test-two
+            vpcName: '{{ .Repeat.vpc_name }}'
+            vpcResource: '{{ getordefault .Repeat "vpc_resource" "test"}}'
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 15m
+        wait: true
+    repeat: '{ .clusters[?(@.mode=="create")] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-eks-discovery
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-eks-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: '{{ getordefault .Repeat "vpc_resource" "test" }}-vpc-{{ .Repeat.vpc_name
+            }}'
+        interval: 1m0s
+        path: ./infra/dynamic/eks-{{ .Repeat.mode }}
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            resourceName: test
+            templateNamespace: test-two
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 15m
+        wait: true
+    repeat: '{ .clusters[?(@.mode!="create")] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-eks-config
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-eks-config-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: test-eks-{{ .Repeat.name }}
+        interval: 1m0s
+        path: ./infra/dynamic/eks-config
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            desired_size: '"2"'
+            eks_core_state_bucket: '---tf-state'
+            resourceName: test
+            target_path: clusters/test-two/test/
+            templateNamespace: test-two
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 5m
+        wait: true
+    repeat: '{ .clusters[?(@.mode=="create")] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-gitops-kubeconfig
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-gitops-kubeconfig-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: test-eks-config-{{ .Repeat.name }}
+        interval: 1m0s
+        path: ./wge-resources/wge/kubeconfig
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            resourceName: test
+            templateNamespace: test-two
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+          - kind: Secret
+            name: test-{{ .Repeat.name }}-cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 1m
+    repeat: '{ .clusters[?(@.gui)] }'
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-gitops-clusters
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-gitops-cluster-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: test-gitops-kubeconfig-{{ .Repeat.name }}
+        interval: 1m0s
+        path: ./wge-resources/wge/gitops-cluster
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            resourceName: test
+            templateNamespace: test-two
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 1m
+    repeat: '{ .clusters[?(@.gui)] }'
