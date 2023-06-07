@@ -84,7 +84,7 @@ do
   set +e
   # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
   # kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
-  kubectl apply -f /tmp/leafs/weave-daemonset-k8s.yaml
+  kubectl apply -f /tmp/kubeadm-leafs/weave-daemonset-k8s.yaml
   ret=$?
   set -e
   if [ $ret -eq 0 ]; then
@@ -115,4 +115,4 @@ do
 done
 
 flux --version
-flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path leafs/$hostname/flux
+flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path kubeadm-leafs/$hostname/flux

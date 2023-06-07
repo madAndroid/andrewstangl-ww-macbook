@@ -46,16 +46,16 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-scp -r leafs ${username_str}${hostname}:/tmp
+scp -r kubeadm-leafs ${username_str}${hostname}:/tmp
 
 cat .envrc | grep "export GITHUB_MGMT_" > /tmp/env.sh
 echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" >> /tmp/env.sh
 scp -r /tmp/env.sh ${username_str}${hostname}:/tmp
 
 if [ -n "$install" ]; then
-  ssh ${username_str}${hostname} "source /tmp/leafs/leaf-install.sh $debug_str"
+  ssh ${username_str}${hostname} "source /tmp/kubeadm-leafs/leaf-install.sh $debug_str"
 fi
 
-ssh ${username_str}${hostname} "source /tmp/leafs/leaf-deploy.sh $debug_str"
+ssh ${username_str}${hostname} "source /tmp/kubeadm-leafs/leaf-deploy.sh $debug_str"
 
 scp ${username_str}${hostname}:/tmp/kubeconfig ~/.kube/${hostname}.kubeconfig

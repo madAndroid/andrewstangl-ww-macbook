@@ -44,3 +44,9 @@ variable "vault_secrets_path" {
   description = "vault path to store leaf cluster secrets"
   default     = "secrets"
 }
+
+variable "target_path" {
+  type        = string
+  description = "flux sync target path"
+  default     = ""
+}

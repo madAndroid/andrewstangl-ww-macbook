@@ -94,6 +94,7 @@ module "leaf_config" {
   commit_email           = var.git_commit_email
   commit_message         = var.git_commit_message
   repository_name        = var.repository_name
+  target_path            = local.flux_target_path
   branch                 = var.branch
 }
 
@@ -130,4 +131,55 @@ resource "aws_autoscaling_schedule" "set-scale-to-zero-ng-worker" {
   desired_capacity       = var.shrink ? 0 : var.desired_size
   recurrence             = "*/5 * * * *"
   autoscaling_group_name = module.worker_node_group.node_group.resources[0].autoscaling_groups[0].name
+}
+
+resource "github_repository_file" "leaf_config" {
+  repository          = var.repository_name
+  branch              = var.branch
+  file                = format("%s/apps.yaml", var.target_path)
+  content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
+    name       = "apps"
+    namespace  = "flux-system"
+    path       = "wge-resources/leaf-config"
+    wait       = true
+    timeout    = "5m"
+    depends_on = null
+    config     = false
+    substitute = <<-EOF
+      clusterName: ${var.cluster_name}
+      GitHubOrg: ${var.github_owner}
+      GitHubRepo: ${var.repository_name}
+      userEmail: ${var.git_commit_email}
+      commitUser: ${var.git_commit_author}
+      resourceName: ${var.resource_name}
+      templateNameSpace: ${var.template_namespace}
+    EOF
+  }))
+  commit_author       = var.commit_author
+  commit_email        = var.commit_email
+  commit_message      = var.commit_message
+  overwrite_on_create = true
+}
+
+resource "github_repository_file" "leaf_apps" {
+  repository          = var.repository_name
+  branch              = var.branch
+  file                = format("%s/apps.yaml", var.target_path)
+  content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
+    name       = "apps"
+    namespace  = "flux-system"
+    path       = "cluster/apps"
+    wait       = true
+    timeout    = "5m"
+    depends_on = "config"
+    config    = true
+    substitute = null
+    # substitute = <<-EOF
+    #   clusterName: ${var.cluster_name}
+    # EOF
+  }))
+  commit_author       = var.commit_author
+  commit_email        = var.commit_email
+  commit_message      = var.commit_message
+  overwrite_on_create = true
 }
