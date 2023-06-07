@@ -82,35 +82,6 @@ if [ $delete_tfs -eq 1 ]; then
     aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
   fi
 
-  set +e
-  kubectl get terraforms.infra.contrib.fluxcd.io -n flux-system aws-dynamo-table > /dev/null 2>&1
-  present=$?
-  set -e
-  if [ $present -eq 0 ]; then
-    kubectl delete terraforms.infra.contrib.fluxcd.io -n flux-system aws-dynamo-table
-  fi
-  
-  set +e
-  kubectl get terraforms.infra.contrib.fluxcd.io -n flux-system aws-s3-bucket > /dev/null 2>&1
-  present=$?
-  set -e
-  if [ $present -eq 0 ]; then
-    kubectl delete terraforms.infra.contrib.fluxcd.io -n flux-system aws-s3-bucket
-  fi
-
-  # Wait for remote state terraform objects to be deleted
-  while ( true ); do
-    echo "Waiting for terraform objects to be deleted"
-    kubectl get terraforms.infra.contrib.fluxcd.io -A -o custom-columns=":metadata.namespace,:metadata.name" > /tmp/tf.list
-    objects="$(wc -l /tmp/tf.list | awk '{print $1}')"
-    if [[  $objects -eq 1 ]]; then
-      break
-    fi
-    echo "${objects} terraform objects still exist"
-    cat /tmp/tf.list
-    sleep 5
-  done
-
 else
 
   cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
