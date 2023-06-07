@@ -98,13 +98,13 @@ resource "vault_kv_secret_v2" "kubeconfig" {
   data_json           = jsonencode({ "value.yaml" = local.kubeconfig })
 }
 
-resource "github_repository_file" "kubeconfig_secret" {
-  repository          = var.repository_name
-  branch              = var.branch
-  file                = "clusters/management/secrets/${local.config_name}.yaml"
-  content             = local.kubeconfig_secret
-  commit_author       = var.commit_author
-  commit_email        = var.commit_email
-  commit_message      = var.commit_message
-  overwrite_on_create = true
-}
+# resource "github_repository_file" "kubeconfig_secret" {
+#   repository          = var.repository_name
+#   branch              = var.branch
+#   file                = "clusters/management/secrets/${local.config_name}.yaml"
+#   content             = local.kubeconfig_secret
+#   commit_author       = var.commit_author
+#   commit_email        = var.commit_email
+#   commit_message      = var.commit_message
+#   overwrite_on_create = true
+# }
