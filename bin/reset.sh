@@ -71,38 +71,27 @@ if [ $delete_tfs -eq 1 ]; then
     cat /tmp/tf.list
     sleep 5
   done
-
-  cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
-  set +e
-  aws s3 ls | grep -E "s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
-  present=$?
-  set -e
-  if [ $present -eq 0 ]; then
-    aws s3 rm s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state/$cluster_name --recursive
-    aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
-  fi
-
-else
-
-  cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
-  set +e
-  aws s3 ls | grep -E "s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
-  present=$?
-  set -e
-  if [ $present -eq 0 ]; then
-    aws s3 rm s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state/$cluster_name --recursive
-    aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
-  fi
-
-  set +e
-  aws dynamodb  list-tables | jq -r '.TableNames[]' | grep -E "^${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
-  present=$?
-  set -e
-  if [ $present -eq 0 ]; then
-    aws dynamodb delete-table --table-name ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
-  fi
-  
 fi
+
+cluster_name=$(kubectl get cm -n flux-system cluster-config -o jsonpath='{.data.mgmtClusterName}')
+set +e
+aws s3 ls | grep -E "${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
+present=$?
+set -e
+if [ $present -eq 0 ]; then
+  aws s3 rm s3://${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state/$cluster_name --recursive
+  aws s3api delete-bucket --bucket ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
+fi
+
+set +e
+aws dynamodb  list-tables | jq -r '.TableNames[]' | grep -E "^${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state$" > /dev/null 2>&1
+present=$?
+set -e
+if [ $present -eq 0 ]; then
+  aws dynamodb delete-table --table-name ${PREFIX_NAME}-ac-${AWS_ACCOUNT_ID}-${AWS_REGION}-tf-state
+fi
+  
+
 
 rm -rf cluster/flux/flux-system
 git add -A
