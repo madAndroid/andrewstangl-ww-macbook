@@ -333,7 +333,7 @@ spec:
                         - kind: ConfigMap
                           name: cluster-config
                         - kind: Secret
-                          name: ${resourceName}-${clusterName}-cluster-config
+                          name: (( .params.RESOURCE_NAME ))-{{ .Repeat.name }}-cluster-config
                       substitute:
                         clusterName: '{{ .Repeat.name }}'
                         templateNamespace: '(( .template.meta.namespace ))'
