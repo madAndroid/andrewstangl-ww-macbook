@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 10m
   dependsOn:
-    - name: 'eks-${resourceName}-${clusterName}'
+    - name: 'eks-config-${resourceName}-${clusterName}'
   retryInterval: 20s
   path: ./terraform/cluster-templates/leaf-apply-${scmType}
   approvePlan: auto
