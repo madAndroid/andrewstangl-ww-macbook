@@ -10,7 +10,7 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./cluster/apps/generator/apps-repos
+  path: ./leaf-clusters/apps/generator/apps-repos
   prune: true
   wait: true
   timeout: 5m

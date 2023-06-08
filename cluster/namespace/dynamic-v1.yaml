@@ -458,7 +458,7 @@ spec:
     #           kind: GitRepository
     #           name: flux-system
     #           namespace: flux-system
-    #         path: ./cluster/apps/generator
+    #         path: ./leaf-clusters/apps/generator
     #         prune: true
     #         wait: true
     #         timeout: 5m
@@ -507,7 +507,7 @@ spec:
         #               kind: GitRepository
         #               name: flux-system
         #               namespace: flux-system
-        #             path: ./cluster/apps/template/{{ .Repeat.mode }}
+        #             path: ./leaf-clusters/apps/template/{{ .Repeat.mode }}
         #             prune: true
         #             wait: true
         #             timeout: 5m

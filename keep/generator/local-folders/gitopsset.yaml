@@ -31,7 +31,7 @@ spec:
             kind: GitRepository
             name: flux-system
             namespace: flux-system
-          path: ./cluster/apps/template/local-folders
+          path: ./leaf-clusters/apps/template/local-folders
           prune: true
           wait: true
           timeout: 5m
