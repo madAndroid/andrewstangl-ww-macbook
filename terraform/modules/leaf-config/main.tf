@@ -4,7 +4,7 @@ resource "kubectl_manifest" "cluster_sa" {
     kind: ServiceAccount
     metadata:
       name: wge
-      namespace: default
+      namespace: ${var.template_namespace}
   YAML
 }
 
@@ -14,7 +14,7 @@ resource "kubectl_manifest" "cluster_sa_token" {
     kind: Secret
     metadata:
       name: wge-token
-      namespace: default
+      namespace: ${var.template_namespace}
       annotations:
         kubernetes.io/service-account.name: ${kubectl_manifest.cluster_sa.name}
     type: kubernetes.io/service-account-token
@@ -93,22 +93,22 @@ resource "vault_kv_secret_v2" "kubeconfig" {
   data_json           = jsonencode({ "value.yaml" = local.kubeconfig })
 }
 
-resource "github_repository_file" "leaf_rbac" {
-  repository          = var.repository_name
-  branch              = var.branch
-  file                = format("%s/leaf.yaml", var.target_path)
-  content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
-    name       = "leaf"
-    namespace  = "flux-system"
-    path       = "wge-resources/leaf-rbac"
-    depends_on = []
-    wait       = true
-    timeout    = "5m"
-    substitute = null
-  }))
-  commit_author       = var.commit_author
-  commit_email        = var.commit_email
-  commit_message      = var.commit_message
-  overwrite_on_create = true
-}
+# resource "github_repository_file" "leaf_rbac" {
+#   repository          = var.repository_name
+#   branch              = var.branch
+#   file                = format("%s/leaf.yaml", var.target_path)
+#   content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
+#     name       = "wge-rbac"
+#     namespace  = var.template_namespace
+#     path       = "wge-resources/leaf-rbac"
+#     depends_on = []
+#     wait       = true
+#     timeout    = "5m"
+#     substitute = null
+#   }))
+#   commit_author       = var.commit_author
+#   commit_email        = var.commit_email
+#   commit_message      = var.commit_message
+#   overwrite_on_create = true
+# }
 

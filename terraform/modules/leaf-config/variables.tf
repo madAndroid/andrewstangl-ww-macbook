@@ -50,3 +50,15 @@ variable "target_path" {
   description = "flux sync target path"
   default     = ""
 }
+
+variable "resource_name" {
+  type        = string
+  description = "template resource name"
+  default     = ""
+}
+
+variable "template_namespace" {
+  type        = string
+  description = "template namespace"
+  default     = ""
+}

@@ -1,3 +1,5 @@
+app_name: podinfo-ms4
+
 deployment:
   image: ""
 

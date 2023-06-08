@@ -52,5 +52,5 @@ clusters:
           type: tag
           value: v6.3.6
       - name: podinfo-ms4
-        mode: app-params
+        mode: apps-params
         params: ./cluster/apps/params/podinfo-ms4.yaml

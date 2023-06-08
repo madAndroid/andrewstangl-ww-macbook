@@ -290,7 +290,7 @@ spec:
         dependsOn:
         - name: test-eks-config-{{ .Repeat.name }}
         interval: 1m0s
-        path: ./wge-resources/wge/kubeconfig
+        path: ./wge/kubeconfig
         postBuild:
           substitute:
             clusterName: '{{ .Repeat.name }}'
@@ -342,7 +342,7 @@ spec:
         dependsOn:
         - name: test-gitops-kubeconfig-{{ .Repeat.name }}
         interval: 1m0s
-        path: ./wge-resources/wge/gitops-cluster
+        path: ./wge/gitops-cluster
         postBuild:
           substitute:
             clusterName: '{{ .Repeat.name }}'
