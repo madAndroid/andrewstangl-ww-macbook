@@ -295,6 +295,65 @@ spec:
                         # shrink: "(( .params.SHRINK ))"
                         # eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
 
+        # Configure leaf cluster if create is true
+        - apiVersion: templates.weave.works/v1alpha1
+          kind: GitOpsSet
+          metadata:
+            labels:
+              app.kubernetes.io/name: gitopsset
+              app.kubernetes.io/instance: gitopsset-sample
+              app.kubernetes.io/part-of: gitopssets-controller
+              app.kubernetes.io/managed-by: kustomize
+              app.kubernetes.io/created-by: gitopssets-controller
+            name: (( .params.RESOURCE_NAME ))-eks-config
+            namespace: (( .template.meta.namespace ))
+          spec:
+            serviceAccountName: gitopssets
+            generators:
+              - gitRepository:
+                  repositoryRef: flux-system
+                  files:
+                    - path: resource-descriptions/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME )).yaml
+            templates:
+              - repeat: '{ .clusters[?(@.mode=="create")] }'
+                content:
+                  kind: Kustomization
+                  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+                  metadata:
+                    name: '(( .params.RESOURCE_NAME ))-eks-config-{{ .Repeat.name }}'
+                    annotations:
+                      templates.weave.works/create-request: ''
+                  spec:
+                    interval: 1m0s
+                    dependsOn:
+                      - name: '(( .params.RESOURCE_NAME ))-eks-{{ .Repeat.name }}'
+                    sourceRef:
+                      kind: GitRepository
+                      name: flux-system
+                      namespace: flux-system
+                    path: ./infra/dynamic/eks-config
+                    prune: true
+                    wait: true
+                    timeout: 5m
+                    
+                    postBuild:
+                      substituteFrom:
+                        - kind: ConfigMap
+                          name: cluster-config
+                      substitute:
+                        resourceName: '(( .params.RESOURCE_NAME ))'
+                        clusterName: '{{ .Repeat.name }}'
+                        templateNamespace: '(( .template.meta.namespace ))'
+                        target_path: 'clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/${clusterName}'
+                        desired_size: "\"(( .params.DESIRED_SIZE ))\""
+                        # min_size: '(( .params.MIN_SIZE ))'
+                        # max_size: '(( .params.MAX_SIZE ))'
+                        # capacity_type: '(( .params.CAPACITY_TYPE ))'
+                        # instance_type: '(( .params.INSTANCE_TYPE ))'
+                        # shrink: "(( .params.SHRINK ))"
+                        # eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
+
+
         # Apply kubeconfig used by GUI to management cluster
         - apiVersion: templates.weave.works/v1alpha1
           kind: GitOpsSet
