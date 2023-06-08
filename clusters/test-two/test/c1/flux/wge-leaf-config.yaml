@@ -5,25 +5,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: wge-leaf
+  name: wge-leaf-config
   namespace: test-two
 spec:
-  dependsOn:
-    - name: wge-leaf-config
   interval: 10m0s
   retryInterval: 1m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./wge-leaf
+  path: ./wge-leaf-config
   prune: true
   timeout: 5m
   wait: true
   postBuild:
-    substituteFrom:
-    - kind: ConfigMap
-      name: cluster-config
     substitute:
       clusterName: test-c1
       GitHubOrg: ww-gitops
