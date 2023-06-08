@@ -138,8 +138,8 @@ resource "aws_autoscaling_schedule" "set-scale-to-zero-ng-worker" {
 resource "github_repository_file" "leaf_config" {
   repository          = var.repository_name
   branch              = var.branch
-  file                = format("%s/wge-leaf-config.yaml", var.target_path)
-  content = base64encode(templatefile("${path.module}/templates/kustomization.tftpl", {
+  file                = format("%s/%s/wge-leaf-config.yaml", var.target_path, var.flux_sync_directory)
+  content = templatefile("${path.module}/templates/kustomization.tftpl", {
     name       = "wge-leaf-config"
     namespace  = var.template_namespace
     path       = "./wge-leaf"
@@ -156,7 +156,7 @@ resource "github_repository_file" "leaf_config" {
       resourceName: ${var.resource_name}
       templateNameSpace: ${var.template_namespace}
     EOF
-  }))
+  })
   commit_author       = var.git_commit_author
   commit_email        = var.git_commit_email
   commit_message      = var.git_commit_message
