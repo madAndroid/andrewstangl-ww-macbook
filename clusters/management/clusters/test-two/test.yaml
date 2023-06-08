@@ -288,7 +288,7 @@ spec:
         name: test-leaf-apply-{{ .Repeat.name }}
       spec:
         dependsOn:
-        - name: test-leaf-apply-{{ .Repeat.name }}
+        - name: test-eks-config-{{ .Repeat.name }}
         interval: 1m0s
         path: ./infra/dynamic/leaf-apply
         postBuild:
