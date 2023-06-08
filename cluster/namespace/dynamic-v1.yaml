@@ -293,7 +293,7 @@ spec:
                         # capacity_type: '(( .params.CAPACITY_TYPE ))'
                         # instance_type: '(( .params.INSTANCE_TYPE ))'
                         # shrink: "(( .params.SHRINK ))"
-                        eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
+                        # eks_core_state_bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
 
         # Apply kubeconfig used by GUI to management cluster
         - apiVersion: templates.weave.works/v1alpha1
