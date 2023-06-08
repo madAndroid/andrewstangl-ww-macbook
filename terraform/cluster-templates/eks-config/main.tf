@@ -135,6 +135,7 @@ resource "aws_autoscaling_schedule" "set-scale-to-zero-ng-worker" {
   autoscaling_group_name = module.worker_node_group.node_group.resources[0].autoscaling_groups[0].name
 }
 
+
 resource "github_repository_file" "leaf_config" {
   repository          = var.repository_name
   branch              = var.branch
@@ -142,11 +143,39 @@ resource "github_repository_file" "leaf_config" {
   content = templatefile("${path.module}/templates/kustomization.tftpl", {
     name       = "wge-leaf-config"
     namespace  = var.template_namespace
-    path       = "./wge-leaf"
+    path       = "./wge-leaf-config"
     wait       = true
     timeout    = "5m"
     depends_on = []
-    config     = false
+    config     = null
+    substitute = <<-EOF
+      clusterName: ${var.cluster_name}
+      GitHubOrg: ${var.github_owner}
+      GitHubRepo: ${var.repository_name}
+      userEmail: ${var.git_commit_email}
+      commitUser: ${var.git_commit_author}
+      resourceName: ${var.resource_name}
+      templateNameSpace: ${var.template_namespace}
+    EOF
+  })
+  commit_author       = var.git_commit_author
+  commit_email        = var.git_commit_email
+  commit_message      = var.git_commit_message
+  overwrite_on_create = true
+}
+
+resource "github_repository_file" "leaf_config" {
+  repository          = var.repository_name
+  branch              = var.branch
+  file                = format("%s/%s/wge-leaf-config.yaml", var.target_path, var.flux_sync_directory)
+  content = templatefile("${path.module}/templates/kustomization.tftpl", {
+    name       = "wge-leaf"
+    namespace  = var.template_namespace
+    path       = "./wge-leaf"
+    wait       = true
+    timeout    = "5m"
+    depends_on = ["wge-leaf-config"]
+    config     = true
     substitute = <<-EOF
       clusterName: ${var.cluster_name}
       GitHubOrg: ${var.github_owner}
