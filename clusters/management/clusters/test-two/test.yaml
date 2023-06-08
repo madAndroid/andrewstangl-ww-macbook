@@ -256,6 +256,60 @@ spec:
         wait: true
     repeat: '{ .clusters[?(@.mode=="create")] }'
 
+
+---
+apiVersion: templates.weave.works/v1alpha1
+kind: GitOpsSet
+metadata:
+  labels:
+    app.kubernetes.io/created-by: gitopssets-controller
+    app.kubernetes.io/instance: gitopsset-sample
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gitopsset
+    app.kubernetes.io/part-of: gitopssets-controller
+    templates.weave.works/template-name: dynamic-v1
+    templates.weave.works/template-namespace: ""
+  name: test-leaf-apply
+  namespace: test-two
+spec:
+  generators:
+  - gitRepository:
+      files:
+      - path: resource-descriptions/test-two/test.yaml
+      repositoryRef: flux-system
+  serviceAccountName: gitopssets
+  templates:
+  - content:
+      apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+      kind: Kustomization
+      metadata:
+        annotations:
+          templates.weave.works/create-request: ""
+        name: test-leaf-apply-{{ .Repeat.name }}
+      spec:
+        dependsOn:
+        - name: test-leaf-apply-{{ .Repeat.name }}
+        interval: 1m0s
+        path: ./infra/dynamic/leaf-apply
+        postBuild:
+          substitute:
+            clusterName: '{{ .Repeat.name }}'
+            desired_size: '"2"'
+            resourceName: test
+            target_path: clusters/test-two/test/
+            templateNamespace: test-two
+          substituteFrom:
+          - kind: ConfigMap
+            name: cluster-config
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+          namespace: flux-system
+        timeout: 5m
+        wait: true
+    repeat: '{ .clusters[?(@.mode=="create")] }'
+
 ---
 apiVersion: templates.weave.works/v1alpha1
 kind: GitOpsSet
