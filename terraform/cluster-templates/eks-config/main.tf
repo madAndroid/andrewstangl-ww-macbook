@@ -135,7 +135,6 @@ resource "aws_autoscaling_schedule" "set-scale-to-zero-ng-worker" {
   autoscaling_group_name = module.worker_node_group.node_group.resources[0].autoscaling_groups[0].name
 }
 
-
 resource "github_repository_file" "leaf_config" {
   repository          = var.repository_name
   branch              = var.branch
@@ -155,7 +154,7 @@ resource "github_repository_file" "leaf_config" {
       userEmail: ${var.git_commit_email}
       commitUser: ${var.git_commit_author}
       resourceName: ${var.resource_name}
-      templateNameSpace: ${var.template_namespace}
+      templateNamespace: ${var.template_namespace}
     EOF
   })
   commit_author       = var.git_commit_author
@@ -183,7 +182,7 @@ resource "github_repository_file" "leaf" {
       userEmail: ${var.git_commit_email}
       commitUser: ${var.git_commit_author}
       resourceName: ${var.resource_name}
-      templateNameSpace: ${var.template_namespace}
+      templateNamespace: ${var.template_namespace}
     EOF
   })
   commit_author       = var.git_commit_author

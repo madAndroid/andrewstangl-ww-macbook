@@ -9,7 +9,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: wge
-  namespace: default
+  namespace: ${templateNamespace}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
