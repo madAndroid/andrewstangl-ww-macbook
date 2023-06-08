@@ -91,7 +91,6 @@ module "leaf_config" {
   cluster_ca_certificate = data.aws_eks_cluster.this.certificate_authority[0].data
   cluster_endpoint       = data.aws_eks_cluster.this.endpoint
   template_namespace     = var.template_namespace
-  resource_name          = var.resource_name
 }
 
 module "flux_bootstrap" {
