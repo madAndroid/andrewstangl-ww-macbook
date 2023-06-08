@@ -1,3 +1,14 @@
+
+# Kubectl
+resource "kubectl_manifest" "resource_namespace" {
+  yaml_body = <<-YAML
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: ${var.template_namespace}
+  YAML
+}
+
 resource "kubectl_manifest" "cluster_sa" {
   yaml_body = <<-YAML
     apiVersion: v1
