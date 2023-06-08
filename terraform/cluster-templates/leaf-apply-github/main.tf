@@ -10,7 +10,7 @@ resource "github_repository_file" "leaf_config" {
   content = templatefile("${path.module}/templates/kustomization.tftpl", {
     name       = "wge-leaf-config"
     namespace  = var.template_namespace
-    path       = "./wge-leaf-config"
+    path       = "./leaf-clusters/wge-leaf-config"
     wait       = true
     timeout    = "5m"
     depends_on = []
@@ -38,7 +38,7 @@ resource "github_repository_file" "leaf-addons" {
   content = templatefile("${path.module}/templates/kustomization.tftpl", {
     name       = "wge-leaf"
     namespace  = var.template_namespace
-    path       = "./wge-leaf"
+    path       = "./leaf-clusters/wge-leaf"
     wait       = true
     timeout    = "5m"
     depends_on = ["wge-leaf-config"]
@@ -66,7 +66,7 @@ resource "github_repository_file" "leaf-apps" {
   content = templatefile("${path.module}/templates/kustomization.tftpl", {
     name       = "wge-leaf-apps"
     namespace  = var.template_namespace
-    path       = "./wge-leaf-apps"
+    path       = "./leaf-clusters/wge-leaf-apps"
     wait       = true
     timeout    = "5m"
     depends_on = ["wge-leaf"]

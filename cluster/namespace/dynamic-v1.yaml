@@ -378,7 +378,7 @@ spec:
                     dependsOn:
                       - name: '(( .params.RESOURCE_NAME ))-eks-config-{{ .Repeat.name }}'
                     interval: 1m0s
-                    path: ./wge/kubeconfig
+                    path: ./leaf-clusters/wge/kubeconfig
                     postBuild:
                       substituteFrom:
                         - kind: ConfigMap
@@ -428,7 +428,7 @@ spec:
                     dependsOn:
                       - name: '(( .params.RESOURCE_NAME ))-gitops-kubeconfig-{{ .Repeat.name }}'
                     interval: 1m0s
-                    path: ./wge/gitops-cluster
+                    path: ./leaf-clusters/wge/gitops-cluster
                     postBuild:
                       substituteFrom:
                         - kind: ConfigMap
