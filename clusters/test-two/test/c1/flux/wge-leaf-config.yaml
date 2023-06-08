@@ -14,7 +14,7 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./wge-leaf-config
+  path: ./leaf-clusters/wge-leaf-config
   prune: true
   timeout: 5m
   wait: true
