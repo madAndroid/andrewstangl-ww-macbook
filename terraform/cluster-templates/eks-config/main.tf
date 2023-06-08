@@ -164,7 +164,7 @@ resource "github_repository_file" "leaf_config" {
   overwrite_on_create = true
 }
 
-resource "github_repository_file" "leaf_config" {
+resource "github_repository_file" "leaf" {
   repository          = var.repository_name
   branch              = var.branch
   file                = format("%s/%s/wge-leaf-config.yaml", var.target_path, var.flux_sync_directory)
