@@ -31,5 +31,5 @@ spec:
       userEmail: paul.carlton@weave.works
       commitUser: paulcarlton-ww
       resourceName: test
-      templateNameSpace: test-two
+      templateNamespace: test-two
       
