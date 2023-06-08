@@ -11,8 +11,6 @@ spec:
   path: ./terraform/cluster-templates/leaf-apply-${scmType}
   approvePlan: auto
   destroyResourcesOnDeletion: true
-  writeOutputsToSecret:
-    name: '${resourceName}-${clusterName}-cluster-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
