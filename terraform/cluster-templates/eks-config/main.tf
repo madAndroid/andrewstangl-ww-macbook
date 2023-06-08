@@ -145,7 +145,7 @@ resource "github_repository_file" "leaf_config" {
     path       = "./wge-leaf"
     wait       = true
     timeout    = "5m"
-    depends_on = null
+    depends_on = []
     config     = false
     substitute = <<-EOF
       clusterName: ${var.cluster_name}
