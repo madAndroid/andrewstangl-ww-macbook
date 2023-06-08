@@ -104,7 +104,6 @@ resource "github_repository_file" "leaf_rbac" {
     depends_on = []
     wait       = true
     timeout    = "5m"
-    depends_on = null
     substitute = null
   }))
   commit_author       = var.commit_author
