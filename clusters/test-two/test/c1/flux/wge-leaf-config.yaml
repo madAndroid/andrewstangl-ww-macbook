@@ -27,5 +27,5 @@ spec:
       commitUser: paulcarlton-ww
       resourceName: test
       templateNamespace: test-two
-      clusterPrefix: 
+      clusterPrefix: test-
       
