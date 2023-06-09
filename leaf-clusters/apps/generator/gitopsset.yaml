@@ -43,4 +43,4 @@ spec:
               templateNamespace: '${templateNamespace}'
               resourceName: '${resourceName}'
               appName: '{{ .Repeat.name }}'
-              appVersion: '{{or .Repeat.version "latest" }}'
+              appVersion: '{{ getordefault .Repeat "version" "latest" }}'
