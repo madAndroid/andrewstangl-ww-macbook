@@ -23,6 +23,7 @@ resource "github_repository_file" "leaf_config" {
       commitUser: ${var.git_commit_author}
       resourceName: ${var.resource_name}
       templateNamespace: ${var.template_namespace}
+      clusterPrefix: ${var.cluster_prefix}
     EOF
   })
   commit_author       = var.git_commit_author

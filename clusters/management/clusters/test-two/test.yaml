@@ -298,6 +298,7 @@ spec:
             resourceName: test
             target_path: clusters/test-two/test/
             templateNamespace: test-two
+            clusterPrefix: 'test-'
           substituteFrom:
           - kind: ConfigMap
             name: cluster-config

@@ -17,30 +17,30 @@ spec:
         files:
           - path: resource-descriptions/${templateNamespace}/${resourceName}.yaml
   templates:
-    - repeat: '{ .clusters.apps[?(@.Element.name==${clusterName})] }'
+    - repeat: '{ .clusters[?("${clusterPrefix}"@.Element.name==${clusterName})].apps }'
       content:
-                kind: Kustomization
-                apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-                metadata:
-                  name: '${resourceName}-cluster-{{ .Element.name }}-app-{{ .Repeat.name }}'
-                  annotations:
-                    templates.weave.works/create-request: ''
-                spec:
-                  interval: 1m0s
-                  sourceRef:
-                    kind: GitRepository
-                    name: flux-system
-                    namespace: flux-system
-                  path: ./leaf-clusters/apps/template/{{ .Repeat.mode }}
-                  prune: true
-                  wait: true
-                  timeout: 5m
-                  postBuild:
-                    substituteFrom:
-                      - kind: ConfigMap
-                        name: cluster-config
-                    substitute:
-                      templateNamespace: '${templateNamespace}'
-                      resourceName: '${resourceName}'
-                      appName: '{{ .Repeat.name }}'
-                      appVersion: '{{or .Repeat.version "latest" }}'
+        kind: Kustomization
+        apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+        metadata:
+          name: '${resourceName}-cluster-{{ .Element.name }}-app-{{ .Repeat.name }}'
+          annotations:
+            templates.weave.works/create-request: ''
+        spec:
+          interval: 1m0s
+          sourceRef:
+            kind: GitRepository
+            name: flux-system
+            namespace: flux-system
+          path: ./leaf-clusters/apps/template/{{ .Repeat.mode }}
+          prune: true
+          wait: true
+          timeout: 5m
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-config
+            substitute:
+              templateNamespace: '${templateNamespace}'
+              resourceName: '${resourceName}'
+              appName: '{{ .Repeat.name }}'
+              appVersion: '{{or .Repeat.version "latest" }}'

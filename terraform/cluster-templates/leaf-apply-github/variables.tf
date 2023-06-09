@@ -73,3 +73,9 @@ variable "template_namespace" {
   description = "template namespace"
   default     = ""
 }
+
+variable "cluster_prefix" {
+  type        = string
+  description = "prefix for cluster name"
+  default     = ""
+}

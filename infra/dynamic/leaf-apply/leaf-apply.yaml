@@ -29,6 +29,8 @@ spec:
       value: ${templateNamespace}
     - name: target_path
       value: 'clusters/${templateNamespace}/${resourceName}/${clusterName}'
+    - name: cluster_prefix
+      value: '${clusterPrefix}'
   varsFrom:
     - kind: ConfigMap
       name: leaf-cluster-config
