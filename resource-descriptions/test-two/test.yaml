@@ -40,17 +40,18 @@ clusters:
     version: 1.26
 
     apps:
-      - name: podinfo-ms1
+      - name: podinfo-ms3
         mode: local-folders
-        path: ./kustomize
+        version: 6.3.6
       - name: podinfo-ms2
         mode: apps-repos
-        version: v6.3.5
-      - name: podinfo-ms3
+        path: ./kustomize
+      - name: podinfo-ms1
         mode: apps-repos
         ref:
           type: tag
           value: v6.3.6
+        path: ./kustomize
       - name: podinfo-ms4
         mode: apps-params
-        params: ./leaf-clusters/apps/params/podinfo-ms4.yaml
+        params: ./resource-descriptions/test-two/podinfo-ms4.yaml

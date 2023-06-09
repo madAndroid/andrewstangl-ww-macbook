@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: ${appName}d
-        image: ghcr.io/stefanprodan/${appName}:6.3.6
+        image: ${appImage}
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

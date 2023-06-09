@@ -31,7 +31,7 @@ spec:
             kind: GitRepository
             name: flux-system
             namespace: flux-system
-          path: ./leaf-clusters/apps/template/{{ .Repeat.mode }}
+          path: ./leaf-clusters/apps/templates/{{ .Repeat.mode }}
           prune: true
           wait: true
           timeout: 5m
@@ -40,7 +40,7 @@ spec:
               - kind: ConfigMap
                 name: cluster-config
             substitute:
-              templateNamespace: '${templateNamespace}'
-              resourceName: '${resourceName}'
               appName: '{{ .Repeat.name }}'
+              appPath: '{{ getordefault .Repeat "path" "./" }}'
               appVersion: '{{ getordefault .Repeat "version" "latest" }}'
+              appParams: '{{ getordefault .Repeat "params" "none" }}'
