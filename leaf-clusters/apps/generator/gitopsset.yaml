@@ -17,7 +17,7 @@ spec:
         files:
           - path: resource-descriptions/${templateNamespace}/${resourceName}.yaml
   templates:
-    - repeat: '{ .clusters[?("${clusterPrefix}"@.Element.name==${clusterName})].apps }'
+    - repeat: '{ .clusters[?("${clusterPrefix}"@.name==${clusterName})].apps }'
       content:
         kind: Kustomization
         apiVersion: kustomize.toolkit.fluxcd.io/v1beta2

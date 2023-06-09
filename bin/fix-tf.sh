@@ -46,3 +46,4 @@ flux suspend kustomization -n test-two test-eks-config-c1
 kubectl delete -n test-two terraforms.infra.contrib.fluxcd.io eks-config-test-c1 &
 kubectl patch terraforms.infra.contrib.fluxcd.io -n test-two eks-config-test-c1  -p '{"metadata":{"finalizers":null}}' --type=merge
 flux resume kustomization -n test-two test-eks-config-c1 &
+echo "Terraform should be reapplied"
