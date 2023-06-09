@@ -22,7 +22,7 @@ spec:
         kind: Kustomization
         apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
         metadata:
-          name: '${resourceName}-cluster-{{ .Element.name }}-app-{{ .Repeat.name }}'
+          name: '${resourceName}-cluster-{{ .name }}-app-{{ .Repeat.name }}'
           annotations:
             templates.weave.works/create-request: ''
         spec:
