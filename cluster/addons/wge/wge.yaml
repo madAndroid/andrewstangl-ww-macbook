@@ -69,8 +69,8 @@ spec:
       enabled: false
     enablePipelines: true
     enableTerraformUI: true
-    templates-controller:
-      enabled: false
+    # templates-controller:
+    #   enabled: false
     global:
       capiEnabled: true
   postRenderers:
