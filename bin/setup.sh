@@ -127,6 +127,9 @@ set +e
 vault-secrets-config.sh
 set -e
 
+export EXP_CLUSTER_RESOURCE_SET=true
+clusterctl init --infrastructure docker
+
 secrets.sh --tls-skip --wge-entitlement $PWD/resources/wge-entitlement.yaml --secrets $PWD/resources/github-secrets.sh
 
 # Wait for dex to start

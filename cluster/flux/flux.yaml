@@ -301,6 +301,8 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
+  dependsOn:
+    - name: wge
   path: ./cluster/namespaces
   prune: true
   #wait: true
