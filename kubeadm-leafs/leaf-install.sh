@@ -37,6 +37,8 @@ args "$@"
 export PATH=$PATH:/usr/local/bin
 export HOME=/root
 
+
+
 echo "Updating system packages & installing required utilities"
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl jq iproute2 git unzip apt-transport-https gnupg2 vim
@@ -101,3 +103,5 @@ sudo apt update
 sudo apt install --allow-change-held-packages -y kubelet kubeadm kubectl
 
 sudo systemctl enable --now kubelet
+
+sudo apt-get install ipvsadm -y

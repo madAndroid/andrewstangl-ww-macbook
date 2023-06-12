@@ -41,8 +41,8 @@ sudo kubeadm reset -f
 sudo rm -rf /etc/cni/net.d
 sudo ipvsadm --clear
 
-sudo systemctl stop firewalld.service 
-sudo systemctl disable firewalld.service
+# sudo systemctl stop firewalld.service 
+# sudo systemctl disable firewalld.service
 
 sudo systemctl stop kubelet
 sudo systemctl stop docker
