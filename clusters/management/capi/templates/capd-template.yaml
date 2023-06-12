@@ -16,14 +16,18 @@ spec:
       description: This is used for the cluster naming.
     - name: NAMESPACE
       description: Namespace to create the cluster in
+      default: "default"
     - name: KUBERNETES_VERSION
       description: Kubernetes version to use for the cluster
-      options: ["1.19.11", "1.21.1", "1.22.0", "1.23.3"]
+      options: ["1.25.9"]
+      default: "1.25.9"
     - name: CONTROL_PLANE_MACHINE_COUNT
       description: Number of control planes
       options: ["1", "2", "3"]
+      default: "1"
     - name: WORKER_MACHINE_COUNT
       description: Number of worker machines
+      default : "1"
   resourcetemplates:
     - content:
         - apiVersion: gitops.weave.works/v1alpha1
@@ -91,6 +95,7 @@ spec:
                     - localhost
                     - 127.0.0.1
                     - 0.0.0.0
+                  bindPort: 7443
                 controllerManager:
                   extraArgs:
                     enable-hostpath-provisioner: "true"
