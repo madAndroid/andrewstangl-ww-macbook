@@ -94,8 +94,8 @@ metadata:
 spec:
   kubeadmConfigSpec:
     clusterConfiguration:
+      controlPlaneEndpoint: "127.0.0.1:7443"
       apiServer:
-        bindPort: 7443
         certSANs:
         - localhost
         - 127.0.0.1
