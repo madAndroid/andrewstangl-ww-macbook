@@ -66,6 +66,9 @@ spec:
         repositoryRef: flux-system
         directories:
           - path: clusters/management/clusters/*
+          - path: clusters/management/clusters/default
+            exclude: true
+
   templates:
     - content:
         kind: Kustomization
