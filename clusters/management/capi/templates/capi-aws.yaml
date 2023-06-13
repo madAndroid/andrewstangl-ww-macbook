@@ -9,10 +9,12 @@ metadata:
     templates.weave.works/credentials-enabled: "true"
     templates.weave.works/add-common-bases: "false"
     templates.weave.works/inject-prune-annotation: "true"
+    templates.weave.works/delimiters: "((,))"
   labels:
     weave.works/template-type: cluster
 spec:
   description: AWS EKS Development Cluster 
+  renderType: templating
   params:
     - name: CLUSTER_NAME
       description: The name for this cluster.
@@ -33,19 +35,19 @@ spec:
         - apiVersion: gitops.weave.works/v1alpha1
           kind: GitopsCluster
           metadata:
-            name: "${CLUSTER_NAME}"
+            name: "(( .params.CLUSTER_NAME ))"
             namespace: default
             labels:
               weave.works/capi: bootstrap
           spec:
             capiClusterRef:
-              name: "${CLUSTER_NAME}"
+              name: "(( .params.CLUSTER_NAME ))"
 
 
         - apiVersion: cluster.x-k8s.io/v1beta1
           kind: Cluster
           metadata:
-            name: ${CLUSTER_NAME}
+            name: (( .params.CLUSTER_NAME ))
             namespace: default
           spec:
             clusterNetwork:
@@ -55,16 +57,16 @@ spec:
             controlPlaneRef:
               apiVersion: controlplane.cluster.x-k8s.io/v1beta1
               kind: AWSManagedControlPlane
-              name: ${CLUSTER_NAME}-control-plane
+              name: (( .params.CLUSTER_NAME ))-control-plane
             infrastructureRef:
               apiVersion: controlplane.cluster.x-k8s.io/v1beta1
               kind: AWSManagedControlPlane
-              name: ${CLUSTER_NAME}-control-plane
+              name: (( .params.CLUSTER_NAME ))-control-plane
           
         - apiVersion: controlplane.cluster.x-k8s.io/v1beta1
           kind: AWSManagedControlPlane
           metadata:
-            name: ${CLUSTER_NAME}-control-plane
+            name: (( .params.CLUSTER_NAME ))-control-plane
             namespace: default
           spec:
             # bastion:
@@ -77,33 +79,33 @@ spec:
               creator: ${awsTagCustomer}
               customer: ${awsTagProjectGid}
               projectGid: ${awsTagCreator}
-            region: ${AWS_REGION}
+            region: (( .params.AWS_REGION ))
             sshKeyName: ${awsKeyPairName}
             version: ${KUBERNETES_VERSION}
-            eksClusterName: ${CLUSTER_NAME}
+            eksClusterName: (( .params.CLUSTER_NAME ))
           
         - apiVersion: cluster.x-k8s.io/v1beta1
           kind: MachinePool
           metadata:
-            name: ${CLUSTER_NAME}-pool-0
+            name: (( .params.CLUSTER_NAME ))-pool-0
             namespace: default
           spec:
-            clusterName: ${CLUSTER_NAME}
+            clusterName: (( .params.CLUSTER_NAME ))
             replicas: ${WORKER_MACHINE_COUNT}
             template:
               spec:
                 bootstrap:
                   dataSecretName: ""
-                clusterName: ${CLUSTER_NAME}
+                clusterName: (( .params.CLUSTER_NAME ))
                 infrastructureRef:
                   apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
                   kind: AWSManagedMachinePool
-                  name: ${CLUSTER_NAME}-pool-0
+                  name: (( .params.CLUSTER_NAME ))-pool-0
           
         - apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
           kind: AWSManagedMachinePool
           metadata:
-            name: ${CLUSTER_NAME}-pool-0
+            name: (( .params.CLUSTER_NAME ))-pool-0
             namespace: default
           spec:
             scaling:
