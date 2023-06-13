@@ -8,7 +8,7 @@ set -euo pipefail
 
 function usage()
 {
-    echo "usage ${0} [--debug] [--plan-only] [--no-lock] <template name>[ <template name>]" >&2
+    echo "usage ${0} [--debug] [--plan-only] [--no-lock] <template name> [ <template name>]" >&2
     echo "This script will apply a terraform template" >&2
     echo "Specify <template name> to apply desired template in cluster-templates folder" >&2
 }
@@ -47,7 +47,7 @@ function args() {
 
 args "$@"
 
-kubectl get cm -n flux-system tf-output-values -o json | jq -r '.data | keys[] as $k | "export \($k)=\"\(.[$k])\""' > vars.sh
+kubectl get cm -n flux-system cluster-config -o json | jq -r '.data | keys[] as $k | "export \($k)=\"\(.[$k])\""' > vars.sh
 echo "" >> vars.sh
 kubectl get cm -n flux-system leaf-cluster-config -o json | jq -r '.data | keys[] as $k | "export \($k)=\"\(.[$k])\""' >> vars.sh
 echo "" >> vars.sh
