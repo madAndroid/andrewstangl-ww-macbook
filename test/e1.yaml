@@ -30,13 +30,20 @@ spec:
       cidrBlocks:
       - 192.168.0.0/16
   controlPlaneRef:
-    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta2
     kind: AWSManagedControlPlane
     name: e1-control-plane
   infrastructureRef:
-    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
-    kind: AWSManagedControlPlane
-    name: e1-control-plane
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+    kind: AWSManagedCluster
+    name: e1
+
+---
+kind: AWSManagedCluster
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+metadata:
+  name: "${CLUSTER_NAME}"
+spec: {}
 
 ---
 apiVersion: controlplane.cluster.x-k8s.io/v1beta1
@@ -57,7 +64,7 @@ spec:
     kind: AWSClusterStaticIdentity
     name: capi-aws-creds
   region: eu-west-1
-  sshKeyName: default
+  # sshKeyName: default
   version: v1.27
 
 ---
@@ -81,41 +88,46 @@ spec:
 
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
-kind: MachinePool
+kind: MachineDeployment
 metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-vas70q\",\"base_branch\":\"main\",\"title\":\"Create resource e1\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"e1\",\"KUBERNETES_VERSION\":\"v1.27\",\"WORKER_MACHINE_COUNT\":\"3\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
-    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/e1.yaml\"]}"
-  labels:
-    templates.weave.works/template-name: aws-eks-dev
-    templates.weave.works/template-namespace: default
-  name: e1-pool-0
-  namespace: default
+  name: "e1-md-0"
+  namespace: "default"
 spec:
-  clusterName: e1
+  clusterName: "e1"
   replicas: 3
+  selector:
+    matchLabels:
   template:
     spec:
+      clusterName: t1
+      version: "1.27"
       bootstrap:
-        dataSecretName: ""
-      clusterName: e1
+        configRef:
+          name: "e1-md-0"
+          apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+          kind: EKSConfigTemplate
       infrastructureRef:
-        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-        kind: AWSManagedMachinePool
-        name: e1-pool-0
+        name: "e1-md-0"
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+        kind: AWSMachineTemplate
 
 ---
-apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
-kind: AWSManagedMachinePool
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: AWSMachineTemplate
 metadata:
-  annotations:
-    kustomize.toolkit.fluxcd.io/prune: disabled
-    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-vas70q\",\"base_branch\":\"main\",\"title\":\"Create resource e1\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"e1\",\"KUBERNETES_VERSION\":\"v1.27\",\"WORKER_MACHINE_COUNT\":\"3\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
-    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/e1.yaml\"]}"
-  labels:
-    templates.weave.works/template-name: aws-eks-dev
-    templates.weave.works/template-namespace: default
-  name: e1-pool-0
+  name: "e1-md-0"
   namespace: default
-spec: {}
+spec:
+  template:
+    spec:
+      instanceType: "t3.medium"
+      iamInstanceProfile: "nodes.cluster-api-provider-aws.sigs.k8s.io"
+      # sshKeyName: "${AWS_SSH_KEY_NAME}"
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta2
+kind: EKSConfigTemplate
+metadata:
+  name: "e1-md-0"
+  namespace: default
+spec:
+  template: {}

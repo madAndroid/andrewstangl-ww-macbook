@@ -1,6 +1,10 @@
 apiVersion: bootstrap.aws.infrastructure.cluster.x-k8s.io/v1beta1
 kind: AWSIAMConfiguration
 spec:
+  stackTags:
+    creator: paul.carlton@weave.works
+    customer: capa
+    projectGid: "99999"
   bootstrapUser:
     enable: true
   eks:
