@@ -106,9 +106,10 @@ while ( true ); do
   if [ "$started" == "true" ]; then
     break
   fi
-  sleep 1
+  sleep 5
 done
 
+sleep 5
 # Initialize vault
 vault-init.sh
 vault-unseal.sh
