@@ -71,7 +71,7 @@ metadata:
   labels:
     templates.weave.works/template-name: aws-eks-dev
     templates.weave.works/template-namespace: default
-  name: default
+  name: capi-aws-creds
   namespace: default
 spec:
   allowedNamespaces:
