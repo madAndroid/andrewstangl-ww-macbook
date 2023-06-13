@@ -21,3 +21,5 @@ data:
   userEmail: ${USER_EMAIL}
   vault_url: ${VAULT_ADDR}
   commitUser: ${GITHUB_USER}
+  awsKeyPairName: ${GITHUB_USER}
+  sshPublicKey: ${SSH_PUB_KEY}
