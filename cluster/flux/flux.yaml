@@ -340,6 +340,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: wge
+    - name: flux-tf
   path: ./clusters/management/clusters/default
   prune: true
   wait: true

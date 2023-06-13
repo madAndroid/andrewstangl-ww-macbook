@@ -4,12 +4,12 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "key_pair_name" {
+variable "awsKeyPairName" {
   type        = string
   description = "EC2 key pair name"
 }
 
-variable "public_key" {
+variable "sshPubKey" {
   type        = string
   description = "ssh public key"
 }

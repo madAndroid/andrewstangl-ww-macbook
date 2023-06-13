@@ -4,12 +4,11 @@ provider "aws" {
   default_tags {
     tags = merge({
       source  = "Terraform Managed"
-      cluster = var.cluster_name
     }, var.tags)
   }
 }
 
 resource "aws_key_pair" "ec2" {
-  key_name   = var.key_pair_name
-  public_key = var.public_key
+  key_name   = var.awsKeyPairName
+  public_key = var.sshPubKey
 }
