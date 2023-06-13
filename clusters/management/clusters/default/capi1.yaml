@@ -61,8 +61,6 @@ spec:
   - conflictResolution: overwrite
     name: vpc-cni
     version: v1.12.6-eksbuild.2
-  bastion:
-    enabled: true
   eksClusterName: capi1
   region: eu-west-1
   version: v1.27
