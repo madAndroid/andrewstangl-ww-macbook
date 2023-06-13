@@ -70,8 +70,8 @@ spec:
             name: ${CLUSTER_NAME}-control-plane
             namespace: default
           spec:
-            bastion:
-              enabled: true
+            # bastion:
+            #   enabled: true
             addons:
             - conflictResolution: overwrite
               name: vpc-cni
