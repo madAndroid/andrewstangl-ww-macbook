@@ -76,9 +76,9 @@ spec:
               name: vpc-cni
               version: v1.12.6-eksbuild.2
             additionalTags: 
-              creator: ${awsTagCustomer}
-              customer: ${awsTagProjectGid}
-              projectGid: ${awsTagCreator}
+              creator: "${awsTagCustomer}"
+              customer: "${awsTagProjectGid}"
+              projectGid: "${awsTagCreator}""
             region: (( .params.AWS_REGION ))
             sshKeyName: ${awsKeyPairName}
             version: ${KUBERNETES_VERSION}
@@ -91,7 +91,7 @@ spec:
             namespace: default
           spec:
             clusterName: (( .params.CLUSTER_NAME ))
-            replicas: ${WORKER_MACHINE_COUNT}
+            replicas: (( .params.WORKER_MACHINE_COUNT ))
             template:
               spec:
                 bootstrap:
