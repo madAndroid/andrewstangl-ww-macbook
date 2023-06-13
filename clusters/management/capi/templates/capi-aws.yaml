@@ -4,10 +4,10 @@ metadata:
   name: aws-eks-dev
   namespace: default
   annotations:
-    templates.weave.works/profiles-enabled: "true"
+    templates.weave.works/profiles-enabled: "false"
     templates.weave.works/kustomizations-enabled: "false"
     templates.weave.works/credentials-enabled: "true"
-    templates.weave.works/add-common-bases: "true"
+    templates.weave.works/add-common-bases: "false"
     templates.weave.works/inject-prune-annotation: "true"
   labels:
     weave.works/template-type: cluster
