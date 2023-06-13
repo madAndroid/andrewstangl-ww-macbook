@@ -10,8 +10,6 @@ spec:
   path: ./terraform/cluster-templates/aws-key-pair
   approvePlan: auto
   destroyResourcesOnDeletion: true
-  writeOutputsToSecret:
-    name: 'aws-key-pair-${keyPairName}-config'
   backendConfig:
     customConfiguration: |
       backend "s3" {
