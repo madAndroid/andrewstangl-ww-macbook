@@ -25,7 +25,7 @@ spec:
       description: Number of worker nodes to create.
       default: "3"
   resourcetemplates:
-    - contents:
+    - content:
         - apiVersion: gitops.weave.works/v1alpha1
           kind: GitopsCluster
           metadata:

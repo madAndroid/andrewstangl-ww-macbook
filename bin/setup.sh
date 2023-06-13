@@ -130,6 +130,9 @@ set -e
 # export EXP_CLUSTER_RESOURCE_SET=true
 # clusterctl init --infrastructure docker
 
+# Setup AWS account for CAPA - not required for Weaveworks sandbox account
+# clusterawsadm bootstrap iam create-cloudformation-stack --config resources/clusterawsadm.yaml --region $AWS_REGION
+
 export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
 
 export EXP_EKS=true
