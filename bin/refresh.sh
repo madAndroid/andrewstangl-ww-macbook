@@ -8,6 +8,11 @@
 aws-secrets.sh
 
 export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+export EXP_EKS=true
+export EXP_MACHINE_POOL=true
+export CAPA_EKS_IAM=false
+export EXP_CLUSTER_RESOURCE_SET=true
+
 clusterctl init --infrastructure aws
 
 kubectl rollout restart deployment -n flux-system  source-controller 
