@@ -1,0 +1,113 @@
+apiVersion: gitops.weave.works/v1alpha1
+kind: GitopsCluster
+metadata:
+  labels:
+    templates.weave.works/template-name: aws-eks-dev
+    templates.weave.works/template-namespace: default
+    weave.works/capi: bootstrap
+  name: c5
+  namespace: default
+  annotations:
+    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-erte8\",\"base_branch\":\"main\",\"title\":\"Create resource c5\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"c5\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
+    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/c5.yaml\"]}"
+spec:
+  capiClusterRef:
+    name: c5
+
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  labels:
+    templates.weave.works/template-name: aws-eks-dev
+    templates.weave.works/template-namespace: default
+  name: c5
+  namespace: default
+spec:
+  clusterNetwork:
+    pods:
+      cidrBlocks:
+      - 10.120.0.0/20
+  controlPlaneRef:
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+    kind: AWSManagedControlPlane
+    name: c5-control-plane
+  infrastructureRef:
+    apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+    kind: AWSManagedControlPlane
+    name: c5-control-plane
+
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: AWSManagedControlPlane
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-erte8\",\"base_branch\":\"main\",\"title\":\"Create resource c5\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"c5\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
+    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/c5.yaml\"]}"
+  labels:
+    templates.weave.works/template-name: aws-eks-dev
+    templates.weave.works/template-namespace: default
+  name: c5-control-plane
+  namespace: default
+spec:
+  additionalTags:
+    creator: weaveworks-cx
+    customer: 20276
+    projectGid: paul.carlton@weave.works
+  addons:
+  - conflictResolution: overwrite
+    name: vpc-cni
+    version: v1.12.6-eksbuild.2
+  eksClusterName: c5
+  region: eu-west-1
+  sshKeyName: paulcarlton-ww
+  version: null
+
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachinePool
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-erte8\",\"base_branch\":\"main\",\"title\":\"Create resource c5\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"c5\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
+    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/c5.yaml\"]}"
+  labels:
+    templates.weave.works/template-name: aws-eks-dev
+    templates.weave.works/template-namespace: default
+  name: c5-pool-0
+  namespace: default
+spec:
+  clusterName: c5
+  replicas: null
+  template:
+    spec:
+      bootstrap:
+        dataSecretName: ""
+      clusterName: c5
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: AWSManagedMachinePool
+        name: c5-pool-0
+
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: AWSManagedMachinePool
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    templates.weave.works/create-request: "{\"repository_url\":\"https://github.com/ww-gitops/paulcarlton-ww-macbook\",\"head_branch\":\"wge-create-branch-erte8\",\"base_branch\":\"main\",\"title\":\"Create resource c5\",\"description\":\"This PR creates a aws-eks-dev instance\",\"template_name\":\"aws-eks-dev\",\"parameter_values\":{\"AWS_REGION\":\"eu-west-1\",\"CLUSTER_NAME\":\"c5\"},\"commit_message\":\"Create aws-eks-dev instance\",\"credentials\":{},\"template_namespace\":\"default\",\"template_kind\":\"GitOpsTemplate\"}"
+    templates.weave.works/created-files: "{\"files\":[\"clusters/management/clusters/default/c5.yaml\"]}"
+  labels:
+    templates.weave.works/template-name: aws-eks-dev
+    templates.weave.works/template-namespace: default
+  name: c5-pool-0
+  namespace: default
+spec:
+  remoteAccess:
+    public: true
+  scaling:
+    maxSize: 3
+    minSize: 1
+  updateConfig:
+    maxUnavailable: 1
