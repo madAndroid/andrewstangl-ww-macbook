@@ -28,12 +28,6 @@ spec:
       description: Number of worker nodes to create.
       options: ['1','2','3']
       default: "2"
-    - name: OWNER_EMAIL 
-      description: E-Mail of Cluster Owner
-      default: "paul.carlton@weave.works"
-    - name: SSH_KEY_NAME
-      description: Name of SSH Key to use for cluster nodes
-      default: "paulcarlton"
   resourcetemplates:
     - content:
         - apiVersion: gitops.weave.works/v1alpha1
@@ -80,13 +74,11 @@ spec:
               name: vpc-cni
               version: v1.12.6-eksbuild.2
             additionalTags: 
-              creator: ${OWNER_EMAIL}
-              environment: demo3
-              customer: weaveworks-cx
-              deployed: capa
-              projectGid: "99999"
+              creator: ${awsTagCustomer}
+              customer: ${awsTagProjectGid}
+              projectGid: ${awsTagCreator}
             region: ${AWS_REGION}
-            sshKeyName: ${SSH_KEY_NAME}
+            sshKeyName: ${awsKeyPairName}
             version: ${KUBERNETES_VERSION}
             eksClusterName: ${CLUSTER_NAME}
           
