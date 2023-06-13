@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     templates.weave.works/inject-prune-annotation: "true"
-    templates.weave.works/add-common-bases: "true"
+    templates.weave.works/add-common-bases: "false"
   labels:
     weave.works/template-type: cluster
 spec:
@@ -68,6 +68,18 @@ spec:
             sshKeyName: default
             version: ${KUBERNETES_VERSION}
             eksClusterName: ${CLUSTER_NAME}
+            identityRef:
+              kind: AWSClusterStaticIdentity
+              name: capi-aws-creds
+
+        - apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+          kind: AWSClusterStaticIdentity
+          metadata:
+            name: default
+          spec:
+            secretRef: capi-aws-creds
+            allowedNamespaces:
+              list: ["default"]
 
         - apiVersion: cluster.x-k8s.io/v1beta1
           kind: MachinePool
@@ -93,3 +105,41 @@ spec:
             name: ${CLUSTER_NAME}-pool-0
             namespace: default
           spec: {}
+    - path: clusters/(( .template.meta.namespace ))/(( .params.CLUSTER_NAME ))/bases.yaml
+      content:
+        apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+        kind: Kustomization
+        metadata:
+          name: wge-rbac
+          namespace: flux-system
+        spec:
+          interval: 1m0s
+          dependsOn:
+            - name: config
+          path: ./cluster/bases/rbac
+          prune: true
+          wait: true
+          sourceRef:
+            kind: GitRepository
+            name: flux-system
+    - path: clusters/(( .template.meta.namespace ))/(( .params.CLUSTER_NAME ))/bases.yaml
+      content:
+        apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+        kind: Kustomization
+        metadata:
+          name: wge-rbac
+          namespace: flux-system
+        spec:
+          interval: 1m0s
+          dependsOn:
+            - name: config
+          path: ./cluster/bases/rbac
+          prune: true
+          wait: true
+          sourceRef:
+            kind: GitRepository
+            name: flux-system
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-config
