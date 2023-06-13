@@ -77,6 +77,7 @@ spec:
           kind: AWSClusterStaticIdentity
           metadata:
             name: capi-aws-creds
+            namespace: default
           spec:
             secretRef: capi-aws-creds
             allowedNamespaces:
