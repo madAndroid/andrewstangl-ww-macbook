@@ -127,8 +127,17 @@ set +e
 vault-secrets-config.sh
 set -e
 
+# export EXP_CLUSTER_RESOURCE_SET=true
+# clusterctl init --infrastructure docker
+
+export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+
+export EXP_EKS=true
+export EXP_MACHINE_POOL=true
+export CAPA_EKS_IAM=true
 export EXP_CLUSTER_RESOURCE_SET=true
-clusterctl init --infrastructure docker
+
+clusterctl init --infrastructure aws
 
 secrets.sh --tls-skip --wge-entitlement $PWD/resources/wge-entitlement.yaml --secrets $PWD/resources/github-secrets.sh
 

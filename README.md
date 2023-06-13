@@ -15,7 +15,8 @@ On a MacBook it is designed to use the Docker Kubernetes deployed from Docker Da
 - [openssl](https://www.openssl.org/source/)
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - [vault cli](https://www.vaultproject.io/docs/install)
-- [custerctl](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterctl) 
+- [custerctl](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterctl)
+- [clusterawsadm](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterawsadm)
 - [terraform](https://www.terraform.io/downloads.html) (optional)
 - [direnv](https://direnv.net/docs/installation.html) (optional)
 
