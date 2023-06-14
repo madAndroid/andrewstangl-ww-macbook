@@ -57,3 +57,5 @@ vault kv put ${tls_skip} -mount=secrets aws-creds  AWS_ACCESS_KEY_ID=$AWS_ACCESS
 
 vault kv put ${tls_skip} -mount=secrets capi-aws-creds  AccessKeyID=$AWS_ACCESS_KEY_ID SecretAccessKey=$AWS_SECRET_ACCESS_KEY \
          SessionToken=$AWS_SESSION_TOKEN
+
+vault kv put ${tls_skip} -mount=secrets capi-aws-default  credentials=${AWS_B64ENCODED_CREDENTIALS}
