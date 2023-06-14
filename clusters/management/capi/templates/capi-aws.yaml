@@ -78,7 +78,7 @@ spec:
             additionalTags: 
               creator: "${awsTagCustomer}"
               customer: "${awsTagProjectGid}"
-              projectGid: "${awsTagCreator}""
+              projectGid: "${awsTagCreator}"
             region: (( .params.AWS_REGION ))
             sshKeyName: ${awsKeyPairName}
             version: ${KUBERNETES_VERSION}
@@ -94,8 +94,8 @@ spec:
             replicas: (( .params.WORKER_MACHINE_COUNT ))
             template:
               spec:
-                # bootstrap:
-                #   dataSecretName: ""
+                bootstrap:
+                  dataSecretName: ""
                 clusterName: (( .params.CLUSTER_NAME ))
                 infrastructureRef:
                   apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
