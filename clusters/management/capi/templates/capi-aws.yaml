@@ -77,11 +77,11 @@ spec:
               version: v1.12.6-eksbuild.2
             additionalTags: 
               creator: "${awsTagCustomer}"
-              customer: "${awsTagProjectGid}"
+              customer: "\"${awsTagProjectGid}\""
               projectGid: "${awsTagCreator}"
             region: (( .params.AWS_REGION ))
             sshKeyName: ${awsKeyPairName}
-            version: ${KUBERNETES_VERSION}
+            version: (( .params.KUBERNETES_VERSION ))
             eksClusterName: (( .params.CLUSTER_NAME ))
           
         - apiVersion: cluster.x-k8s.io/v1beta1
