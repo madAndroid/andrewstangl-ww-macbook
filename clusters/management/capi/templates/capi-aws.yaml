@@ -78,7 +78,7 @@ spec:
             additionalTags: 
               creator: ${awsTagCreator}
               customer: ww-cx
-              projectGid: 99999
+              projectGid: "99999"
             region: (( .params.AWS_REGION ))
             sshKeyName: ${awsKeyPairName}
             version: (( .params.KUBERNETES_VERSION ))
