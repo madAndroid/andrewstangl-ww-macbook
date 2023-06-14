@@ -147,3 +147,5 @@ kubectl wait --timeout=5m --for=condition=Ready kustomization/dex -n flux-system
 set +e
 vault-oidc-config.sh
 set -e
+
+terraform/bin/tf-apply.sh --debug aws-key-pair
