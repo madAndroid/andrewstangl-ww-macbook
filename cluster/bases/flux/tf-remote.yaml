@@ -12,7 +12,7 @@ spec:
     bucket: ${prefixName}-${awsAccountId}-${awsRegion}-tf-state
     tags:
       creator: ${awsTagCreator}
-      customer: ${awsTagCustomer}
+      customer: weaveworks-cx
       projectGid: ${awsTagProjectGid}
       Name: state-bucket
   sourceRef:
