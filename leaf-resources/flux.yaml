@@ -1,0 +1,40 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: wge-sa
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  dependsOn:
+    - name: secrets
+  path: ./leaf-clusters/wge-leaf/leaf-sa
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substitute:
+      templateNamespace: wge
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: wge-sa
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  dependsOn:
+    - name: secrets
+  path: ./cluster/addons/tf-controller
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substitute:
+      dnsSuffix: kubernetes.docker.internal
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-config
