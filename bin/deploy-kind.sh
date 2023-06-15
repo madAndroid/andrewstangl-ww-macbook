@@ -103,11 +103,11 @@ fi
 
 # Setup WGE access to the cluster
 
-cp leaf-resources/*.yaml clusters/kind/$hostname-$cluster_name/flux/
-git add clusters/kind/$hostname-$cluster_name/flux/$wge-sa.yaml
+cat resources/leaf-flux.yaml | envsubst > clusters/kind/$hostname-$cluster_name/flux/flux.yaml
+git add clusters/kind/$hostname-$cluster_name/flux/flux.yaml
 
 if [[ `git status --porcelain` ]]; then
-  git commit -m "deploy kustomization to apply WGE SA"
+  git commit -m "deploy kustomizations to apply WGE SA, addons and apps to kind cluster $hostname-$cluster_name"
   git pull
   git push
 fi
@@ -116,6 +116,18 @@ echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
 # Setup WGE access to the cluster using the WGE SA
+
+token="$(kubectl get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
+
+vault kv put -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  value.yaml=${AWS_B64ENCODED_CREDENTIALS}
+
+cat resources/mgmt-flux.yaml | envsubst > clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
+git add clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
+if [[ `git status --porcelain` ]]; then
+  git commit -m "deploy kustomization to apply kubeconfig and gitopsCluster for kind cluster $hostname-$cluster_name"
+  git pull
+  git push
+fi
 
 
 

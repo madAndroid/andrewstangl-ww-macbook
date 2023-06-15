@@ -14,6 +14,8 @@ kind: Secret
 metadata:
   name: wge-token
   namespace: ${templateNamespace}
+  label:
+    weave.works/wge-sa: wge
   annotations:
     kubernetes.io/service-account.name: wge
 type: kubernetes.io/service-account-token
