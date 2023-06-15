@@ -22,6 +22,11 @@ function args() {
   hostname=""
   cluster_name="kind"
 
+  ssh_opts="-o StrictHostKeyChecking=no"
+  scp_opts="-o StrictHostKeyChecking=no"
+  ssh_cmd="ssh $ssh_opts"
+  scp_cmd="scp scp_opts"
+
   arg_list=( "$@" )
   arg_count=${#arg_list[@]}
   arg_index=0
@@ -54,7 +59,7 @@ pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
 if [ -z "${hostname}" ]; then
-  scp -r kind-leafs ${username_str}${hostname}:/tmp
+  $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp
 
   cat .envrc | grep "export GITHUB_MGMT_" > /tmp/env.sh
   echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" >> /tmp/env.sh
@@ -62,17 +67,17 @@ if [ -z "${hostname}" ]; then
   echo "export listen_port=${listen_port}" >> /tmp/env.sh
   echo "export cluster_name=${cluster_name}" >> /tmp/env.sh
   echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/env.sh
-  scp -r /tmp/env.sh ${username_str}${hostname}:/tmp
+  $scp_cmd -r /tmp/env.sh ${username_str}${hostname}:/tmp
 
-  scp -r resources/kind.yaml ${username_str}${hostname}:/tmp
+  $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp
 
   if [ -n "$install" ]; then
-    ssh ${username_str}${hostname} "source /tmp/kind-leafs/leaf-install.sh $debug_str"
+    $ssh_cmd ${username_str}${hostname} "source /tmp/kind-leafs/leaf-install.sh $debug_str"
   fi
 
-  ssh ${username_str}${hostname} "source /tmp/kind-leafs/leaf-deploy.sh $debug_str"
+  $ssh_cmd ${username_str}${hostname} "source /tmp/kind-leafs/leaf-deploy.sh $debug_str"
 
-  scp ${username_str}${hostname}:/tmp/kubeconfig ~/.kube/${hostname}-${cluster_name}.kubeconfig
+  $scp_cmd ${username_str}${hostname}:/tmp/kubeconfig ~/.kube/${hostname}-${cluster_name}.kubeconfig
 
   echo "Cluster ${cluster_name} deployed on ${hostname}, use the following KUBECONFIG to access it:"
   echo "export KUBECONFIG=~/.kube/${hostname}-${cluster_name}.kubeconfig" 

@@ -84,4 +84,4 @@ do
 done
 
 flux --version
-flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path clusters/kind/$hostname/$cluster_name/flux
+flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path clusters/kind/$hostname-$cluster_name/flux
