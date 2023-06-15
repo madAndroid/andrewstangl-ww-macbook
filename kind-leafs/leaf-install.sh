@@ -47,7 +47,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
   echo "Updating system packages & installing required utilities"
   sudo apt-get update
-  sudo apt-get install -y ca-certificates curl jq iproute2 git unzip apt-transport-https gnupg2 vim kubectl
+  sudo apt-get install -y ca-certificates curl jq iproute2 git unzip apt-transport-https gnupg2 vim
+  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  rm kubectl
   curl -s https://fluxcd.io/install.sh | bash
   # For AMD64 / x86_64
   [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.19.0/kind-linux-amd64

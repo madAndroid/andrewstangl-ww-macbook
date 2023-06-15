@@ -43,12 +43,17 @@ set -e
 
 if [ $ret -eq 0 ]; then
   echo "Cluster ${cluster_name} already exists, deleting"
-  kind delete cluster ${cluster_name}
-  sleep 5
+  kind delete cluster --name ${cluster_name}
+  sleep 30
+fi
+
+
+if [ "$listen_address" ==  "127.0.0.1" ]; then
+  listen_address="hostname -I | awk '{print $1}'"
 fi
 
 cat /tmp/kind.yaml | envsubst > /tmp/kind-config.yaml
-kind create clusters --name ${cluster_name} --config /tmp/kind-config.yaml
+kind create cluster --name ${cluster_name} --config /tmp/kind-config.yaml
 
 while [ 1 -eq 1 ]
 do
@@ -65,7 +70,7 @@ done
 
 sleep 5
 
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+#kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get nodes
 
 kubectl get pods -A
@@ -85,3 +90,4 @@ done
 
 flux --version
 flux bootstrap github --owner $GITHUB_MGMT_ORG --repository $GITHUB_MGMT_REPO --path clusters/kind/$hostname-$cluster_name/flux
+

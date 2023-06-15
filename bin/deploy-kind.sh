@@ -25,7 +25,7 @@ function args() {
   ssh_opts="-o StrictHostKeyChecking=no"
   scp_opts="-o StrictHostKeyChecking=no"
   ssh_cmd="ssh $ssh_opts"
-  scp_cmd="scp scp_opts"
+  scp_cmd="scp $scp_opts"
 
   arg_list=( "$@" )
   arg_count=${#arg_list[@]}
@@ -58,7 +58,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-if [ -z "${hostname}" ]; then
+if [ -n "${hostname}" ]; then
   $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp
 
   cat .envrc | grep "export GITHUB_MGMT_" > /tmp/env.sh
@@ -66,6 +66,7 @@ if [ -z "${hostname}" ]; then
   echo "export listen_address=${listen_address}" >> /tmp/env.sh
   echo "export listen_port=${listen_port}" >> /tmp/env.sh
   echo "export cluster_name=${cluster_name}" >> /tmp/env.sh
+  echo "export hostname=${hostname}" >> /tmp/env.sh
   echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/env.sh
   $scp_cmd -r /tmp/env.sh ${username_str}${hostname}:/tmp
 
