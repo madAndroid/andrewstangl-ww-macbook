@@ -128,16 +128,18 @@ set +e
 vault-secrets-config.sh
 set -e
 
-clusterawsadm bootstrap iam create-cloudformation-stack --config resources/clusterawsadm.yaml --region $AWS_REGION
+if [ "$aws_capi" == "true" ]; then
+  clusterawsadm bootstrap iam create-cloudformation-stack --config resources/clusterawsadm.yaml --region $AWS_REGION
 
-export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+  export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
 
-export EXP_EKS=true
-export EXP_MACHINE_POOL=true
-export CAPA_EKS_IAM=true
-export EXP_CLUSTER_RESOURCE_SET=true
+  export EXP_EKS=true
+  export EXP_MACHINE_POOL=true
+  export CAPA_EKS_IAM=true
+  export EXP_CLUSTER_RESOURCE_SET=true
 
-clusterctl init --infrastructure aws
+  clusterctl init --infrastructure aws
+fi
 
 secrets.sh --tls-skip --wge-entitlement $PWD/resources/wge-entitlement.yaml --secrets $PWD/resources/github-secrets.sh
 
@@ -148,4 +150,10 @@ set +e
 vault-oidc-config.sh
 set -e
 
-terraform/bin/tf-apply.sh --debug aws-key-pair
+if [ "$aws" == "true" ]; then
+  # Wait for flux-tf to be applied
+  echo "Waiting for flux-tf to be applied"
+  kubectl wait --timeout=5m --for=condition=Ready kustomization/flux-tf -n flux-system
+
+  terraform/bin/tf-apply.sh aws-key-pair
+fi

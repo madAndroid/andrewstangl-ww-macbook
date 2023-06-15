@@ -81,7 +81,8 @@ if [ -n "${hostname}" ]; then
   $scp_cmd ${username_str}${hostname}:/tmp/kubeconfig ~/.kube/${hostname}-${cluster_name}.kubeconfig
 
   echo "Cluster ${cluster_name} deployed on ${hostname}, use the following KUBECONFIG to access it:"
-  echo "export KUBECONFIG=~/.kube/${hostname}-${cluster_name}.kubeconfig" 
+  echo "export KUBECONFIG=~/.kube/${hostname}-${cluster_name}.kubeconfig"
+  export KUBECONFIG=~/.kube/${hostname}-${cluster_name}.kubeconfig
 else
   if [ -n "$install" ]; then
     kind-leafs/leaf-install.sh $debug_str
@@ -97,5 +98,9 @@ else
 
   echo "Cluster ${cluster_name} deployed on localhost, use the following KUBECONFIG to access it:"
   echo "export KUBECONFIG=~/.kube/localhost-${cluster_name}.kubeconfig" 
+  export KUBECONFIG=~/.kube/localhost-${cluster_name}.kubeconfig
 fi
+
+# Setup WGE access to the cluster
+
 

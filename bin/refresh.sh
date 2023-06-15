@@ -4,8 +4,10 @@
 # Version: 1.0
 # Author: Paul Carlton (mailto:paul.carlton@weave.works)
 
-
-export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+export AWS_B64ENCODED_CREDENTIALS="placeholder"
+if [ "$aws_capi" == "true" ]; then
+  export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+fi
 
 aws-secrets.sh
 

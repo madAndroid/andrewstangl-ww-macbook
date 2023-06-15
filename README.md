@@ -6,19 +6,20 @@ On a MacBook it is designed to use the Docker Kubernetes deployed from Docker Da
 
 ## Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/)
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [Flux](https://fluxcd.io/docs/installation/)
-- [gitops](https://docs.gitops.weave.works/docs/next/installation/weave-gitops/#install-the-gitops-cli)
-- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
-- [jq](https://stedolan.github.io/jq/download/)
-- [openssl](https://www.openssl.org/source/)
-- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-- [vault cli](https://www.vaultproject.io/docs/install)
-- [custerctl](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterctl)
-- [clusterawsadm](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterawsadm)
-- [terraform](https://www.terraform.io/downloads.html) (optional)
+- [Docker](https://docs.docker.com/get-docker/) (required for local cluster)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (required by various scripts)
+- [Flux](https://fluxcd.io/docs/installation/) (required by various scripts)
+- [vault cli](https://www.vaultproject.io/docs/install) (required by various scripts)
+- [jq](https://stedolan.github.io/jq/download/) (required by various scripts)
+- [openssl](https://www.openssl.org/source/) (required to generate cluster certificate)
+- [gitops](https://docs.gitops.weave.works/docs/next/installation/weave-gitops/#install-the-gitops-cli) (optional only required for GitOps CLI deployments)
+- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/) (optional, only for Linux and local Kind deployments)
+- [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) (optional, only for AWS deployments)
+- [custerctl](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterctl) (optional, only for Cluster API deployments)
+- [clusterawsadm](https://cluster-api-aws.sigs.k8s.io/getting-started.html#install-clusterawsadm) (optional, only for Cluster API  AWS deployments)
+- [terraform](https://www.terraform.io/downloads.html) (optional, only for AWS deployments)
 - [direnv](https://direnv.net/docs/installation.html) (optional)
+- [multipass](https://multipass.run/) (optional, only for multipass deployments)
 
 
 ## Setup
