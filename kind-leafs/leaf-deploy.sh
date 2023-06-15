@@ -49,7 +49,7 @@ fi
 
 
 if [ "$listen_address" ==  "127.0.0.1" ]; then
-  listen_address="hostname -I | awk '{print $1}'"
+  listen_address="$(hostname -I | awk '{print $1}')"
 fi
 
 cat /tmp/kind.yaml | envsubst > /tmp/kind-config.yaml
