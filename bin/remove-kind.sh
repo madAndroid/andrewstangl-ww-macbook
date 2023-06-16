@@ -19,6 +19,7 @@ function args() {
   username_str=""
   hostname=""
   cluster_name="kind"
+  debug_str=""
 
   ssh_opts="-o StrictHostKeyChecking=no"
   scp_opts="-o StrictHostKeyChecking=no"
