@@ -129,6 +129,7 @@ export endpoint="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -
 cat resources/wge-kubeconfig.yaml | envsubst > /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml
 vault kv put -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  value.yaml="$(cat /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml)"
 
+mkdir -p clusters/management/clusters/kind/$hostname-$cluster_name
 cat resources/mgmt-flux.yaml | envsubst > clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
 git add clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
 if [[ `git status --porcelain` ]]; then
