@@ -44,6 +44,5 @@ set -e
 if [ $ret -eq 0 ]; then
   echo "Cluster ${cluster_name} already exists, deleting"
   kind delete cluster --name ${cluster_name}
-  sleep 30
 fi
 
