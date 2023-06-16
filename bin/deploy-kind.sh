@@ -58,17 +58,29 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
+location="${hostname:-localhost}"
+if [ -d "clusters/kind/${location}-$cluster_name" ]; then
+
+  rm -rf clusters/kind/$location-$cluster_name
+  git add clusters/kind/$location-$cluster_name
+  if [[ `git status --porcelain` ]]; then
+    git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
+    git pull
+    git push
+  fi
+fi
+
 if [ -n "${hostname}" ]; then
   $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp
 
-  cat .envrc | grep "export GITHUB_MGMT_" > /tmp/env.sh
-  echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" >> /tmp/env.sh
-  echo "export listen_address=${listen_address}" >> /tmp/env.sh
-  echo "export listen_port=${listen_port}" >> /tmp/env.sh
-  echo "export cluster_name=${cluster_name}" >> /tmp/env.sh
-  echo "export hostname=${hostname}" >> /tmp/env.sh
-  echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/env.sh
-  $scp_cmd -r /tmp/env.sh ${username_str}${hostname}:/tmp
+  cat .envrc | grep "export GITHUB_MGMT_" > /tmp/${location}-${cluster_name}-env.sh
+  echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export listen_address=${listen_address}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export listen_port=${listen_port}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export cluster_name=${cluster_name}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export hostname=${hostname}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/${location}-${cluster_name}-env.sh
+  $scp_cmd -r /tmp/${location}-${cluster_name}-env.sh ${username_str}${hostname}:/tmp/env.sh
 
   $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp
 
@@ -117,9 +129,13 @@ kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-sys
 
 # Setup WGE access to the cluster using the WGE SA
 
-token="$(kubectl get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
+export token="$(kubectl get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
+export wge_cluster_name="kind-${hostname}-${cluster_name}"
+export cert="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster."certificate-authority-data"')"
+export endpoint="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster.server')"
 
-vault kv put -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  value.yaml=${AWS_B64ENCODED_CREDENTIALS}
+cat resources/wge-kubeconfig.yaml | envsubst > /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml
+vault kv put -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  value.yaml="$(cat /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml)"
 
 cat resources/mgmt-flux.yaml | envsubst > clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
 git add clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
