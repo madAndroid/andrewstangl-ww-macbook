@@ -28,7 +28,7 @@ metadata:
   name: kind-${hostname}-${cluster_name}-gitops-cluster
 spec:
   dependsOn:
-    - name: kind-gitops-kubeconfig-${hostname}-${cluster_name}
+    - name: kind-${hostname}-${cluster_name}-gitops-kubeconfig
   interval: 1m0s
   path: ./leaf-clusters/wge/gitops-cluster
   postBuild:
