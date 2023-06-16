@@ -41,34 +41,30 @@ kind get clusters | grep -E "^${cluster_name}$" >/dev/null
 ret=$?
 set -e
 
-if [ $ret -eq 0 ]; then
-  echo "Cluster ${cluster_name} already exists, deleting"
-  kind delete cluster --name ${cluster_name}
-  sleep 30
-fi
+if [ $ret -ne 0 ]; then
 
-
-if [ "$listen_address" ==  "127.0.0.1" ]; then
-  listen_address="$(hostname -I | awk '{print $1}')"
-fi
-
-cat /tmp/kind.yaml | envsubst > /tmp/kind-config.yaml
-kind create cluster --name ${cluster_name} --config /tmp/kind-config.yaml
-
-while [ 1 -eq 1 ]
-do
-  set +e
-  echo "Waiting for kube-apiserver-${cluster_name}-control-plane to be ready"
-  kubectl wait --for=condition=Ready -n kube-system pod/kube-apiserver-${cluster_name}-control-plane
-  ret=$?
-  set -e
-  if [ $ret -eq 0 ]; then
-    break
+  if [ "$listen_address" ==  "127.0.0.1" ]; then
+    listen_address="$(hostname -I | awk '{print $1}')"
   fi
-  sleep 1
-done
 
-sleep 5
+  cat /tmp/kind.yaml | envsubst > /tmp/kind-config.yaml
+  kind create cluster --name ${cluster_name} --config /tmp/kind-config.yaml
+
+  while [ 1 -eq 1 ]
+  do
+    set +e
+    echo "Waiting for kube-apiserver-${cluster_name}-control-plane to be ready"
+    kubectl wait --for=condition=Ready -n kube-system pod/kube-apiserver-${cluster_name}-control-plane
+    ret=$?
+    set -e
+    if [ $ret -eq 0 ]; then
+      break
+    fi
+    sleep 1
+  done
+
+  sleep 5
+fi
 
 #kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get nodes
