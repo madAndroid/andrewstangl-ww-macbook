@@ -19,8 +19,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: wge-leaf-config
-  namespace: flux-system
+  namespace: wge
 spec:
+  dependsOn:
+    - name: wge-sa
+      namespace: flux-system
   interval: 10m0s
   retryInterval: 1m0s
   sourceRef:
@@ -57,7 +60,6 @@ spec:
   wait: true
   dependsOn:
   - name: wge-leaf-config
-  - name: wge-sa
   interval: 5m0s
   path: ./leaf-clusters/wge-leaf
   postBuild:
