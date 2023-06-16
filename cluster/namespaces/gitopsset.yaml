@@ -97,7 +97,7 @@ metadata:
     app.kubernetes.io/part-of: gitopssets-controller
     app.kubernetes.io/managed-by: kustomize
     app.kubernetes.io/created-by: gitopssets-controller
-  name: templates
+  name: gitops-templates
   namespace: flux-system
 spec:
   serviceAccountName: gitopssets
