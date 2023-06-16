@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: kind--kind-gitops-kubeconfig
+  name: kind-u2-kind-gitops-kubeconfig
 spec:
   interval: 1m0s
   path: ./leaf-clusters/wge/kubeconfig
@@ -11,8 +11,8 @@ spec:
         name: cluster-config
     substitute:
       clusterName: kind
-      resourceName: kind-
-      secret_name: kind--kind
+      resourceName: kind-u2
+      secret_name: kind-u2-kind
   prune: true
   sourceRef:
     kind: GitRepository
@@ -25,10 +25,10 @@ kind: Kustomization
 metadata:
   annotations:
     templates.weave.works/create-request: ""
-  name: kind--kind-gitops-cluster
+  name: kind-u2-kind-gitops-cluster
 spec:
   dependsOn:
-    - name: kind-gitops-kubeconfig--kind
+    - name: kind-gitops-kubeconfig-u2-kind
   interval: 1m0s
   path: ./leaf-clusters/wge/gitops-cluster
   postBuild:
@@ -37,7 +37,7 @@ spec:
         name: cluster-config
     substitute:
       clusterName: kind
-      resourceName: kind-
+      resourceName: kind-u2
   prune: true
   sourceRef:
     kind: GitRepository
