@@ -21,7 +21,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: wge-leaf-config
-  namespace: wge
+  namespace: flux-system
 spec:
   interval: 10m0s
   retryInterval: 1m0s
@@ -47,7 +47,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: wge-leaf
-  namespace: wge
+  namespace: flux-system
 spec:
   prune: true
   retryInterval: 1m0s
@@ -71,7 +71,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: wge-leaf-apps
-  namespace: wge
+  namespace: flux-system
 spec:
   prune: true
   retryInterval: 1m0s
