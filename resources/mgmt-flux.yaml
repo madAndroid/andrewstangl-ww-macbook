@@ -2,6 +2,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: kind-${hostname}-${cluster_name}-gitops-kubeconfig
+  namespace: flux-system
 spec:
   interval: 1m0s
   path: ./leaf-clusters/wge/kubeconfig
@@ -26,6 +27,7 @@ metadata:
   annotations:
     templates.weave.works/create-request: ""
   name: kind-${hostname}-${cluster_name}-gitops-cluster
+  namespace: flux-system
 spec:
   dependsOn:
     - name: kind-${hostname}-${cluster_name}-gitops-kubeconfig
