@@ -59,6 +59,8 @@ if [ -d "clusters/kind/${location}-$cluster_name" ]; then
 
   rm -rf clusters/kind/$location-$cluster_name
   git add clusters/kind/$location-$cluster_name
+  rm -rf clusters/management/clusters/kind/$location-$cluster_name
+  git add clusters/management/clusters/kind/$location-$cluster_name
   if [[ `git status --porcelain` ]]; then
     git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
     git pull
@@ -80,19 +82,6 @@ else
   kind-leafs/leaf-remove.sh $debug_str
 fi
 
-# Setup WGE access to the cluster
-
-git pull
-rm -rf clusters/kind/$hostname-$cluster_name
-git add clusters/kind/$hostname-$cluster_name
-# vault kv delete -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  
-rm -rf clusters/management/clusters/kind/$hostname-$cluster_name
-git add clusters/management/clusters/kind/$hostname-$cluster_name
-if [[ `git status --porcelain` ]]; then
-  git commit -m "remove kubeconfig and gitopsCluster for kind cluster $hostname-$cluster_name"
-  git pull
-  git push
-fi
 
 
 
