@@ -35,7 +35,7 @@ spec:
   wait: true
   postBuild:
     substitute:
-      clusterName: ${cluster_name}
+      clusterName: ${wge_cluster_name}
       GitHubOrg: ${GITHUB_MGMT_ORG}
       GitHubRepo: ${GITHUB_MGMT_REPO}
       userEmail: ${USER_EMAIL}

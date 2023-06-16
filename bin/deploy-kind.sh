@@ -115,6 +115,8 @@ fi
 
 # Setup WGE access to the cluster
 
+export cluster_name
+export wge_cluster_name="kind-${hostname}-${cluster_name}"
 git pull
 cat resources/leaf-flux.yaml | envsubst > clusters/kind/$hostname-$cluster_name/flux/flux.yaml
 git add clusters/kind/$hostname-$cluster_name/flux/flux.yaml
@@ -131,7 +133,6 @@ kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-sys
 # Setup WGE access to the cluster using the WGE SA
 
 export token="$(kubectl get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
-export wge_cluster_name="kind-${hostname}-${cluster_name}"
 export cert="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster."certificate-authority-data"')"
 export endpoint="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster.server')"
 
