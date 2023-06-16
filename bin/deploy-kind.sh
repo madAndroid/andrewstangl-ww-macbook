@@ -106,6 +106,7 @@ fi
 # Setup WGE access to the cluster
 
 export cluster_name
+export hostname
 export wge_cluster_name="kind-${hostname}-${cluster_name}"
 git pull
 cat resources/leaf-flux.yaml | envsubst > clusters/kind/$hostname-$cluster_name/flux/flux.yaml
