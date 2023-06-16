@@ -54,17 +54,20 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
+push=""
 location="${hostname:-localhost}"
 if [ -d "clusters/kind/${location}-$cluster_name" ]; then
   rm -rf clusters/kind/$location-$cluster_name
   git add clusters/kind/$location-$cluster_name
+  push=true
 fi
 if [ -d "clusters/management/clusters/kind/$location-$cluster_name" ]; then
   rm -rf clusters/management/clusters/kind/$location-$cluster_name
   git add clusters/management/clusters/kind/$location-$cluster_name
+  push=true
 fi
 
-if [[ `git status --porcelain` ]]; then
+if [  -n "$push" ]; then
   git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
   git pull
   git push
