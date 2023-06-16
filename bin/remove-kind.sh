@@ -56,17 +56,20 @@ source .envrc
 
 location="${hostname:-localhost}"
 if [ -d "clusters/kind/${location}-$cluster_name" ]; then
-
   rm -rf clusters/kind/$location-$cluster_name
   git add clusters/kind/$location-$cluster_name
+fi
+if [ -d "clusters/management/clusters/kind/$location-$cluster_name" ]; then
   rm -rf clusters/management/clusters/kind/$location-$cluster_name
   git add clusters/management/clusters/kind/$location-$cluster_name
-  if [[ `git status --porcelain` ]]; then
-    git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
-    git pull
-    git push
-  fi
 fi
+
+if [[ `git status --porcelain` ]]; then
+  git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
+  git pull
+  git push
+fi
+
 
 if [ -n "${hostname}" ]; then
   $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp
