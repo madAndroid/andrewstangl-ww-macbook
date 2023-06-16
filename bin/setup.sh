@@ -89,6 +89,20 @@ if [ "$aws" == "true" ]; then
   export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
 fi
 
+if [ "$aws" == "true" ]; then
+  cp resources/aws/flux/* cluster/flux
+  cp resources/aws/namespace/* cluster/namespace
+  git add cluster/flux
+  git add cluster/namespace
+fi
+
+if [ "$capi" == "true" ]; then
+  cp resources/capi/flux/* cluster/flux
+  cp resources/capi/namespace/* cluster/namespace
+  git add cluster/flux
+  git add cluster/namespace
+fi
+
 export namespace=flux-system
 cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 export namespace=\$\{nameSpace\}
