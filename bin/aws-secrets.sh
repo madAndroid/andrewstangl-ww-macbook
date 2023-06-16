@@ -52,6 +52,11 @@ AWS_SECRET_ACCESS_KEY="placeholder"
 AWS_REGION="placeholder"
 AWS_SESSION_TOKEN="placeholder"
 
+export AWS_B64ENCODED_CREDENTIALS="placeholder"
+if [ "$aws_capi" == "true" ]; then
+  export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
+fi
+
 if [ "$aws" == "true" ]; then
   AWS_ACCESS_KEY_ID=$(cat ${aws_dir}/credentials | grep aws_access_key_id | cut -f2- -d=)
   AWS_SECRET_ACCESS_KEY=$(cat ${aws_dir}/credentials | grep aws_secret_access_key | cut -f2- -d=)

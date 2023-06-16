@@ -41,11 +41,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-export AWS_B64ENCODED_CREDENTIALS="placeholder"
-if [ "$aws_capi" == "true" ]; then
-  export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-as-profile)
-fi
-
 aws-secrets.sh
 
 kubectl rollout restart deployment -n flux-system  source-controller 
