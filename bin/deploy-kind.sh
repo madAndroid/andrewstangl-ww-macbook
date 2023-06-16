@@ -122,12 +122,12 @@ kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-sys
 
 # Setup WGE access to the cluster using the WGE SA
 
-export token="$(kubectl get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
+export token="$(kubectl --kubeconfig ~/.kube/$location-${cluster_name}.kubeconfig get secrets -n wge -l "weave.works/wge-sa=wge" -o jsonpath={.items[0].data.token})"
 export cert="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster."certificate-authority-data"')"
 export endpoint="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -r '.clusters[0].cluster.server')"
 
 cat resources/wge-kubeconfig.yaml | envsubst > /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml
-vault kv put -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  value.yaml="$(cat /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml)"
+vault kv put -mount=secrets/leaf-cluster-secrets kind-${hostname}-${cluster_name}  value.yaml="$(cat /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml)"
 
 mkdir -p clusters/management/clusters/kind/$hostname-$cluster_name
 cat resources/mgmt-flux.yaml | envsubst > clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
