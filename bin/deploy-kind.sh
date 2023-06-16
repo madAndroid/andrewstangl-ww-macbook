@@ -58,18 +58,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 pushd $SCRIPT_DIR/.. >/dev/null
 source .envrc
 
-location="${hostname:-localhost}"
-if [ -d "clusters/kind/${location}-$cluster_name" ]; then
-
-  rm -rf clusters/kind/$location-$cluster_name
-  git add clusters/kind/$location-$cluster_name
-  if [[ `git status --porcelain` ]]; then
-    git commit -m "remove files from clusters for kind cluster $location-$cluster_name"
-    git pull
-    git push
-  fi
-fi
-
 if [ -n "${hostname}" ]; then
   $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp
 
