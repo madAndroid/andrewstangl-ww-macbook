@@ -91,9 +91,9 @@ fi
 
 if [ "$aws" == "true" ]; then
   cp resources/aws/flux/* cluster/flux
-  cp resources/aws/namespace/* cluster/namespace
+  cp resources/aws/templates/* cluster/templates
   git add cluster/flux
-  git add cluster/namespace
+  git add cluster/templates
 fi
 
 if [ "$capi" == "true" ]; then
