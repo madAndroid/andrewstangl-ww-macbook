@@ -84,7 +84,11 @@ echo "Waiting for ingress controller to start"
 kubectl wait --timeout=2m --for=condition=Ready kustomizations.kustomize.toolkit.fluxcd.io -n flux-system nginx
 
 export CLUSTER_IP=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.spec.clusterIP}')
-export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+export AWS_ACCOUNT_ID="none"
+if [ "$aws" == "true" ]; then
+  export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+fi
+
 export namespace=flux-system
 cat resources/cluster-config.yaml | envsubst > cluster/config/cluster-config.yaml
 export namespace=\$\{nameSpace\}
@@ -151,9 +155,8 @@ vault-oidc-config.sh
 set -e
 
 if [ "$aws" == "true" ]; then
-  # Wait for flux-tf to be applied
-  echo "Waiting for flux-tf to be applied"
-  kubectl wait --timeout=5m --for=condition=Ready kustomization/flux-tf -n flux-system
+  echo "Waiting for aws to be applied"
+  kubectl wait --timeout=5m --for=condition=Ready kustomization/aws -n flux-system
 
   terraform/bin/tf-apply.sh aws-key-pair
 fi

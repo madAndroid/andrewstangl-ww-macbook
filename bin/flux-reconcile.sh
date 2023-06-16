@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Utility for creating aws credentials secrets in Vault
+# Utility for reconciling flux kustomizations
 # Version: 1.0
 # Author: Paul Carlton (mailto:paul.carlton@weave.works)
 
@@ -57,5 +57,7 @@ flux reconcile kustomization vault
 flux reconcile kustomization config 
 flux reconcile kustomization dex
 flux reconcile kustomization wge
-flux reconcile kustomization capi-templates
-flux reconcile kustomization capi-clusters 
+if [ "$capi" == "true" ]; then
+  flux reconcile kustomization capi-templates
+  flux reconcile kustomization capi-clusters 
+fi

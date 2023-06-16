@@ -96,7 +96,7 @@ spec:
     # templates-controller:
     #   enabled: false
     global:
-      capiEnabled: true
+      capiEnabled: ${capi}
     #### Metrics - Prometheus metrics configuration
     metrics:
       # Enables metrics generation and prometheus endpoint
