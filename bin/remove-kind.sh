@@ -95,7 +95,7 @@ fi
 echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
-vault kv delete -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  
+# vault kv delete -mount=secrets/leaf-clusters kind-${hostname}-${cluster_name}  
 rm -rf clusters/management/clusters/kind/$hostname-$cluster_name
 git add clusters/management/clusters/kind/$hostname-$cluster_name
 if [[ `git status --porcelain` ]]; then
