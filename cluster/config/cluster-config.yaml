@@ -12,7 +12,7 @@ data:
   scmType: github
   GitHubOrg: ww-gitops
   GitHubRepo: paulcarlton-ww-macbook
-  awsAccountId: ac-none
+  awsAccountId: ac-
   prefixName: ww-paulc
   awsRegion: eu-west-1
   awsTagCreator: paul.carlton@weave.works
