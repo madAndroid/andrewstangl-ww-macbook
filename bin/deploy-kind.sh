@@ -21,6 +21,7 @@ function args() {
   listen_port="6443"
   hostname=""
   cluster_name="kind"
+  debug_str
 
   ssh_opts="-o StrictHostKeyChecking=no"
   scp_opts="-o StrictHostKeyChecking=no"
