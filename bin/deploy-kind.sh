@@ -119,6 +119,8 @@ if [[ `git status --porcelain` ]]; then
   git push
 fi
 
+sleep 5 
+
 echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
