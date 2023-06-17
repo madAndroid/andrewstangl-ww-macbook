@@ -73,7 +73,7 @@ if [ -n "${hostname}" ]; then
   echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/${location}-${cluster_name}-env.sh
   $scp_cmd -r /tmp/${location}-${cluster_name}-env.sh ${username_str}${hostname}:/tmp/env.sh
 
-  $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp
+  $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp >/dev/null
 
   if [ -n "$install" ]; then
     $ssh_cmd ${username_str}${hostname} "source /tmp/kind-leafs/leaf-install.sh $debug_str"
@@ -119,8 +119,8 @@ if [[ `git status --porcelain` ]]; then
   git push
 fi
 
-sleep 5 
-
+flux reconcile kustomization flux-system
+sleep 5
 echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
