@@ -125,8 +125,8 @@ echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
 git pull
-cat resources/leaf-flux1.yaml | envsubst > clusters/kind/$hostname-$cluster_name/flux/flux1.yaml
-git add clusters/kind/$hostname-$cluster_name/flux/flux1.yaml
+cat resources/leaf-wge.yaml | envsubst > clusters/kind/$hostname-$cluster_name/wge/flux.yaml
+git add clusters/kind/$hostname-$cluster_name/wge/flux.yaml
 
 if [[ `git status --porcelain` ]]; then
   git commit -m "deploy kustomizations to apply addons and apps to kind cluster $hostname-$cluster_name"
