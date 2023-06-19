@@ -74,6 +74,7 @@ if [ -n "${hostname}" ]; then
   $scp_cmd -r /tmp/${location}-${cluster_name}-env.sh ${username_str}${hostname}:/tmp/env.sh >/dev/null
 
   $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp >/dev/null
+  $scp_cmd -r resources/audit.yaml ${username_str}${hostname}:/tmp >/dev/null
 
   if [ -n "$install" ]; then
     $ssh_cmd ${username_str}${hostname} "source /tmp/kind-leafs/leaf-install.sh $debug_str"
