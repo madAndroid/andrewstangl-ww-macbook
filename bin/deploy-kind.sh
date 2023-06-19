@@ -120,9 +120,10 @@ if [[ `git status --porcelain` ]]; then
   git push
 fi
 
+flux reconcile source git flux-system
 flux reconcile kustomization flux-system
 
-sleep 30
+sleep 10
 
 echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
@@ -137,6 +138,9 @@ if [[ `git status --porcelain` ]]; then
   git pull
   git push
 fi
+
+flux reconcile source git flux-system
+flux reconcile kustomization flux-system
 
 # Setup WGE access to the cluster using the WGE SA
 
@@ -155,6 +159,9 @@ if [[ `git status --porcelain` ]]; then
   git pull
   git push
 fi
+
+flux reconcile source git flux-system
+flux reconcile kustomization flux-system
 
 
 
