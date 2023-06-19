@@ -49,7 +49,7 @@ if [ $ret -ne 0 ]; then
 
   cat /tmp/kind.yaml | envsubst > /tmp/kind-config.yaml
 
-  mkdir -p $HOME/kubernetes/policies
+  mkdir -p /tmp/kubernetes/policies
   cp -f /tmp/audit.yaml /tmp/kubernetes/policies/audit.yaml
   kind create cluster --name ${cluster_name} --config /tmp/kind-config.yaml
 
