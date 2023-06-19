@@ -127,6 +127,7 @@ echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system
 
 git pull
+mkdir -p clusters/management/clusters/kind/$hostname-$cluster_name/wge
 cat resources/leaf-wge.yaml | envsubst > clusters/kind/$hostname-$cluster_name/wge/flux.yaml
 git add clusters/kind/$hostname-$cluster_name/wge/flux.yaml
 
@@ -145,7 +146,6 @@ export endpoint="$(cat $HOME/.kube/${hostname}-${cluster_name}.kubeconfig | yq -
 cat resources/wge-kubeconfig.yaml | envsubst > /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml
 vault kv put -mount=secrets/leaf-cluster-secrets kind-${hostname}-${cluster_name}  value.yaml="$(cat /tmp/kind-${hostname}-${cluster_name}-wge-kubeconfig.yaml)"
 
-mkdir -p clusters/management/clusters/kind/$hostname-$cluster_name
 cat resources/mgmt-flux.yaml | envsubst > clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
 git add clusters/management/clusters/kind/$hostname-$cluster_name/flux.yaml
 if [[ `git status --porcelain` ]]; then
