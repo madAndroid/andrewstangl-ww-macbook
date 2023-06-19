@@ -62,6 +62,8 @@ if [ $ret -eq 0 ]; then
   echo "multipass machine ${hostname} already exists, purging" >&2
   multipass delete ${hostname}
   multipass purge
+  grep -v -E "^u2 " $HOME/.ssh/known_hosts > /tmp/known_hosts
+  cp /tmp/known_hosts $HOME/.ssh/known_hosts
 fi
 
 cat resources/multipass-cloud-init.yaml | envsubst > /tmp/cloud-init.yaml
@@ -73,4 +75,3 @@ echo "IP address of multipass machine is ${ip}"
 cp /etc/hosts /tmp/hosts-plus
 echo "$ip $hostname" >> /tmp/hosts-plus
 sudo cp /tmp/hosts-plus /etc/hosts
-

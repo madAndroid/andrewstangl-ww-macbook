@@ -33,7 +33,7 @@ function args() {
   arg_index=0
   while (( arg_index < arg_count )); do
     case "${arg_list[${arg_index}]}" in
-          "--install") install=true;;
+          "--install") install="true";;
           "--cluster-name") (( arg_index+=1 )); cluster_name="${arg_list[${arg_index}]}";;
           "--hostname") (( arg_index+=1 )); hostname="${arg_list[${arg_index}]}";;
           "--username") (( arg_index+=1 )); username_str="${arg_list[${arg_index}]}@";;
