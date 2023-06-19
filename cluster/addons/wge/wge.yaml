@@ -43,7 +43,7 @@ spec:
     #     serviceAccount:
     #       name: "collector"
     #       namespace: "flux-system"
-    enableExplorer: true
+    # enableExplorer: true
 
     ingress:
       enabled: true
