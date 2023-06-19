@@ -21,17 +21,17 @@ nodes:
         # mount new files / directories on the control plane
         extraVolumes:
           - name: audit-policies
-            hostPath: $HOME/kubernetes/policies
+            hostPath: /etc/kubernetes/policies
             mountPath: /etc/kubernetes/policies
             readOnly: true
             pathType: "DirectoryOrCreate"
           - name: "audit-logs"
-            hostPath: "$HOME/kubernetes/log/kubernetes"
+            hostPath: "/var/kubernetes/log/kubernetes"
             mountPath: "/var/kubernetes/log/kubernetes"
             readOnly: false
             pathType: DirectoryOrCreate
   # mount the local file on the control plane
   extraMounts:
-  - hostPath: $HOME/kubernetes/policies/audit.yaml
+  - hostPath: /tmp/kubernetes/policies/audit.yaml
     containerPath: /etc/kubernetes/policies/audit.yaml
     readOnly: true
