@@ -2,7 +2,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: wge-leaf-config
-  namespace: ${templateNamespace}
+  namespace: wge
 spec:
   dependsOn:
     - name: wge-sa
@@ -31,7 +31,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: wge-leaf
-  namespace: ${templateNamespace}
+  namespace: wge
 spec:
   prune: true
   retryInterval: 1m0s
@@ -54,7 +54,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: wge-leaf-apps
-  namespace: ${templateNamespace}
+  namespace: wge
 spec:
   prune: true
   retryInterval: 1m0s
