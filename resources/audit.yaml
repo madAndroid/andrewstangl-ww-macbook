@@ -29,12 +29,12 @@ rules:
     - group: "" # core API group
       resources: ["endpoints", "services"]
 
-  # Don't log authenticated requests to certain non-resource URL paths.
-  - level: None
-    userGroups: ["system:authenticated"]
-    nonResourceURLs:
-    - "/api*" # Wildcard matching.
-    - "/version"
+  # # Don't log authenticated requests to certain non-resource URL paths.
+  # - level: None
+  #   userGroups: ["system:authenticated"]
+  #   nonResourceURLs:
+  #   - "/api*" # Wildcard matching.
+  #   - "/version"
 
   # Log all other resources in core and extensions at the Request level.
   - level: Request
