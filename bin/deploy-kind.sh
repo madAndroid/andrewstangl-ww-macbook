@@ -123,7 +123,18 @@ fi
 flux reconcile source git flux-system
 flux reconcile kustomization flux-system
 
-sleep 10
+# Wait for wge-sa kustomization to be created
+echo "Waiting for wge-sa kustomization to be created"
+while ( true ); do
+  set +e
+  kubectl get kustomization/wge-sa -n flux-system 2>/dev/null
+  ret=$?
+  set -e
+  if [ "$ret" == "0" ]; then
+    break
+  fi
+  sleep 5
+done
 
 echo "Waiting for wge-sa to be applied"
 kubectl wait --timeout=5m --for=condition=Ready kustomization/wge-sa -n flux-system

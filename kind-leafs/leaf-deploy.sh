@@ -69,7 +69,6 @@ if [ $ret -ne 0 ]; then
   sleep 5
 fi
 
-#kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 kubectl get nodes
 
 kubectl get pods -A
