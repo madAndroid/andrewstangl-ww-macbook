@@ -7,7 +7,7 @@ rules:
   # Log Flux RequestResponse level
   - level: RequestResponse
     resources:
-    - group: "*.toolkit.fluxcd.io"
+    - group: "kustomize.toolkit.fluxcd.io"
   # Log "pods/log", "pods/status" at Metadata level
   - level: Metadata
     resources:
