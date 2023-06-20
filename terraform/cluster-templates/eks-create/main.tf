@@ -12,5 +12,6 @@ module "eks" {
   source       = "../../modules/eks"
   cluster_name = var.cluster_name
   vpc_id       = var.vpc_id
+  eks_version =  var.eks_version
   subnet_ids   = flatten([split(",", var.public_subnets_string), split(",", var.private_subnets_string)])
 }

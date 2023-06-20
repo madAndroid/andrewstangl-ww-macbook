@@ -37,7 +37,7 @@ clusters:
     # vpc_resource: <resource name> 
     vpc_name: v1
 
-    version: 1.26
+    version: 1.27
 
     apps:
       - name: podinfo-ms1
