@@ -51,7 +51,7 @@ if [ $ret -ne 0 ]; then
 
   mkdir -p /tmp/kubernetes/policies
   cp -f /tmp/audit.yaml /tmp/kubernetes/policies/audit.yaml
-  rm -f /tmp/kind-config.yaml
+  rm -f /tmp/kubeconfig
   kind create cluster --name ${cluster_name} --config /tmp/kind-config.yaml
 
   while [ 1 -eq 1 ]
