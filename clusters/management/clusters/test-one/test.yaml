@@ -412,9 +412,6 @@ spec:
         patches:
           - target:
               kind: GitopsCluster
-              group: gitops.weave.works
-              name: test-{{ .Repeat.name }}
-              namespace: flux-system
             patch: |
               - op: add
                 path: /metadata/labels
