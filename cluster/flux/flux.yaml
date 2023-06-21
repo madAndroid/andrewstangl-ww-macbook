@@ -283,6 +283,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: wge
+    - name: prom-graf
   path: ./cluster/bases/flux
   prune: true
   wait: true
