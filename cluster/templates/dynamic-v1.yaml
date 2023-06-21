@@ -447,6 +447,8 @@ spec:
                     patches: |-
                       - target:
                           kind: GitopsCluster
+                          group: gitops.weave.works
+                          version: v1alpha1
                           name: (( .params.RESOURCE_NAME ))-{{ .Repeat.name }}
                         patch:
                           - op: add

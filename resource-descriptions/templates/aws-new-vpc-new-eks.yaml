@@ -50,8 +50,8 @@ clusters:
         path: ./kustomize
       - name: podinfo-ms2
         labels:
-          appset-one: true
-          appset-two: true
+          appset-one: "true"
+          appset-two: "true"
         mode: apps-repos
         version: v6.3.5
       - name: podinfo-ms3
