@@ -415,8 +415,8 @@ spec:
               group: gitops.weave.works
               name: test-{{ .Repeat.name }}
               namespace: flux-system
-            patch: |-
+            patch: |
               - op: add
-                path: /metadata/labels
+                path: /metadata/labels/-
                 value: ${{ .Repeat.labels | toJson }}
     repeat: '{ .clusters[?(@.gui)] }'
