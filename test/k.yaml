@@ -20,7 +20,9 @@ spec:
         value: {"app-one":"true", "app-two":"true"}
     target:
       kind: GitopsCluster
-      name: cluster-config
+      group: gitops.weave.works
+      version: v1alpha1
+      name: whatever
   path: ./test/config
   postBuild:
     substitute:
