@@ -444,7 +444,7 @@ spec:
                       name: flux-system
                       namespace: flux-system
                     timeout: 1m
-                    patches:
+                    patches: |-
                       - target:
                           kind: GitopsCluster
                           name: (( .params.RESOURCE_NAME ))-{{ .Repeat.name }}
