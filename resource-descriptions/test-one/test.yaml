@@ -24,8 +24,8 @@ clusters:
     # set to the resource name of the eks cluster if using an existing eks cluster created by this template
     # eks_resource: <resource name>
     labels:
-      appset-one: "true"
-      appset-two: "true"
+      appset-one: true
+      appset-two: true
 
     # set to 'discover' for using existing eks cluster not created by this template
     mode: create
