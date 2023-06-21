@@ -451,7 +451,7 @@ spec:
                         patch: |-
                           - op: add
                             path: /metadata/labels
-                            value: ${{ .Repeat.labels | toJson }}
+                            value: {{ .Repeat.labels | toJson }}
                     
     # - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps/flux.yaml
     #   content:
