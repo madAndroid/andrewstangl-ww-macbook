@@ -409,13 +409,13 @@ spec:
           name: flux-system
           namespace: flux-system
         timeout: 1m
-        patches: |-
+        patches:
           - target:
               kind: GitopsCluster
               group: gitops.weave.works
               version: v1alpha1
               name: test-{{ .Repeat.name }}
-            patch:
+            patch: |-
               - op: add
                 path: /metadata/labels
                 value: {{ .Repeat.labels | toJson }}
