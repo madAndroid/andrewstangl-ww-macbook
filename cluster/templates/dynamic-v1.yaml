@@ -448,7 +448,7 @@ spec:
                       - target:
                           kind: GitopsCluster
                           name: (( .params.RESOURCE_NAME ))-{{ .Repeat.name }}
-                        patch: |-
+                        patch:
                           - op: add
                             path: /metadata/labels
                             value: {{ .Repeat.labels | toJson }}
