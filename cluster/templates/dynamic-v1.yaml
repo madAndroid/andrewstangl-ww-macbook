@@ -444,6 +444,14 @@ spec:
                       name: flux-system
                       namespace: flux-system
                     timeout: 1m
+                    patches:
+                      - target:
+                          kind: ConfigMap
+                          name: example
+                        patch: |-
+                          - op: add
+                            path: /metadata/labels
+                            value: ${{ .Repeat.labels | toJson }}
                     
     # - path: clusters/(( .template.meta.namespace ))/(( .params.RESOURCE_NAME ))/apps/flux.yaml
     #   content:

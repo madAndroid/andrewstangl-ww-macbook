@@ -22,7 +22,10 @@ clusters:
     
   - name: c1
     # set to the resource name of the eks cluster if using an existing eks cluster created by this template
-    # eks_resource: <resource name> 
+    # eks_resource: <resource name>
+    labels:
+      appset-one: true
+      appset-two: true
 
     # set to 'discover' for using existing eks cluster not created by this template
     mode: create
@@ -41,16 +44,30 @@ clusters:
 
     apps:
       - name: podinfo-ms1
+        labels:
+          appset-one: true
         mode: local-folders
         path: ./kustomize
       - name: podinfo-ms2
+        labels:
+          appset-one: true
+          appset-two: true
         mode: apps-repos
         version: v6.3.5
       - name: podinfo-ms3
+        labels:
+          appset-two: true
         mode: apps-repos
         ref:
           type: tag
           value: v6.3.6
       - name: podinfo-ms4
+        labels:
+          appset-one: true
         mode: app-params
         params: ./leaf-clusters/apps/params/podinfo-ms4.yaml
+      - name: podinfo-msX
+        mode: local-folders
+        version: 6.3.6
+        labels:
+          appset-not: true

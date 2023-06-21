@@ -1,30 +1,29 @@
 apps:
-  - name: podinfo-ms3
-    mode: local-folders
-    version: 6.3.6
-    clusterLabels:
-      - multipass
-      - dell
-  - name: podinfo-ms2
-    mode: apps-repos
-    path: ./kustomize
-    clusterLabels:
-      - multipass
   - name: podinfo-ms1
+    labels:
+      appset-one: true
+    mode: local-folders
+    path: ./kustomize
+  - name: podinfo-ms2
+    labels:
+      appset-one: true
+      appset-two: true
+    mode: apps-repos
+    version: v6.3.5
+  - name: podinfo-ms3
+    labels:
+      appset-two: true
     mode: apps-repos
     ref:
       type: tag
       value: v6.3.6
-    path: ./kustomize
-    clusterLabels:
-      - multipass
   - name: podinfo-ms4
-    mode: apps-params
-    params: ./resource-descriptions/test-two/podinfo-ms4.yaml
-    clusterLabels:
-      - dell
+    labels:
+      appset-one: true
+    mode: app-params
+    params: ./leaf-clusters/apps/params/podinfo-ms4.yaml
   - name: podinfo-msX
     mode: local-folders
     version: 6.3.6
-    clusterLabels:
-      - not-clusters
+    labels:
+      appset-not: true
