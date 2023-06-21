@@ -417,6 +417,6 @@ spec:
               namespace: flux-system
             patch: |
               - op: add
-                path: /metadata/labels/-
-                value: ${{ .Repeat.labels | toJson }}
+                path: /metadata/labels/app-one
+                value: true
     repeat: '{ .clusters[?(@.gui)] }'
