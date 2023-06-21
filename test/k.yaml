@@ -17,9 +17,9 @@ spec:
   - patch: |-
       - op: add
         path: /metadata/labels
-        value: {"app-one": "true"}
+        value: {"app-one":"true", "app-two":"true"}
     target:
-      kind: ConfigMap
+      kind: GitopsCluster
       name: cluster-config
   path: ./test/config
   postBuild:
