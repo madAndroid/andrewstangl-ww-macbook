@@ -446,8 +446,8 @@ spec:
                     timeout: 1m
                     patches:
                       - target:
-                          kind: ConfigMap
-                          name: example
+                          kind: GitopsCluster
+                          name: (( .params.RESOURCE_NAME ))-{{ .Repeat.name }}
                         patch: |-
                           - op: add
                             path: /metadata/labels
