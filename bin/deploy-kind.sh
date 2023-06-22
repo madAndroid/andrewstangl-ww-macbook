@@ -70,7 +70,7 @@ if [ -n "${hostname}" ]; then
   echo "export listen_port=${listen_port}" >> /tmp/${location}-${cluster_name}-env.sh
   echo "export cluster_name=${cluster_name}" >> /tmp/${location}-${cluster_name}-env.sh
   echo "export hostname=${hostname}" >> /tmp/${location}-${cluster_name}-env.sh
-  echo "export KUBECONFIG=/tmp/kubeconfig" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export KUBECONFIG=/tmp/${cluster_name}.kubeconfig" >> /tmp/${location}-${cluster_name}-env.sh
   $scp_cmd -r /tmp/${location}-${cluster_name}-env.sh ${username_str}${hostname}:/tmp/env.sh >/dev/null
 
   $scp_cmd -r resources/kind.yaml ${username_str}${hostname}:/tmp >/dev/null
@@ -82,7 +82,7 @@ if [ -n "${hostname}" ]; then
 
   $ssh_cmd ${username_str}${hostname} "source /tmp/kind-leafs/leaf-deploy.sh $debug_str"
 
-  $scp_cmd ${username_str}${hostname}:/tmp/kubeconfig ~/.kube/${hostname}-${cluster_name}.kubeconfig >/dev/null
+  $scp_cmd ${username_str}${hostname}:/tmp/${cluster_name}.kubeconfig ~/.kube/${hostname}-${cluster_name}.kubeconfig >/dev/null
 
   echo "Cluster ${cluster_name} deployed on ${hostname}, use the following KUBECONFIG to access it:"
   echo "export KUBECONFIG=~/.kube/${hostname}-${cluster_name}.kubeconfig"
