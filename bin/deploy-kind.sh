@@ -65,7 +65,7 @@ if [ -n "${hostname}" ]; then
   $scp_cmd -r kind-leafs ${username_str}${hostname}:/tmp >/dev/null
 
   cat .envrc | grep "export GITHUB_MGMT_" > /tmp/${location}-${cluster_name}-env.sh
-  echo "export GITHUB_TOKEN=${GITHUB_TOKEN}" >> /tmp/${location}-${cluster_name}-env.sh
+  echo "export GITHUB_TOKEN=${GITHUB_TOKEN_READ}" >> /tmp/${location}-${cluster_name}-env.sh
   echo "export listen_address=${listen_address}" >> /tmp/${location}-${cluster_name}-env.sh
   echo "export listen_port=${listen_port}" >> /tmp/${location}-${cluster_name}-env.sh
   echo "export cluster_name=${cluster_name}" >> /tmp/${location}-${cluster_name}-env.sh
