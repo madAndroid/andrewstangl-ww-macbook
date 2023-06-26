@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/addons/kyverno
+  path: ./mgmt-cluster/addons/kyverno
   prune: true
   wait: true
   sourceRef:
@@ -43,7 +43,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/addons/cert-manager
+  path: ./mgmt-cluster/addons/cert-manager
   prune: true
   wait: true
   sourceRef:
@@ -57,7 +57,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/addons/nginx
+  path: ./mgmt-cluster/addons/nginx
   prune: true
   wait: true
   sourceRef:
@@ -74,7 +74,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/addons/reloader
+  path: ./mgmt-cluster/addons/reloader
   prune: true
   wait: true
   sourceRef:
@@ -110,7 +110,7 @@ spec:
   dependsOn:
     - name: cert-config
   interval: 1m0s
-  path: ./cluster/addons/vault
+  path: ./mgmt-cluster/addons/vault
   prune: true
   wait: true
   sourceRef:
@@ -127,7 +127,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m0s
-  path: ./cluster/addons/external-secrets
+  path: ./mgmt-cluster/addons/external-secrets
   prune: true
   wait: true
   sourceRef:
@@ -165,7 +165,7 @@ spec:
     - name: vault
     - name: secrets
     - name: config
-  path: ./cluster/addons/dex
+  path: ./mgmt-cluster/addons/dex
   prune: true
   wait: true
   sourceRef:
@@ -201,7 +201,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: secrets
-  path: ./cluster/addons/tf-controller
+  path: ./mgmt-cluster/addons/tf-controller
   prune: true
   wait: true
   sourceRef:
@@ -223,7 +223,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: dex
-  path: ./cluster/addons/wge
+  path: ./mgmt-cluster/addons/wge
   prune: true
   wait: true
   sourceRef:
@@ -243,7 +243,7 @@ spec:
   interval: 1m0s
   dependsOn:
     - name: secrets
-  path: ./cluster/addons/prom-graf
+  path: ./mgmt-cluster/addons/prom-graf
   prune: true
   wait: true
   sourceRef:
