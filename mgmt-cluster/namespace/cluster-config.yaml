@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-config
+  namespace: ${nameSpace}
+data:
+  clusterType: "macbook"
+  mgmtClusterName: ww-andrews-macbook
+  dnsSuffix: kubernetes.docker.internal
+  clusterIP: 10.103.37.254
+  scmType: github
+  GitHubOrg: madAndroid
+  GitHubRepo: andrewstangl-ww-macbook
+  awsAccountId: ac-none
+  prefixName: ww-andrews
+  awsRegion: eu-west-1
+  awsTagCreator: andrew@weave.works
+  awsTagCustomer: weaveworks-cx
+  awsTagProjectGid: "20276"
+  userEmail: andrew@weave.works
+  vault_url: https://vault.kubernetes.docker.internal
+  commitUser: madAndroid
+  awsKeyPairName: madAndroid
+  sshPubKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQyRyrviqmIpXHQG76qIujZbJ1Sx4TAsBGn7y8C9bL2DhL0PkPh87yYamNc8rGSWExyX8TJxCO8PGpGdujGwYgwbFhq5KOAes7DZI1vGZw2HMsKASVZ4g3f62MxYX+DsVqNG5Bhm4GLaW2j+HaDFTnI1rtx9eQE/e5rhoPN62NEB2liUJegfxxKuS6MiVCUl0fGC8cPt/3sYY1axpre3+kV9gb0MtpATyk8VZ4ijOl3VWEyWPYMdUaL02XcYd8Okw13hObJT786JE8df9ZaxhAAXP+jW2wNeP1jTxPc+CyHaULQBcvLiW0aaCvkSwBlA5dd+9+aOLX/ilXLRs4lvP1
+  capi: true
