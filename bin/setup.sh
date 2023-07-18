@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 # Utility setting local kubernetes cluster
 # Version: 1.0
 # Author: Paul Carlton (mailto:paul.carlton@weave.works)
@@ -47,7 +49,7 @@ source .envrc
 echo "Waiting for cluster to be ready"
 kubectl wait --for=condition=Available  -n kube-system deployment coredns
 
-git config pull.rebase true  
+git config pull.rebase true
 
 if [ $bootstrap -eq 0 ]; then
   set +e
@@ -58,6 +60,7 @@ fi
 if [ $bootstrap -eq 0 ]; then
   echo "flux-system namespace already. skipping bootstrap"
 else
+  echo $PWD
   bootstrap.sh
 fi
 
