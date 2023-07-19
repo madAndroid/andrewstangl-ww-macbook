@@ -3,16 +3,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cluster-config
-  namespace: flux-system
+  namespace: 
 data:
   clusterType: "macbook"
   mgmtClusterName: ww-andrews-macbook
   dnsSuffix: kubernetes.docker.internal
-  clusterIP: 10.96.172.122
+  clusterIP: 
   scmType: github
   GitHubOrg: madAndroid
   GitHubRepo: andrewstangl-ww-macbook
-  awsAccountId: ac-none
+  globalGitHubOrg: ww-gitops
+  globalGitHubRepo: global-config
+  globalGitHubBranch: flux-fixes
+  awsAccountId: ""
   prefixName: ww-andrews
   awsRegion: eu-west-1
   awsTagCreator: andrew@weave.works
@@ -23,4 +26,4 @@ data:
   commitUser: madAndroid
   awsKeyPairName: madAndroid
   sshPubKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQyRyrviqmIpXHQG76qIujZbJ1Sx4TAsBGn7y8C9bL2DhL0PkPh87yYamNc8rGSWExyX8TJxCO8PGpGdujGwYgwbFhq5KOAes7DZI1vGZw2HMsKASVZ4g3f62MxYX+DsVqNG5Bhm4GLaW2j+HaDFTnI1rtx9eQE/e5rhoPN62NEB2liUJegfxxKuS6MiVCUl0fGC8cPt/3sYY1axpre3+kV9gb0MtpATyk8VZ4ijOl3VWEyWPYMdUaL02XcYd8Okw13hObJT786JE8df9ZaxhAAXP+jW2wNeP1jTxPc+CyHaULQBcvLiW0aaCvkSwBlA5dd+9+aOLX/ilXLRs4lvP1
-  capi: true
+  capi: "true"
