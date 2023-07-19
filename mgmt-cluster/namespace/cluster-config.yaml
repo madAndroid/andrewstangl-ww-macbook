@@ -8,7 +8,7 @@ data:
   clusterType: "macbook"
   mgmtClusterName: ww-andrews-macbook
   dnsSuffix: kubernetes.docker.internal
-  clusterIP: 10.101.202.242
+  clusterIP: 10.100.41.45
   scmType: github
   GitHubOrg: madAndroid
   GitHubRepo: andrewstangl-ww-macbook
@@ -26,4 +26,4 @@ data:
   commitUser: madAndroid
   awsKeyPairName: madAndroid
   sshPubKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQyRyrviqmIpXHQG76qIujZbJ1Sx4TAsBGn7y8C9bL2DhL0PkPh87yYamNc8rGSWExyX8TJxCO8PGpGdujGwYgwbFhq5KOAes7DZI1vGZw2HMsKASVZ4g3f62MxYX+DsVqNG5Bhm4GLaW2j+HaDFTnI1rtx9eQE/e5rhoPN62NEB2liUJegfxxKuS6MiVCUl0fGC8cPt/3sYY1axpre3+kV9gb0MtpATyk8VZ4ijOl3VWEyWPYMdUaL02XcYd8Okw13hObJT786JE8df9ZaxhAAXP+jW2wNeP1jTxPc+CyHaULQBcvLiW0aaCvkSwBlA5dd+9+aOLX/ilXLRs4lvP1
-  capi: "true"
+  capi: "false"
