@@ -6,7 +6,7 @@ metadata:
 spec:
   dependsOn:
   - name: flux-components
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/kyverno
   prune: true
   wait: true
@@ -22,7 +22,7 @@ metadata:
 spec:
   dependsOn:
   - name: flux-components
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/cert-manager
   prune: true
   wait: true
@@ -38,7 +38,7 @@ metadata:
 spec:
   dependsOn:
   - name: flux-components
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/nginx
   prune: true
   wait: true
@@ -57,7 +57,7 @@ metadata:
 spec:
   dependsOn:
   - name: flux-components
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/reloader
   prune: true
   wait: true
@@ -71,7 +71,7 @@ metadata:
   name: cert-config
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/cert-config
   prune: true
   wait: true
@@ -93,7 +93,7 @@ metadata:
 spec:
   dependsOn:
     - name: cert-config
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/vault
   prune: true
   wait: true
@@ -113,7 +113,7 @@ metadata:
 spec:
   dependsOn:
   - name: flux-components
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/addons/external-secrets
   prune: true
   wait: true
@@ -127,7 +127,7 @@ metadata:
   name: secrets
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   path: ./mgmt-cluster/secrets
   prune: true
   wait: true
@@ -147,7 +147,7 @@ metadata:
   name: dex
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: vault
     - name: secrets
@@ -169,7 +169,7 @@ metadata:
   name: config
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: vault
   path: ./mgmt-cluster/config
@@ -185,7 +185,7 @@ metadata:
   name: tf-controller
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: secrets
   path: ./mgmt-cluster/addons/tf-controller
@@ -207,7 +207,7 @@ metadata:
   name: wge
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: dex
   path: ./mgmt-cluster/addons/wge
@@ -227,7 +227,7 @@ metadata:
   name: prom-graf
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: secrets
   path: ./mgmt-cluster/addons/prom-graf
@@ -247,7 +247,7 @@ metadata:
   name: wge-rbac
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: wge
   path: ./mgmt-cluster/bases/rbac
@@ -267,7 +267,7 @@ metadata:
   name: flux
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: wge
     - name: prom-graf
@@ -288,7 +288,7 @@ metadata:
   name: namespaces
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 5m0s
   dependsOn:
     - name: wge
   path: ./mgmt-cluster/namespaces
