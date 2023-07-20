@@ -8,7 +8,7 @@ data:
   clusterType: "macbook"
   mgmtClusterName: ww-andrews-macbook
   dnsSuffix: kubernetes.docker.internal
-  clusterIP: 10.100.116.253
+  clusterIP: 10.102.17.32
   scmType: github
   GitHubOrg: madAndroid
   GitHubRepo: andrewstangl-ww-macbook
